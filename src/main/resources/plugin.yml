@@ -1,0 +1,4 @@
+name: BudgieSets
+version: '${project.version}'
+main: net.tree.budgiesets.BudgieSets
+api-version: '1.20'
