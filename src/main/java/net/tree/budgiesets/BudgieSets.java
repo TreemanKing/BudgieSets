@@ -11,13 +11,19 @@ import java.io.File;
 
 public final class BudgieSets extends JavaPlugin {
 
+    public static BudgieSets plugin;
     private ConfigurationManager configManager;
 
     @Override
     public void onEnable() {
+
+        plugin = this;
+
         this.configManager = new ConfigurationManager(this);
+
         ListenerManager.registerListeners(this);
         registerArmorSetListeners();
+
     }
 
     @Override
@@ -39,9 +45,14 @@ public final class BudgieSets extends JavaPlugin {
 
     private void registerArmorSetListener(String armorSetName, ConfigurationSection armorSetConfig) {
 
-        if (armorSetName != null && !armorSetName.isEmpty()) {
-            // Register a listener for the specific armor set
+        if (armorSetName == null || armorSetConfig == null) return;
+        try {
             Bukkit.getServer().getPluginManager().registerEvents(new ArmorSetEquip(armorSetName, armorSetConfig), this);
+            getLogger().info(armorSetName + " Registered");
+        } catch (Exception exception) {
+            getLogger().severe(armorSetName + "did not register and ran into an error!");
+            exception.printStackTrace();
         }
+
     }
 }
