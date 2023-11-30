@@ -3,10 +3,13 @@ package net.tree.budgiesets.eventlisteners;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.tree.budgiesets.BudgieSets;
+import net.tree.budgiesets.events.ArmourSetEquipEvent;
+import net.tree.budgiesets.managers.EventManager;
+import net.tree.budgiesets.utilities.effects.PermPotion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,45 +17,49 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
-public class ArmorSetEquip implements Listener {
+public class ArmorSetListener implements Listener {
 
     private final String armorSetName;
-    private final ConfigurationSection armorSetConfig;
+    private final FileConfiguration armorSetConfig;
     private final HashMap<UUID, EquipStatus> playerEquipStatusHashMap = new HashMap<>();
 
-    public ArmorSetEquip(String armorSetName, ConfigurationSection armorSetConfig) {
+    public ArmorSetListener(String armorSetName, FileConfiguration armorSetConfig) {
         this.armorSetName = armorSetName;
         this.armorSetConfig = armorSetConfig;
     }
 
+    // Events
+
+    // Handles armor set equipping/unequipped. This has nothing to do with registration of the events
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerEquip(PlayerArmorChangeEvent event) {
         Player player = event.getPlayer();
         UUID playerId = player.getUniqueId();
-        EquipStatus currentStatus = playerEquipStatusHashMap.get(playerId);
+        EquipStatus currentStatus = playerEquipStatusHashMap.getOrDefault(playerId, EquipStatus.NULL);
 
         if (isWearingFullSet(player) && currentStatus.equals(EquipStatus.NOT_EQUIPPED)) {
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
             player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-            // ADD ARMOR SET EVENTS AND EFFECTS
+            EventManager.applyEffectsOnEquip(player, armorSetConfig);
+
 
         } else if (!isWearingFullSet(player) && currentStatus.equals(EquipStatus.EQUIPPED)) {
             player.sendMessage(ChatColor.RED + "You are now not wearing the " + armorSetName + " set and will lose all bonuses.");
             playerEquipStatusHashMap.put(playerId, EquipStatus.NOT_EQUIPPED);
-            // REMOVE ARMOR SET EVENTS AND EFFECTS
-        } else if (isWearingFullSet(player) && currentStatus.equals(EquipStatus.NULL)) {
+            PermPotion.removePotionEffects(player);
+
+
+        } else if (isWearingFullSet(player) && currentStatus.equals(EquipStatus.NULL)) { // When a player joins the server, it will only trigger this event.
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
-            Bukkit.getServer().getScheduler().runTaskLater(BudgieSets.plugin, new Runnable() {
-                @Override
-                public void run() {
-                    // Your code to be executed after 5 seconds goes here
-                    // For example, you can send a delayed message to the player
-                    player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-                }
-            }, 100L);
+
+            Bukkit.getServer().getScheduler().runTaskLater(BudgieSets.plugin, () -> {
+                // Your code to be executed after 5 seconds goes here
+                // For example, you can send a delayed message to the player
+                player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
+                EventManager.applyEffectsOnEquip(player, armorSetConfig);
+            }, 60L);
         }
     }
 
@@ -98,6 +105,9 @@ public class ArmorSetEquip implements Listener {
     private enum EquipStatus {
         EQUIPPED,
         NOT_EQUIPPED,
+        /**
+         * For when someone joins, give them a status of "nothing"
+         */
         NULL
     }
 }

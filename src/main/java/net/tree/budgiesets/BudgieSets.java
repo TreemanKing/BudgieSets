@@ -1,10 +1,9 @@
 package net.tree.budgiesets;
 
 import net.tree.budgiesets.managers.ListenerManager;
-import net.tree.budgiesets.eventlisteners.ArmorSetEquip;
+import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import net.tree.budgiesets.managers.ConfigurationManager;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
@@ -43,16 +42,16 @@ public final class BudgieSets extends JavaPlugin {
         }
     }
 
-    private void registerArmorSetListener(String armorSetName, ConfigurationSection armorSetConfig) {
-
+    private void registerArmorSetListener(String armorSetName, FileConfiguration armorSetConfig) {
         if (armorSetName == null || armorSetConfig == null) return;
+
         try {
-            Bukkit.getServer().getPluginManager().registerEvents(new ArmorSetEquip(armorSetName, armorSetConfig), this);
+
+            Bukkit.getServer().getPluginManager().registerEvents(new ArmorSetListener(armorSetName, armorSetConfig), this);
             getLogger().info(armorSetName + " Registered");
         } catch (Exception exception) {
-            getLogger().severe(armorSetName + "did not register and ran into an error!");
+            getLogger().severe(armorSetName + " did not register and ran into an error!");
             exception.printStackTrace();
         }
-
     }
 }

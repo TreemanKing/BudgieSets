@@ -1,5 +1,6 @@
 package net.tree.budgiesets.managers;
 
+import net.tree.budgiesets.BudgieSets;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ListenerManager {
@@ -8,7 +9,7 @@ public class ListenerManager {
 
     // Method to register all listeners
     public static void registerListeners(JavaPlugin plugin) {
-        // Add more listener registrations as needed
+
     }
 
 
