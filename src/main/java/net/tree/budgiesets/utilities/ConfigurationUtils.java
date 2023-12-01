@@ -1,4 +1,4 @@
-package net.tree.budgiesets.utilities.effects;
+package net.tree.budgiesets.utilities;
 
 import org.bukkit.configuration.ConfigurationSection;
 

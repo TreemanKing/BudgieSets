@@ -3,16 +3,19 @@ package net.tree.budgiesets.processor;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public interface EventProcessor {
     void process(Map<String, Object> effects, Player player);
-    String getEventType();
 
     default boolean checkConditions(List<String> conditions, Player player) {
+        // Don't check conditions if PlaceholderAPI is not enabled
+        if(Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI").isEnabled()) {
+            Bukkit.getLogger().warning("PlaceholderAPI is not enabled on this server, conditions will not work!");
+            return true;
+        }
+
         if (conditions != null) {
             for (String condition : conditions) {
                 if (!checkCondition(condition, player)) {
@@ -44,8 +47,8 @@ public interface EventProcessor {
         } else {
             // Log a warning or handle the case where the condition format is invalid
             Bukkit.getLogger().warning("Invalid condition format: " + condition);
+            return false;
         }
-        return false;
     }
 
     default boolean performComparison(String actualValue, String operator, String expectedValue) {

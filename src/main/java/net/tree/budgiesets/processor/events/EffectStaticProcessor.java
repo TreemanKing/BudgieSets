@@ -1,7 +1,7 @@
 package net.tree.budgiesets.processor.events;
 
 import net.tree.budgiesets.processor.EventProcessor;
-import net.tree.budgiesets.utilities.effects.PermPotion;
+import net.tree.budgiesets.utilities.PermPotion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import java.util.List;
@@ -17,11 +17,6 @@ public class EffectStaticProcessor implements EventProcessor {
             // Log a warning or handle the case where "Effects" key is missing
             Bukkit.getLogger().warning("Effects key not found for an event.");
         }
-    }
-
-    @Override
-    public String getEventType() {
-        return "EFFECT_STATIC";
     }
 
     private void processEffects(List<Map<String, Object>> effects, Player player) {

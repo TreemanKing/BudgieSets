@@ -4,7 +4,7 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.tree.budgiesets.BudgieSets;
 import net.tree.budgiesets.managers.EventManager;
-import net.tree.budgiesets.utilities.effects.PermPotion;
+import net.tree.budgiesets.utilities.PermPotion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,7 +16,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -25,10 +24,12 @@ public class ArmorSetListener implements Listener {
     private final String armorSetName;
     private final FileConfiguration armorSetConfig;
     private final HashMap<UUID, EquipStatus> playerEquipStatusHashMap = new HashMap<>();
+    private final BudgieSets plugin;
 
-    public ArmorSetListener(String armorSetName, FileConfiguration armorSetConfig) {
+    public ArmorSetListener(String armorSetName, FileConfiguration armorSetConfig, BudgieSets plugin) {
         this.armorSetName = armorSetName;
         this.armorSetConfig = armorSetConfig;
+        this.plugin = plugin;
     }
 
     // Events
@@ -58,7 +59,7 @@ public class ArmorSetListener implements Listener {
         } else if (isWearingFullSet(player) && currentStatus.equals(EquipStatus.NULL)) { // When a player joins the server, it will only trigger this event.
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
 
-            Bukkit.getServer().getScheduler().runTaskLater(BudgieSets.plugin, () -> {
+            Bukkit.getServer().getScheduler().runTaskLater(plugin, () -> {
                 // Your code to be executed after 5 seconds goes here
                 // For example, you can send a delayed message to the player
                 player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
