@@ -1,4 +1,4 @@
-package net.tree.budgiesets.processor;
+package net.tree.budgiesets.processor.interfaces;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 public interface EventProcessor {
-    void process(Map<String, Object> effects, Player player);
+    void process(Map<String, Object> event, Player player);
 
     default boolean checkConditions(List<String> conditions, Player player) {
         // Don't check conditions if PlaceholderAPI is not enabled
-        if(Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI").isEnabled()) {
+        if(!Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI").isEnabled()) {
             Bukkit.getLogger().warning("PlaceholderAPI is not enabled on this server, conditions will not work!");
             return true;
         }

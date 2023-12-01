@@ -1,7 +1,7 @@
 package net.tree.budgiesets.managers;
 
-import net.tree.budgiesets.processor.EventProcessor;
-import net.tree.budgiesets.processor.EventProcessorFactory;
+import net.tree.budgiesets.processor.factory.EventProcessorFactory;
+import net.tree.budgiesets.processor.interfaces.EventProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -12,14 +12,19 @@ import java.util.Set;
 
 
 public class EventManager {
-    public static void applyEventsOnEquip(Player player, FileConfiguration fileConfiguration) {
+
+    public EventManager(Player player, FileConfiguration fileConfiguration) {
+        applyEventsOnEquip(player, fileConfiguration);
+    }
+
+    private void applyEventsOnEquip(Player player, FileConfiguration fileConfiguration) {
         @NotNull List<Map<?, ?>> eventsList = fileConfiguration.getMapList("Events");
         for (Map<?, ?> event : eventsList) {
             processEvent((Map<String, Object>) event, player);
         }
     }
 
-    private static void processEvent(Map<String, Object> eventMap, Player player) {
+    private void processEvent(Map<String, Object> eventMap, Player player) {
         if (eventMap != null) {
             Set<Map.Entry<String, Object>> entrySet = eventMap.entrySet();
             if (entrySet.size() == 1) {

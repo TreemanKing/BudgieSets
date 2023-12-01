@@ -44,17 +44,12 @@ public class ArmorSetListener implements Listener {
         if (isWearingFullSet(player) && currentStatus.equals(EquipStatus.NOT_EQUIPPED)) {
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
             player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-
-                EventManager.applyEventsOnEquip(player, armorSetConfig);
-
-
-
+            new EventManager(player, armorSetConfig);
 
         } else if (!isWearingFullSet(player) && currentStatus.equals(EquipStatus.EQUIPPED)) {
             player.sendMessage(ChatColor.RED + "You are now not wearing the " + armorSetName + " set and will lose all bonuses.");
             playerEquipStatusHashMap.put(playerId, EquipStatus.NOT_EQUIPPED);
             PermPotion.removePotionEffects(player);
-
 
         } else if (isWearingFullSet(player) && currentStatus.equals(EquipStatus.NULL)) { // When a player joins the server, it will only trigger this event.
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
@@ -63,9 +58,7 @@ public class ArmorSetListener implements Listener {
                 // Your code to be executed after 5 seconds goes here
                 // For example, you can send a delayed message to the player
                 player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-
-                EventManager.applyEventsOnEquip(player, armorSetConfig);
-
+                new EventManager(player, armorSetConfig);
             }, 60L);
         }
     }

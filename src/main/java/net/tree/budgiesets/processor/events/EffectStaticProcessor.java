@@ -1,6 +1,6 @@
 package net.tree.budgiesets.processor.events;
 
-import net.tree.budgiesets.processor.EventProcessor;
+import net.tree.budgiesets.processor.interfaces.EventProcessor;
 import net.tree.budgiesets.utilities.PermPotion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

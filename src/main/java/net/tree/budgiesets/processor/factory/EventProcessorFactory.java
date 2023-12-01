@@ -1,5 +1,7 @@
-package net.tree.budgiesets.processor;
+package net.tree.budgiesets.processor.factory;
 
+import net.tree.budgiesets.processor.interfaces.EventProcessor;
+import net.tree.budgiesets.processor.events.EatProcessor;
 import net.tree.budgiesets.processor.events.EffectStaticProcessor;
 
 public class EventProcessorFactory {
@@ -7,7 +9,8 @@ public class EventProcessorFactory {
         switch (eventType.toUpperCase()) {
             case "EFFECT_STATIC":
                 return new EffectStaticProcessor();
-            // Add more cases for other event types as needed
+            case "EAT":
+                return new EatProcessor();
             default:
                 return null;
         }
