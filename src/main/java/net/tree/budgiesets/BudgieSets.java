@@ -14,7 +14,7 @@ public final class BudgieSets extends JavaPlugin {
         plugin = this;
 
         ConfigurationManager configManager = new ConfigurationManager(this);
-        ArmorSetManager armorSetManager = new ArmorSetManager(this, configManager);
+        new ArmorSetManager(this, configManager);
     }
 
     @Override

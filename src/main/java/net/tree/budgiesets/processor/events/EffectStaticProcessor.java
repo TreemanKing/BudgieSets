@@ -41,8 +41,11 @@ public class EffectStaticProcessor implements EventProcessor {
         int amplifier = (int) effect.get("Amplifier");
         boolean ambient = (boolean) effect.get("Ambient");
         boolean particles = (boolean) effect.get("Particles");
+        List<String> conditions = (List<String>) effect.get("Conditions");
 
         // Assuming you have a method to apply PermPotion effects
-        PermPotion.applyPotionEffect(player, type, amplifier, ambient, particles);
+        if (checkConditions(conditions, player)) {
+            PermPotion.applyPotionEffect(player, type, amplifier, ambient, particles);
+        }
     }
 }

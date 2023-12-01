@@ -1,6 +1,7 @@
 package net.tree.budgiesets.processor;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -11,34 +12,78 @@ public interface EventProcessor {
     void process(Map<String, Object> effects, Player player);
     String getEventType();
 
-    static List<Map<String, Object>> getConfigSections(Map<String, Object> section) {
-        List<Map<String, Object>> configSections = new ArrayList<>();
-        for (String key : section.keySet()) {
-            Object value = section.get(key);
-            if (value instanceof Map) {
-                configSections.add((Map<String, Object>) value);
-            }
-        }
-        return configSections;
-    }
-
-    static boolean checkConditions(Map<String, Object> conditions, Player player) {
+    default boolean checkConditions(List<String> conditions, Player player) {
         if (conditions != null) {
-            for (String placeholder : conditions.keySet()) {
-                Object value = conditions.get(placeholder);
-                if (value instanceof String) {
-                    String expectedValue = (String) value;
-
-                    // Use PlaceholderAPI to get the actual value for the placeholder
-                    String actualValue = PlaceholderAPI.setPlaceholders(player, "%" + placeholder + "%");
-
-                    // Compare the actual value with the expected value
-                    if (!actualValue.equals(expectedValue)) {
-                        return false; // Condition not met
-                    }
+            for (String condition : conditions) {
+                if (!checkCondition(condition, player)) {
+                    return false; // Condition not met
                 }
             }
         }
         return true; // If no conditions or conditions are met
+    }
+
+    default boolean checkCondition(String condition, Player player) {
+        // Remove whitespaces before splitting the condition
+        String trimmedCondition = condition.replaceAll("\\s+", "");
+
+        // Split the condition into placeholder and value parts
+        String[] parts = trimmedCondition.split("<=|>=|<|>|==");
+
+        if (parts.length == 2) {
+            // Trim to remove any leading/trailing whitespaces
+            String placeholder = parts[0].trim();
+            String actualValue = PlaceholderAPI.setPlaceholders(player, placeholder);
+            String restOfCondition = parts[1].trim();
+
+
+            // Preserve the operator
+            String operator = condition.substring(placeholder.length(), condition.length() - restOfCondition.length()).trim();
+
+            return performComparison(actualValue, operator, restOfCondition);
+        } else {
+            // Log a warning or handle the case where the condition format is invalid
+            Bukkit.getLogger().warning("Invalid condition format: " + condition);
+        }
+        return false;
+    }
+
+    default boolean performComparison(String actualValue, String operator, String expectedValue) {
+        if (isNumeric(actualValue) && isNumeric(expectedValue)) {
+            // Numeric comparison
+            double actualNumeric = Double.parseDouble(actualValue);
+            double expectedNumeric = Double.parseDouble(expectedValue);
+
+            switch (operator) {
+                case "==": return actualNumeric == expectedNumeric;
+                case "<": return actualNumeric < expectedNumeric;
+                case ">": return actualNumeric > expectedNumeric;
+                case "<=": return actualNumeric <= expectedNumeric;
+                case ">=": return actualNumeric >= expectedNumeric;
+                default: return false; // Unsupported operator
+            }
+        } else if (isBoolean(actualValue) && isBoolean(expectedValue)) {
+            // Boolean comparison
+            boolean actualBoolean = Boolean.parseBoolean(actualValue);
+            boolean expectedBoolean = Boolean.parseBoolean(expectedValue);
+
+            return actualBoolean == expectedBoolean;
+        } else {
+            // String comparison
+            return actualValue.equals(expectedValue);
+        }
+    }
+
+    default boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    default boolean isBoolean(String str) {
+        return str.equalsIgnoreCase("true") || str.equalsIgnoreCase("false");
     }
 }
