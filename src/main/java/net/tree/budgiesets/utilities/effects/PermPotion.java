@@ -40,8 +40,11 @@ public class PermPotion {
         List<PotionEffect> playerEffects = activeEffects.get(playerId);
 
         if (playerEffects != null) {
-            // Remove all potion effects for the player
-            for (PotionEffect effect : playerEffects) {
+            // Create a copy of the effects list to avoid ConcurrentModificationException
+            List<PotionEffect> effectsCopy = new ArrayList<>(playerEffects);
+
+            // Remove custom potion effects for the player
+            for (PotionEffect effect : effectsCopy) {
                 player.removePotionEffect(effect.getType());
             }
 
@@ -49,5 +52,7 @@ public class PermPotion {
             activeEffects.remove(playerId);
         }
     }
+
+
 
 }

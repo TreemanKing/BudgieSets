@@ -3,7 +3,6 @@ package net.tree.budgiesets.eventlisteners;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.tree.budgiesets.BudgieSets;
-import net.tree.budgiesets.events.ArmourSetEquipEvent;
 import net.tree.budgiesets.managers.EventManager;
 import net.tree.budgiesets.utilities.effects.PermPotion;
 import org.bukkit.Bukkit;
@@ -17,7 +16,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class ArmorSetListener implements Listener {
 
@@ -42,7 +43,10 @@ public class ArmorSetListener implements Listener {
         if (isWearingFullSet(player) && currentStatus.equals(EquipStatus.NOT_EQUIPPED)) {
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
             player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-            EventManager.applyEffectsOnEquip(player, armorSetConfig);
+
+                EventManager.applyEventsOnEquip(player, armorSetConfig);
+
+
 
 
         } else if (!isWearingFullSet(player) && currentStatus.equals(EquipStatus.EQUIPPED)) {
@@ -58,7 +62,9 @@ public class ArmorSetListener implements Listener {
                 // Your code to be executed after 5 seconds goes here
                 // For example, you can send a delayed message to the player
                 player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-                EventManager.applyEffectsOnEquip(player, armorSetConfig);
+
+                EventManager.applyEventsOnEquip(player, armorSetConfig);
+
             }, 60L);
         }
     }
@@ -110,4 +116,6 @@ public class ArmorSetListener implements Listener {
          */
         NULL
     }
+
+
 }
