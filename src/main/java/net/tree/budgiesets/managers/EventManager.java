@@ -1,5 +1,6 @@
 package net.tree.budgiesets.managers;
 
+import net.tree.budgiesets.BudgieSets;
 import net.tree.budgiesets.processor.factory.EventProcessorFactory;
 import net.tree.budgiesets.processor.interfaces.EventProcessor;
 import org.bukkit.Bukkit;
@@ -13,18 +14,18 @@ import java.util.Set;
 
 public class EventManager {
 
-    public EventManager(Player player, FileConfiguration fileConfiguration) {
-        applyEventsOnEquip(player, fileConfiguration);
+    public EventManager(Player player, FileConfiguration fileConfiguration, BudgieSets plugin) {
+        applyEventsOnEquip(player, fileConfiguration, plugin);
     }
 
-    private void applyEventsOnEquip(Player player, FileConfiguration fileConfiguration) {
+    private void applyEventsOnEquip(Player player, FileConfiguration fileConfiguration, BudgieSets plugin) {
         @NotNull List<Map<?, ?>> eventsList = fileConfiguration.getMapList("Events");
         for (Map<?, ?> event : eventsList) {
-            processEvent(event, player);
+            processEvent(event, player, plugin);
         }
     }
 
-    private void processEvent(Map<?, ?> eventMap, Player player) {
+    private void processEvent(Map<?, ?> eventMap, Player player, BudgieSets plugin) {
         if (eventMap != null) {
             Set<? extends Map.Entry<?, ?>> entrySet = eventMap.entrySet();
             if (entrySet.size() == 1) {
@@ -34,7 +35,7 @@ public class EventManager {
                 if (processor != null) {
                     Object value = entry.getValue();
                     if (value instanceof Map) {
-                        processor.process((Map<?, ?>) value, player);
+                        processor.process((Map<?, ?>) value, player, plugin);
                     } else {
                         Bukkit.getLogger().warning("Invalid event structure found: " + eventMap);
                     }

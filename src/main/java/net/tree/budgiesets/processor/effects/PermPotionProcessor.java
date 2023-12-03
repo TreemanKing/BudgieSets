@@ -1,13 +1,11 @@
 package net.tree.budgiesets.processor.effects;
 
 import net.tree.budgiesets.processor.interfaces.EffectProcessor;
-import net.tree.budgiesets.utilities.PermPotion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
 public class PermPotionProcessor implements EffectProcessor {
@@ -23,9 +21,11 @@ public class PermPotionProcessor implements EffectProcessor {
                 int amplifier = (int) potionMap.get("Amplifier");
                 boolean ambient = (boolean) potionMap.get("Ambient");
                 boolean particles = (boolean) potionMap.get("Particles");
-
+                List<String> conditions = (List<String>) potionMap.get("Conditions");
                 // Assuming you have a method to apply PermPotion effects
-                applyPotionEffect(player, type, amplifier, ambient, particles);
+                if (checkConditions(conditions, player)) {
+                    applyPotionEffect(player, type, amplifier, ambient, particles);
+                }
             }
         }
     }

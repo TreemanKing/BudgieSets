@@ -4,7 +4,6 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.tree.budgiesets.BudgieSets;
 import net.tree.budgiesets.managers.EventManager;
-import net.tree.budgiesets.utilities.PermPotion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -45,7 +44,7 @@ public class ArmorSetListener implements Listener {
         if (isWearingFullSet(player) && currentStatus.equals(EquipStatus.NOT_EQUIPPED)) {
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
             player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-            new EventManager(player, armorSetConfig);
+            new EventManager(player, armorSetConfig, plugin);
 
         } else if (!isWearingFullSet(player) && currentStatus.equals(EquipStatus.EQUIPPED)) {
             player.sendMessage(ChatColor.RED + "You are now not wearing the " + armorSetName + " set and will lose all bonuses.");
@@ -59,7 +58,7 @@ public class ArmorSetListener implements Listener {
                 // Your code to be executed after 5 seconds goes here
                 // For example, you can send a delayed message to the player
                 player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-                new EventManager(player, armorSetConfig);
+                new EventManager(player, armorSetConfig, plugin);
             }, 60L);
         }
     }

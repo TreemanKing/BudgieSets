@@ -1,6 +1,7 @@
 package net.tree.budgiesets.processor.factory;
 
 import net.tree.budgiesets.processor.effects.ActionBarProcessor;
+import net.tree.budgiesets.processor.effects.HealthProcessor;
 import net.tree.budgiesets.processor.effects.HungerProcessor;
 import net.tree.budgiesets.processor.effects.PermPotionProcessor;
 import net.tree.budgiesets.processor.interfaces.EffectProcessor;
@@ -14,6 +15,8 @@ public class EffectProcessorFactory {
                 return new HungerProcessor();
             case "PERM_POTION":
                 return new PermPotionProcessor();
+            case "HEALTH":
+                return new HealthProcessor();
             default:
                 return null;
         }

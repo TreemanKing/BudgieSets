@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public interface EffectProcessor {
