@@ -2,12 +2,11 @@ package net.tree.budgiesets.processor.effects;
 
 import net.tree.budgiesets.processor.interfaces.EffectProcessor;
 import org.bukkit.entity.Player;
-
-import java.util.Map;
+import java.util.List;
 
 public class HungerProcessor implements EffectProcessor {
     @Override
-    public void process(Map<String, Object> effect, Player player) {
+    public void processEffect(List<?> effect, Player player) {
 
     }
 }

@@ -1,46 +1,58 @@
 package net.tree.budgiesets.processor.events;
 
+import net.tree.budgiesets.processor.factory.EffectProcessorFactory;
+import net.tree.budgiesets.processor.interfaces.EffectProcessor;
 import net.tree.budgiesets.processor.interfaces.EventProcessor;
-import net.tree.budgiesets.utilities.PermPotion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class EffectStaticProcessor implements EventProcessor {
     @Override
-    public void process(Map<String, Object> event, Player player) {
+    public void process(Map<?, ?> event, Player player) {
         if (event.containsKey("Effects")) {
-            List<Map<String, Object>> effects = (List<Map<String, Object>>) event.get("Effects");
+            List<Map<?, ?>> effects = (List<Map<?, ?>>) event.get("Effects");
             processEffects(effects, player);
         } else {
-            // Log a warning or handle the case where "Effects" key is missing
-            Bukkit.getLogger().warning("Effects key not found for an event.");
+            throw new IllegalArgumentException("Effects key not found for an event.");
         }
     }
 
-    private void processEffects(List<Map<String, Object>> effects, Player player) {
-        if (effects != null) {
-            for (Map<String, Object> effect : effects) {
-                applyEffect(effect, player);
+    private void processEffects(List<Map<?, ?>> effectsMap, Player player) {
+        if (effectsMap != null) {
+            for (Map<?, ?> effect : effectsMap) {
+                processEffect(effect, player);
             }
         } else {
-            // Log a warning or handle the case where "Effects" list is null
-            Bukkit.getLogger().warning("Effects list not found or is null for an event.");
+            throw new IllegalArgumentException("Effects list not found or is null for an event.");
         }
     }
 
-    private void applyEffect(Map<String, Object> effect, Player player) {
-        // Extract effect properties and apply to the player
-        String type = (String) effect.get("Type");
-        int amplifier = (int) effect.get("Amplifier");
-        boolean ambient = (boolean) effect.get("Ambient");
-        boolean particles = (boolean) effect.get("Particles");
-        List<String> conditions = (List<String>) effect.get("Conditions");
-
-        // Assuming you have a method to apply PermPotion effects
-        if (checkConditions(conditions, player)) {
-            PermPotion.applyPotionEffect(player, type, amplifier, ambient, particles);
+    private void processEffect(Map<?, ?> effectMap, Player player) {
+        if (effectMap != null) {
+            Set<? extends Map.Entry<?, ?>> entrySet = effectMap.entrySet();
+            if (entrySet.size() == 1) {
+                Map.Entry<?, ?> entry = entrySet.iterator().next();
+                String effectType = (String) entry.getKey();
+                EffectProcessor processor = EffectProcessorFactory.createProcessor(effectType);
+                if (processor != null) {
+                    Object value = entry.getValue();
+                    if (value instanceof List) {
+                        processor.processEffect((List<?>) value, player);
+                    } else {
+                        Bukkit.getLogger().warning("Invalid effect structure found: " + effectMap);
+                    }
+                } else {
+                    Bukkit.getLogger().warning("Invalid effect type: " + effectType);
+                }
+            } else {
+                Bukkit.getLogger().warning("Invalid effect1 structure found: " + effectMap);
+            }
         }
     }
 }
+
+
+

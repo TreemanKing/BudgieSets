@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.UUID;
+import net.tree.budgiesets.processor.effects.PermPotionProcessor;
 
 public class ArmorSetListener implements Listener {
 
@@ -49,7 +50,7 @@ public class ArmorSetListener implements Listener {
         } else if (!isWearingFullSet(player) && currentStatus.equals(EquipStatus.EQUIPPED)) {
             player.sendMessage(ChatColor.RED + "You are now not wearing the " + armorSetName + " set and will lose all bonuses.");
             playerEquipStatusHashMap.put(playerId, EquipStatus.NOT_EQUIPPED);
-            PermPotion.removePotionEffects(player);
+            PermPotionProcessor.removePotionEffects(player);
 
         } else if (isWearingFullSet(player) && currentStatus.equals(EquipStatus.NULL)) { // When a player joins the server, it will only trigger this event.
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);

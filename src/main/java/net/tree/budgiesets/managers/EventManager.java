@@ -20,22 +20,21 @@ public class EventManager {
     private void applyEventsOnEquip(Player player, FileConfiguration fileConfiguration) {
         @NotNull List<Map<?, ?>> eventsList = fileConfiguration.getMapList("Events");
         for (Map<?, ?> event : eventsList) {
-            processEvent((Map<String, Object>) event, player);
+            processEvent(event, player);
         }
     }
 
-    private void processEvent(Map<String, Object> eventMap, Player player) {
+    private void processEvent(Map<?, ?> eventMap, Player player) {
         if (eventMap != null) {
-            Set<Map.Entry<String, Object>> entrySet = eventMap.entrySet();
+            Set<? extends Map.Entry<?, ?>> entrySet = eventMap.entrySet();
             if (entrySet.size() == 1) {
-                Map.Entry<String, Object> entry = entrySet.iterator().next();
-                String eventType = entry.getKey();
+                Map.Entry<?, ?> entry = entrySet.iterator().next();
+                String eventType = (String) entry.getKey();
                 EventProcessor processor = EventProcessorFactory.createProcessor(eventType);
-
                 if (processor != null) {
                     Object value = entry.getValue();
                     if (value instanceof Map) {
-                        processor.process((Map<String, Object>) value, player);
+                        processor.process((Map<?, ?>) value, player);
                     } else {
                         Bukkit.getLogger().warning("Invalid event structure found: " + eventMap);
                     }
