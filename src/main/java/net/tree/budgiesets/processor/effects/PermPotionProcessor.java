@@ -10,21 +10,32 @@ import java.util.*;
 
 public class PermPotionProcessor implements EffectProcessor {
 
+    private static final String TYPE_KEY = "Type";
+    private static final String AMPLIFIER_KEY = "Amplifier";
+    private static final String AMBIENT_KEY = "Ambient";
+    private static final String PARTICLES_KEY = "Particles";
+    private static final String CONDITIONS_KEY = "Conditions";
+
     @Override
     public void processEffect(List<?> potions, Player player) {
         for (Object potion : potions) {
             if (potion instanceof Map<?, ?>) {
                 Map<?, ?> potionMap = (Map<?, ?>) potion;
 
-                // Extract and apply PermPotion effects here
-                String type = (String) potionMap.get("Type");
-                int amplifier = (int) potionMap.get("Amplifier");
-                boolean ambient = (boolean) potionMap.get("Ambient");
-                boolean particles = (boolean) potionMap.get("Particles");
-                List<String> conditions = (List<String>) potionMap.get("Conditions");
-                // Assuming you have a method to apply PermPotion effects
-                if (checkConditions(conditions, player)) {
-                    applyPotionEffect(player, type, amplifier, ambient, particles);
+                if (validatePotionConfig(potionMap)) {
+                    // Extract and apply PermPotion effects here
+                    String type = (String) potionMap.get(TYPE_KEY);
+                    int amplifier = (int) potionMap.get(AMPLIFIER_KEY);
+                    boolean ambient = (boolean) potionMap.get(AMBIENT_KEY);
+                    boolean particles = (boolean) potionMap.get(PARTICLES_KEY);
+                    List<String> conditions = (List<String>) potionMap.get("Conditions");
+                    // Assuming you have a method to apply PermPotion effects
+                    if (checkConditions(conditions, player)) {
+                        applyPotionEffect(player, type, amplifier, ambient, particles);
+                    }
+                } else {
+                    // Log an error or inform the user about the invalid configuration
+                    Bukkit.getLogger().warning("Invalid potion configuration: " + potionMap);
                 }
             }
         }
@@ -72,5 +83,18 @@ public class PermPotionProcessor implements EffectProcessor {
             // Remove the player entry from the activeEffects map
             activeEffects.remove(playerId);
         }
+    }
+
+    // Validation method for potion configuration
+    private boolean validatePotionConfig(Map<?, ?> potionMap) {
+        return potionMap.containsKey(TYPE_KEY)
+                && potionMap.containsKey(AMPLIFIER_KEY)
+                && potionMap.containsKey(AMBIENT_KEY)
+                && potionMap.containsKey(PARTICLES_KEY)
+                && potionMap.get(TYPE_KEY) instanceof String
+                && potionMap.get(AMPLIFIER_KEY) instanceof Integer
+                && potionMap.get(AMBIENT_KEY) instanceof Boolean
+                && potionMap.get(PARTICLES_KEY) instanceof Boolean;
+
     }
 }

@@ -11,24 +11,23 @@ import java.util.Map;
 
 public class ConsumeProcessor implements EventProcessor {
     @Override
-    public void process(Map<?, ?> event, Player player, BudgieSets plugin) {
-        new ConsumeListener(player, event);
-        plugin.getServer().getPluginManager().registerEvents(new ConsumeListener(player, event), plugin);
+    public void process(Map<?, ?> effectsMap, Player player, BudgieSets plugin) {
+        plugin.getServer().getPluginManager().registerEvents(new ConsumeListener(player, effectsMap), plugin);
     }
 
     private static class ConsumeListener implements Listener {
 
         private final Player player;
-        private final Map<?, ?> event;
+        private final Map<?, ?> effectsMap;
 
         public ConsumeListener(Player player, Map<?, ?> event) {
             this.player = player;
-            this.event = event;
+            this.effectsMap = event;
         }
 
         @EventHandler
         private void onPlayerConsume(PlayerItemConsumeEvent consumeEvent) {
-            new EffectsManager(event, player);
+            new EffectsManager(effectsMap, player);
         }
 
     }

@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class EffectStaticProcessor implements EventProcessor {
     @Override
-    public void process(Map<?, ?> event, Player player, BudgieSets plugin) {
-        new EffectsManager(event, player);
+    public void process(Map<?, ?> effectsMap, Player player, BudgieSets plugin) {
+        new EffectsManager(effectsMap, player);
     }
 }
 

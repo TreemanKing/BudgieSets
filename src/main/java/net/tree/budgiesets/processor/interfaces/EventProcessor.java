@@ -5,6 +5,6 @@ import org.bukkit.entity.Player;
 import java.util.Map;
 
 public interface EventProcessor {
-    void process(Map<?, ?> event, Player player, BudgieSets plugin);
+    void process(Map<?, ?> effectsMap, Player player, BudgieSets plugin);
 
 }

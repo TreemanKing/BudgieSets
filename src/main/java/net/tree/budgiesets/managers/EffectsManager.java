@@ -4,7 +4,6 @@ import net.tree.budgiesets.processor.factory.EffectProcessorFactory;
 import net.tree.budgiesets.processor.interfaces.EffectProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,7 +51,7 @@ public class EffectsManager {
                     Bukkit.getLogger().warning("Invalid effect type: " + effectType);
                 }
             } else {
-                Bukkit.getLogger().warning("Invalid effect1 structure found: " + effectMap);
+                Bukkit.getLogger().warning("Invalid effect structure found: " + effectMap);
             }
         }
     }
