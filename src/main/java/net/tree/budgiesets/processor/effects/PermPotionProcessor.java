@@ -1,5 +1,6 @@
 package net.tree.budgiesets.processor.effects;
 
+import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import net.tree.budgiesets.processor.interfaces.EffectProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,25 +15,29 @@ public class PermPotionProcessor implements EffectProcessor {
     private static final String AMPLIFIER_KEY = "Amplifier";
     private static final String AMBIENT_KEY = "Ambient";
     private static final String PARTICLES_KEY = "Particles";
-    private static final String CONDITIONS_KEY = "Conditions";
 
     @Override
-    public void processEffect(List<?> potions, Player player) {
+    public void processEffect(List<?> potions, Player player, ArmorSetListener.EquipStatus equipStatus) {
         for (Object potion : potions) {
             if (potion instanceof Map<?, ?>) {
                 Map<?, ?> potionMap = (Map<?, ?>) potion;
 
                 if (validatePotionConfig(potionMap)) {
-                    // Extract and apply PermPotion effects here
-                    String type = (String) potionMap.get(TYPE_KEY);
-                    int amplifier = (int) potionMap.get(AMPLIFIER_KEY);
-                    boolean ambient = (boolean) potionMap.get(AMBIENT_KEY);
-                    boolean particles = (boolean) potionMap.get(PARTICLES_KEY);
-                    List<String> conditions = (List<String>) potionMap.get("Conditions");
-                    // Assuming you have a method to apply PermPotion effects
-                    if (checkConditions(conditions, player)) {
-                        applyPotionEffect(player, type, amplifier, ambient, particles);
+                    if(equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)) {
+                        // Extract and apply PermPotion effects here
+                        String type = (String) potionMap.get(TYPE_KEY);
+                        int amplifier = (int) potionMap.get(AMPLIFIER_KEY);
+                        boolean ambient = (boolean) potionMap.get(AMBIENT_KEY);
+                        boolean particles = (boolean) potionMap.get(PARTICLES_KEY);
+                        List<String> conditions = (List<String>) potionMap.get("Conditions");
+                        // Assuming you have a method to apply PermPotion effects
+                        if (checkConditions(conditions, player)) {
+                            applyPotionEffect(player, type, amplifier, ambient, particles);
+                        }
+                    } else {
+                        removePotionEffects(player);
                     }
+
                 } else {
                     // Log an error or inform the user about the invalid configuration
                     Bukkit.getLogger().warning("Invalid potion configuration: " + potionMap);
@@ -66,7 +71,7 @@ public class PermPotionProcessor implements EffectProcessor {
         }
     }
 
-    public static void removePotionEffects(Player player) {
+    public void removePotionEffects(Player player) {
         UUID playerId = player.getUniqueId();
         List<PotionEffect> playerEffects = activeEffects.get(playerId);
 

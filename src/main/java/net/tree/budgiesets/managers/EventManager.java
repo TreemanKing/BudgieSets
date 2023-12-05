@@ -1,31 +1,26 @@
 package net.tree.budgiesets.managers;
 
 import net.tree.budgiesets.BudgieSets;
+import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import net.tree.budgiesets.processor.factory.EventProcessorFactory;
 import net.tree.budgiesets.processor.interfaces.EventProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 
 
 public class EventManager {
 
-    public EventManager(Player player, FileConfiguration fileConfiguration, BudgieSets plugin) {
-        applyEventsOnEquip(player, fileConfiguration, plugin);
-    }
-
-    private void applyEventsOnEquip(Player player, FileConfiguration fileConfiguration, BudgieSets plugin) {
+    public void registerArmorEvents(FileConfiguration fileConfiguration, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
         @NotNull List<Map<?, ?>> eventsList = fileConfiguration.getMapList("Events");
         for (Map<?, ?> event : eventsList) {
-            processEvent(event, player, plugin);
+            processEvent(event, plugin, playerEquipStatusHashMap);
         }
     }
 
-    private void processEvent(Map<?, ?> eventMap, Player player, BudgieSets plugin) {
+    private void processEvent(Map<?, ?> eventMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
         if (eventMap != null) {
             Set<? extends Map.Entry<?, ?>> entrySet = eventMap.entrySet();
             if (entrySet.size() == 1) {
@@ -35,7 +30,7 @@ public class EventManager {
                 if (processor != null) {
                     Object value = entry.getValue();
                     if (value instanceof Map) {
-                        processor.process((Map<?, ?>) value, player, plugin);
+                        processor.process((Map<?, ?>) value, plugin, playerEquipStatusHashMap);
                     } else {
                         Bukkit.getLogger().warning("Invalid event structure found: " + eventMap);
                     }

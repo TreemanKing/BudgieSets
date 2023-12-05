@@ -22,20 +22,21 @@ import net.tree.budgiesets.processor.effects.PermPotionProcessor;
 public class ArmorSetListener implements Listener {
 
     private final String armorSetName;
-    private final FileConfiguration armorSetConfig;
     private final HashMap<UUID, EquipStatus> playerEquipStatusHashMap = new HashMap<>();
     private final BudgieSets plugin;
 
     public ArmorSetListener(String armorSetName, FileConfiguration armorSetConfig, BudgieSets plugin) {
         this.armorSetName = armorSetName;
-        this.armorSetConfig = armorSetConfig;
         this.plugin = plugin;
+
+        EventManager eventManager = new EventManager();
+        eventManager.registerArmorEvents(armorSetConfig, plugin, this.playerEquipStatusHashMap);
     }
 
     // Events
 
     // Handles armor set equipping/unequipped. This has nothing to do with registration of the events
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerEquip(PlayerArmorChangeEvent event) {
         Player player = event.getPlayer();
         UUID playerId = player.getUniqueId();
@@ -44,12 +45,10 @@ public class ArmorSetListener implements Listener {
         if (isWearingFullSet(player) && currentStatus.equals(EquipStatus.NOT_EQUIPPED)) {
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
             player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-            new EventManager(player, armorSetConfig, plugin);
 
         } else if (!isWearingFullSet(player) && currentStatus.equals(EquipStatus.EQUIPPED)) {
             player.sendMessage(ChatColor.RED + "You are now not wearing the " + armorSetName + " set and will lose all bonuses.");
             playerEquipStatusHashMap.put(playerId, EquipStatus.NOT_EQUIPPED);
-            PermPotionProcessor.removePotionEffects(player);
 
         } else if (isWearingFullSet(player) && currentStatus.equals(EquipStatus.NULL)) { // When a player joins the server, it will only trigger this event.
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
@@ -58,7 +57,6 @@ public class ArmorSetListener implements Listener {
                 // Your code to be executed after 5 seconds goes here
                 // For example, you can send a delayed message to the player
                 player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-                new EventManager(player, armorSetConfig, plugin);
             }, 60L);
         }
     }
@@ -102,7 +100,7 @@ public class ArmorSetListener implements Listener {
         return nbtItem.hasTag("armorSet") && nbtItem.getString("armorSet").equals(setName);
     }
 
-    private enum EquipStatus {
+    public enum EquipStatus {
         EQUIPPED,
         NOT_EQUIPPED,
         /**
