@@ -15,8 +15,10 @@ public class EventProcessorFactory {
                 return new ConsumeProcessor();
             case "JUMP":
                 return new JumpProcessor();
+                /*
             case "ATTACK":
                 return new AttackProcessor();
+                 */
             default:
                 return null;
         }

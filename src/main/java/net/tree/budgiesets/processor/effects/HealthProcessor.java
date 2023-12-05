@@ -1,5 +1,6 @@
 package net.tree.budgiesets.processor.effects;
 
+import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import net.tree.budgiesets.processor.interfaces.EffectProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,11 +13,13 @@ public class HealthProcessor implements EffectProcessor {
     private static final String AMOUNT_KEY = "Amount";
 
     @Override
-    public void processEffect(List<?> healths, Player player) {
+    public void processEffect(List<?> healths, Player player, ArmorSetListener.EquipStatus equipStatus) {
         for (Object health : healths) {
             if (health instanceof Map<?, ?>) {
                 Map<?, ?> healthMap = (Map<?, ?>) health;
                 if (validateHealthConfig(healthMap)) {
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
+
                     double amount = (double) healthMap.get(AMOUNT_KEY);
                     List<String> conditions = (List<String>) healthMap.get("Conditions");
 

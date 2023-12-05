@@ -1,8 +1,8 @@
-package net.tree.budgiesets.processor.interfaces;
+package net.tree.budgiesets.processor.interfaces.utils;
 
 import java.util.Map;
 
-public interface EventUtilities {
+public interface EventSettings {
 
     default boolean checkCancelled(Map<?, ?> effectsMap) {
         final String CANCELLED_KEY = "Cancelled";

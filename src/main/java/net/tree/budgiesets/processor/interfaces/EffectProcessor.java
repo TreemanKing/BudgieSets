@@ -1,6 +1,7 @@
 package net.tree.budgiesets.processor.interfaces;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 public interface EffectProcessor {
-    void processEffect(List<?> effect, Player player);
+    void processEffect(List<?> effect, Player player, ArmorSetListener.EquipStatus equipStatus);
 
     // Condition Checker using Placeholder API
     default boolean checkConditions(List<String> conditions, Player player) {

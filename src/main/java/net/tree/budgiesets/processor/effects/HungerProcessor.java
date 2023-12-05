@@ -1,5 +1,6 @@
 package net.tree.budgiesets.processor.effects;
 
+import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import net.tree.budgiesets.processor.interfaces.EffectProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,11 +13,13 @@ public class HungerProcessor implements EffectProcessor {
     private static final String AMOUNT_KEY = "Amount";
 
     @Override
-    public void processEffect(List<?> hungers, Player player) {
+    public void processEffect(List<?> hungers, Player player, ArmorSetListener.EquipStatus equipStatus) {
         for (Object hunger : hungers) {
             if (hunger instanceof Map<?, ?>) {
                 Map<?, ?> hungerMap = (Map<?, ?>) hunger;
                 if (validateHungerConfig(hungerMap)) {
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
+
                     int amount = (int) hungerMap.get(AMOUNT_KEY);
                     List<String> conditions = (List<String>) hungerMap.get("Conditions");
 
