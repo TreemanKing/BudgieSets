@@ -8,43 +8,38 @@ import net.tree.budgiesets.processor.interfaces.utils.EventSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class AttackProcessor implements EventProcessor {
-
+public class HookProcessor implements EventProcessor {
     @Override
     public void process(Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
-        plugin.getServer().getPluginManager().registerEvents(new AttackProcessor.AttackListener(effectsMap, playerEquipStatusHashMap), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new HookProcessor.HookListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class AttackListener implements Listener, EventSettings {
+    private static class HookListener implements Listener, EventSettings {
 
         private final Map<?, ?> effectsMap;
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
 
-        public AttackListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+        public HookListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
             this.effectsMap = event;
             this.playerEquipStatus = playerEquipStatusHashMap;
         }
 
         @EventHandler
-        private void onPlayerAttack(EntityDamageByEntityEvent damageByEntityEvent) {
-            if (!(damageByEntityEvent.getEntity() instanceof Player)) return;
-
-            Player player = (Player) damageByEntityEvent.getDamager();
+        private void onFishingHook(PlayerFishEvent fishEvent) {
+            Player player = fishEvent.getPlayer();
 
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
-
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
             new EffectsManager(effectsMap, player, currentStatus);
-            damageByEntityEvent.setCancelled(checkCancelled(effectsMap));
+            fishEvent.setCancelled(checkCancelled(effectsMap));
         }
 
     }
-
 }

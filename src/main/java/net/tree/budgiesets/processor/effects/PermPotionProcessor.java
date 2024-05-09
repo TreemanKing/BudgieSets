@@ -11,10 +11,10 @@ import java.util.*;
 
 public class PermPotionProcessor implements EffectProcessor {
 
-    private static final String TYPE_KEY = "Type";
-    private static final String AMPLIFIER_KEY = "Amplifier";
-    private static final String AMBIENT_KEY = "Ambient";
-    private static final String PARTICLES_KEY = "Particles";
+    private final String TYPE_KEY = "Type";
+    private final String AMPLIFIER_KEY = "Amplifier";
+    private final String AMBIENT_KEY = "Ambient";
+    private final String PARTICLES_KEY = "Particles";
 
     @Override
     public void processEffect(List<?> potions, Player player, ArmorSetListener.EquipStatus equipStatus) {

@@ -1,10 +1,7 @@
 package net.tree.budgiesets.processor.factory;
 
-import net.tree.budgiesets.processor.events.AttackProcessor;
-import net.tree.budgiesets.processor.events.JumpProcessor;
+import net.tree.budgiesets.processor.events.*;
 import net.tree.budgiesets.processor.interfaces.EventProcessor;
-import net.tree.budgiesets.processor.events.ConsumeProcessor;
-import net.tree.budgiesets.processor.events.EffectStaticProcessor;
 
 public class EventProcessorFactory {
     public static EventProcessor createProcessor(String eventType) {
@@ -15,6 +12,8 @@ public class EventProcessorFactory {
                 return new ConsumeProcessor();
             case "JUMP":
                 return new JumpProcessor();
+            case "HOOK":
+                return new HookProcessor();
                 /*
             case "ATTACK":
                 return new AttackProcessor();

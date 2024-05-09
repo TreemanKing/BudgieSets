@@ -10,7 +10,6 @@ import java.util.Map;
 
 public class ActionBarProcessor implements EffectProcessor {
 
-
     private static final String TEXT_KEY = "Text";
 
     @Override

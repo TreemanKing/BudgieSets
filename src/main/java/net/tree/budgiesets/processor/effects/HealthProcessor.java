@@ -30,13 +30,26 @@ public class HealthProcessor implements EffectProcessor {
                     // Log an error or inform the user about the invalid configuration
                     Bukkit.getLogger().warning("Invalid health configuration: " + healthMap);
                 }
-
             }
         }
     }
 
     private void setHealth(@NotNull Player player, double amount) {
-        player.setHealth(player.getHealth() + amount);
+        double currentHealth = player.getHealth();
+        double maxHealth = player.getMaxHealth();
+
+        if (amount < 0) {
+            // Handle case where amount is negative (health is being subtracted)
+            if (currentHealth + amount < 0) {
+                player.setHealth(0);
+            } else {
+                player.setHealth(Math.max(currentHealth + amount, 0));
+            }
+        } else if (amount > 0) {
+            // Handle case where amount is positive (health is being added)
+            double newHealth = currentHealth + amount;
+            player.setHealth(Math.min(newHealth, maxHealth));
+        }
     }
 
     private boolean validateHealthConfig(Map<?, ?> healthMap) {

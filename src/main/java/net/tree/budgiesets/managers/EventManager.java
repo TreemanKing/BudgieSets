@@ -13,7 +13,7 @@ import java.util.*;
 
 public class EventManager {
 
-    public void registerArmorEvents(FileConfiguration fileConfiguration, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+    public void registerArmorEvents(@NotNull FileConfiguration fileConfiguration, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
         @NotNull List<Map<?, ?>> eventsList = fileConfiguration.getMapList("Events");
         for (Map<?, ?> event : eventsList) {
             processEvent(event, plugin, playerEquipStatusHashMap);
