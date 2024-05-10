@@ -5,36 +5,38 @@ import net.tree.budgiesets.processor.factory.EffectProcessorFactory;
 import net.tree.budgiesets.processor.interfaces.EffectProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class EffectsManager {
 
-    public EffectsManager (Map<?, ?> event, Player player, ArmorSetListener.EquipStatus equipStatus) {
-        processEffectsMap(event, player, equipStatus);
+    public EffectsManager (Map<?, ?> eventMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+        processEffectsMap(eventMap, player, equipStatus, event);
     }
 
-    private void processEffectsMap(Map<?, ?> event, Player player, ArmorSetListener.EquipStatus equipStatus) {
-        if (event.containsKey("Effects")) {
-            List<Map<?, ?>> effects = (List<Map<?, ?>>) event.get("Effects");
-            processEffects(effects, player, equipStatus);
+    private void processEffectsMap(Map<?, ?> eventMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+        if (eventMap.containsKey("Effects")) {
+            List<Map<?, ?>> effects = (List<Map<?, ?>>) eventMap.get("Effects");
+            processEffects(effects, player, equipStatus, event);
         } else {
             throw new IllegalArgumentException("Effects key not found for an event.");
         }
     }
 
-    private void processEffects(List<Map<?, ?>> effectsMap, Player player, ArmorSetListener.EquipStatus equipStatus) {
+    private void processEffects(List<Map<?, ?>> effectsMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         if (effectsMap != null) {
             for (Map<?, ?> effect : effectsMap) {
-                processEffect(effect, player, equipStatus);
+                processEffect(effect, player, equipStatus, event);
             }
         } else {
             throw new IllegalArgumentException("Effects list not found or is null for an event.");
         }
     }
 
-    private void processEffect(Map<?, ?> effectMap, Player player, ArmorSetListener.EquipStatus equipStatus) {
+    private void processEffect(Map<?, ?> effectMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         if (effectMap != null) {
             Set<? extends Map.Entry<?, ?>> entrySet = effectMap.entrySet();
             if (entrySet.size() == 1) {
@@ -44,7 +46,7 @@ public class EffectsManager {
                 if (processor != null) {
                     Object value = entry.getValue();
                     if (value instanceof List) {
-                        processor.processEffect((List<?>) value, player, equipStatus);
+                        processor.processEffect((List<?>) value, player, equipStatus, event);
                     } else {
                         Bukkit.getLogger().warning("Invalid effect structure found: " + effectMap);
                     }

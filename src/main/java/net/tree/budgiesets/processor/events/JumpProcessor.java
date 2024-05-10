@@ -37,8 +37,7 @@ public class JumpProcessor implements EventProcessor, Listener {
 
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
-            new EffectsManager(effectsMap, player, currentStatus);
-            jumpEvent.setCancelled(checkCancelled(effectsMap));
+            new EffectsManager(effectsMap, player, currentStatus, jumpEvent);
         }
     }
 

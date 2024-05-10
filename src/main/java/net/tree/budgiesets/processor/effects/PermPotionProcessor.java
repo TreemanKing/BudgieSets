@@ -4,6 +4,7 @@ import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import net.tree.budgiesets.processor.interfaces.EffectProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,7 @@ public class PermPotionProcessor implements EffectProcessor {
     private final String PARTICLES_KEY = "Particles";
 
     @Override
-    public void processEffect(List<?> potions, Player player, ArmorSetListener.EquipStatus equipStatus) {
+    public void processEffect(List<?> potions, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object potion : potions) {
             if (potion instanceof Map<?, ?>) {
                 Map<?, ?> potionMap = (Map<?, ?>) potion;

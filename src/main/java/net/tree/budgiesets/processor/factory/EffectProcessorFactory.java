@@ -18,6 +18,8 @@ public class EffectProcessorFactory {
                 return new BurnProcessor();
             case "EXP_LEVEL":
                 return new ExpLevelProcessor();
+            case "CANCEL_EVENT":
+                return new EventCancelProcessor();
             default:
                 return null;
         }

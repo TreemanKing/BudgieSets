@@ -4,6 +4,7 @@ import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import net.tree.budgiesets.processor.interfaces.EffectProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ public class BurnProcessor implements EffectProcessor {
     private static final Object BURN_KEY = "Time";
 
     @Override
-    public void processEffect(List<?> burns, Player player, ArmorSetListener.EquipStatus equipStatus) {
+    public void processEffect(List<?> burns, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object burn : burns) {
             if (burn instanceof Map<?, ?>) {
                 Map<?, ?> burnMap = (Map<?, ?>) burn;

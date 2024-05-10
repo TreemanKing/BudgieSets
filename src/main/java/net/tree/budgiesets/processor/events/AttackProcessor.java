@@ -41,8 +41,7 @@ public class AttackProcessor implements EventProcessor {
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
 
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
-            new EffectsManager(effectsMap, player, currentStatus);
-            damageByEntityEvent.setCancelled(checkCancelled(effectsMap));
+            new EffectsManager(effectsMap, player, currentStatus, damageByEntityEvent);
         }
 
     }

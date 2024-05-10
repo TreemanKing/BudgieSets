@@ -36,7 +36,7 @@ public class ConsumeProcessor implements EventProcessor {
 
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
-            new EffectsManager(effectsMap, player, currentStatus);
+            new EffectsManager(effectsMap, player, currentStatus, consumeEvent);
             consumeEvent.setCancelled(checkCancelled(effectsMap));
         }
 

@@ -4,6 +4,7 @@ import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import net.tree.budgiesets.processor.interfaces.EffectProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class ExpLevelProcessor implements EffectProcessor {
     private static final String AMOUNT_KEY = "Amount";
 
     @Override
-    public void processEffect(List<?> expLevels, Player player, ArmorSetListener.EquipStatus equipStatus) {
+    public void processEffect(List<?> expLevels, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object expLevel : expLevels) {
             if (expLevel instanceof Map<?, ?>) {
                 Map<?, ?> expLevelMap = (Map<?, ?>) expLevel;

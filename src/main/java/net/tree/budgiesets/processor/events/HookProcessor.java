@@ -37,7 +37,7 @@ public class HookProcessor implements EventProcessor {
 
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
-            new EffectsManager(effectsMap, player, currentStatus);
+            new EffectsManager(effectsMap, player, currentStatus, fishEvent);
             fishEvent.setCancelled(checkCancelled(effectsMap));
         }
 
