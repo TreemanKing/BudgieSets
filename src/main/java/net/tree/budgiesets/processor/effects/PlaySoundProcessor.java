@@ -13,8 +13,8 @@ import java.util.Map;
 public class PlaySoundProcessor implements EffectProcessor {
 
     private final String SOUND_KEY = "Sound";
-    private static String VOLUME_KEY = "Volume";
-    private static String PITCH_KEY = "Pitch";
+    private final String VOLUME_KEY = "Volume";
+    private final String PITCH_KEY = "Pitch";
 
     @Override
     public void processEffect(List<?> sounds, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
@@ -24,21 +24,20 @@ public class PlaySoundProcessor implements EffectProcessor {
                 if (validateSoundConfig(soundMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 
-                    String sound2 = (String) soundMap.get(SOUND_KEY);
-                    //sound.
+                    Sound soundType = Enum.valueOf(Sound.class, (String) soundMap.get(SOUND_KEY));
                     int volume = (int) soundMap.get(VOLUME_KEY);
                     int pitch = (int) soundMap.get(PITCH_KEY);
 
                     List<String> conditions = (List<String>) soundMap.get("Conditions");
 
                     if (checkConditions(conditions, player)) {
-                        //playSound(player, sound);
+                        playSound(player, soundType, volume, pitch);
                     }
 
 
                 } else {
                     // Log an error or inform the user about the invalid configuration
-                    Bukkit.getLogger().warning("Invalid hunger configuration: " + soundMap);
+                    Bukkit.getLogger().warning("Invalid sound configuration: " + soundMap);
                 }
 
             }
@@ -46,17 +45,25 @@ public class PlaySoundProcessor implements EffectProcessor {
     }
 
     private void playSound(Player player, Sound sound, int volume, int pitch) {
-        player.getWorld().playSound(player.getLocation(), Sound.ITEM_GOAT_HORN_SOUND_0, 1, 5);
+        player.getWorld().playSound(player.getLocation(), sound, volume, pitch);
     }
 
-    private boolean validateSoundConfig(Map<?, ?> potionMap) {
-        /*return potionMap.containsKey(AMPLIFIER_KEY)
-                && potionMap.containsKey(AMBIENT_KEY)
-                && potionMap.containsKey(PARTICLES_KEY)
-                && potionMap.get(TYPE_KEY) instanceof String
-                && potionMap.get(AMPLIFIER_KEY) instanceof Integer
-                && potionMap.get(AMBIENT_KEY) instanceof Boolean
-                && potionMap.get(PARTICLES_KEY) instanceof Boolean;*/
+    private boolean validateSoundConfig(Map<?, ?> soundMap) {
+        return soundMap.containsKey(SOUND_KEY)
+                && soundMap.containsKey(VOLUME_KEY)
+                && soundMap.containsKey(PITCH_KEY)
+                && isValidSoundEnum((String) soundMap.get(SOUND_KEY))
+                && soundMap.get(VOLUME_KEY) instanceof Integer
+                && soundMap.get(PITCH_KEY) instanceof Integer;
+    }
+
+    private boolean isValidSoundEnum(String type) {
+        try {
+            Enum.valueOf(Sound.class, type);
+            return true;
+        } catch (IllegalArgumentException exception) {
+            Bukkit.getLogger().warning(type + "Not a valid sound.");
+        }
         return false;
     }
 }

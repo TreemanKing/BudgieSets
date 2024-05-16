@@ -22,6 +22,10 @@ public class EffectProcessorFactory {
                 return new EventCancelProcessor();
             case "POTION":
                 return new PotionProcessor();
+            case "PLAY_SOUND":
+                return new PlaySoundProcessor();
+            case "PARTICLE":
+                return new ParticleProcessor();
             default:
                 return null;
         }
