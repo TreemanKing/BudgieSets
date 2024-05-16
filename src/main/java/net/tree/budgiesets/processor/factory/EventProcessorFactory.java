@@ -14,6 +14,8 @@ public class EventProcessorFactory {
                 return new JumpProcessor();
             case "HOOK":
                 return new HookProcessor();
+            case "PLAYER_ELYTRA_BOOST":
+                return new ElytraBoostProcessor();
                 /*
             case "ATTACK":
                 return new AttackProcessor();
