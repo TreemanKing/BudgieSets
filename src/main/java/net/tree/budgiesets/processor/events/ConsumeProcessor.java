@@ -4,7 +4,6 @@ import net.tree.budgiesets.BudgieSets;
 import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import net.tree.budgiesets.managers.EffectsManager;
 import net.tree.budgiesets.processor.interfaces.EventProcessor;
-import net.tree.budgiesets.processor.interfaces.utils.EventSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +19,7 @@ public class ConsumeProcessor implements EventProcessor {
         plugin.getServer().getPluginManager().registerEvents(new ConsumeListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class ConsumeListener implements Listener, EventSettings {
+    private static class ConsumeListener implements Listener {
 
         private final Map<?, ?> effectsMap;
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
@@ -37,7 +36,6 @@ public class ConsumeProcessor implements EventProcessor {
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
             new EffectsManager(effectsMap, player, currentStatus, consumeEvent);
-            consumeEvent.setCancelled(checkCancelled(effectsMap));
         }
 
     }

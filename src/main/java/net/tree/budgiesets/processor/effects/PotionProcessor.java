@@ -8,18 +8,19 @@ import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
-public class PermPotionProcessor implements EffectProcessor {
+public class PotionProcessor implements EffectProcessor {
 
     private final String TYPE_KEY = "Type";
+    private final String DURATION_KEY = "Duration";
     private final String AMPLIFIER_KEY = "Amplifier";
     private final String AMBIENT_KEY = "Ambient";
     private final String PARTICLES_KEY = "Particles";
-
     @Override
-    public void processEffect(List<?> potions, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
-        for (Object potion : potions) {
+    public void processEffect(List<?> effect, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+        for (Object potion : effect) {
             if (potion instanceof Map<?, ?>) {
                 Map<?, ?> potionMap = (Map<?, ?>) potion;
 
@@ -27,18 +28,18 @@ public class PermPotionProcessor implements EffectProcessor {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)) {
                         // Extract and apply PermPotion effects here
                         String type = (String) potionMap.get(TYPE_KEY);
+                        int duration = (int) potionMap.get(DURATION_KEY);
                         int amplifier = (int) potionMap.get(AMPLIFIER_KEY);
                         boolean ambient = (boolean) potionMap.get(AMBIENT_KEY);
                         boolean particles = (boolean) potionMap.get(PARTICLES_KEY);
                         List<String> conditions = (List<String>) potionMap.get("Conditions");
                         // Assuming you have a method to apply PermPotion effects
                         if (checkConditions(conditions, player)) {
-                            applyPotionEffect(player, type, amplifier, ambient, particles);
+                            applyPotionEffect(player, duration, type, amplifier, ambient, particles);
                         }
                     } else {
-                        removePotionEffects(player);
+                        if ((int) potionMap.get(DURATION_KEY) == -1) removePotionEffects(player);
                     }
-
                 } else {
                     // Log an error or inform the user about the invalid configuration
                     Bukkit.getLogger().warning("Invalid potion configuration: " + potionMap);
@@ -49,12 +50,12 @@ public class PermPotionProcessor implements EffectProcessor {
 
     private static final Map<UUID, List<PotionEffect>> activeEffects = new HashMap<>();
 
-    private void applyPotionEffect(@NotNull Player player, @NotNull String effectName, int amplifier, boolean ambient, boolean particles) {
+    private void applyPotionEffect(@NotNull Player player, int duration, @NotNull String effectName, int amplifier, boolean ambient, boolean particles) {
         PotionEffectType effectType = PotionEffectType.getByName(effectName.toUpperCase());
 
         if (effectType != null) {
             // Apply the permanent potion effect
-            PotionEffect effect = new PotionEffect(effectType, PotionEffect.INFINITE_DURATION, amplifier, ambient, particles);
+            PotionEffect effect = new PotionEffect(effectType, duration * 20, amplifier, ambient, particles);
 
             // Check if the player already has effects
             if (activeEffects.containsKey(player.getUniqueId())) {
@@ -94,13 +95,14 @@ public class PermPotionProcessor implements EffectProcessor {
     // Validation method for potion configuration
     private boolean validatePotionConfig(Map<?, ?> potionMap) {
         return potionMap.containsKey(TYPE_KEY)
+                && potionMap.containsKey(DURATION_KEY)
                 && potionMap.containsKey(AMPLIFIER_KEY)
                 && potionMap.containsKey(AMBIENT_KEY)
                 && potionMap.containsKey(PARTICLES_KEY)
                 && potionMap.get(TYPE_KEY) instanceof String
+                && potionMap.get(DURATION_KEY) instanceof Integer
                 && potionMap.get(AMPLIFIER_KEY) instanceof Integer
                 && potionMap.get(AMBIENT_KEY) instanceof Boolean
                 && potionMap.get(PARTICLES_KEY) instanceof Boolean;
-
     }
 }

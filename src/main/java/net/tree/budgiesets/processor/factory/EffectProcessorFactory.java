@@ -20,6 +20,8 @@ public class EffectProcessorFactory {
                 return new ExpLevelProcessor();
             case "CANCEL_EVENT":
                 return new EventCancelProcessor();
+            case "POTION":
+                return new PotionProcessor();
             default:
                 return null;
         }

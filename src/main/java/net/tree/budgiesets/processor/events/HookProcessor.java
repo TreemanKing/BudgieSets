@@ -4,13 +4,10 @@ import net.tree.budgiesets.BudgieSets;
 import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import net.tree.budgiesets.managers.EffectsManager;
 import net.tree.budgiesets.processor.interfaces.EventProcessor;
-import net.tree.budgiesets.processor.interfaces.utils.EventSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -21,7 +18,7 @@ public class HookProcessor implements EventProcessor {
         plugin.getServer().getPluginManager().registerEvents(new HookProcessor.HookListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class HookListener implements Listener, EventSettings {
+    private static class HookListener implements Listener {
 
         private final Map<?, ?> effectsMap;
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
@@ -38,8 +35,6 @@ public class HookProcessor implements EventProcessor {
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
             new EffectsManager(effectsMap, player, currentStatus, fishEvent);
-            fishEvent.setCancelled(checkCancelled(effectsMap));
         }
-
     }
 }

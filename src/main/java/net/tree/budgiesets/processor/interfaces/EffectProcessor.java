@@ -4,20 +4,20 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
-
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public interface EffectProcessor {
     void processEffect(List<?> effect, Player player, ArmorSetListener.EquipStatus equipStatus, Event event);
 
+    // Check Cooldown
+
+
     // Condition Checker using Placeholder API
     default boolean checkConditions(List<String> conditions, Player player) {
         // Don't check conditions if PlaceholderAPI is not enabled
-        if(!Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI")).isEnabled()) {
+        if (!Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI")).isEnabled()) {
             Bukkit.getLogger().warning("PlaceholderAPI is not enabled on this server, conditions will not work!");
             return true;
         }

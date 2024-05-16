@@ -4,13 +4,10 @@ import net.tree.budgiesets.BudgieSets;
 import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import net.tree.budgiesets.managers.EffectsManager;
 import net.tree.budgiesets.processor.interfaces.EventProcessor;
-import net.tree.budgiesets.processor.interfaces.utils.EventSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -22,7 +19,7 @@ public class AttackProcessor implements EventProcessor {
         plugin.getServer().getPluginManager().registerEvents(new AttackProcessor.AttackListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class AttackListener implements Listener, EventSettings {
+    private static class AttackListener implements Listener {
 
         private final Map<?, ?> effectsMap;
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;

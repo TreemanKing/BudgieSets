@@ -5,7 +5,6 @@ import net.tree.budgiesets.BudgieSets;
 import net.tree.budgiesets.eventlisteners.ArmorSetListener;
 import net.tree.budgiesets.managers.EffectsManager;
 import net.tree.budgiesets.processor.interfaces.EventProcessor;
-import net.tree.budgiesets.processor.interfaces.utils.EventSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,7 +19,7 @@ public class EffectStaticProcessor implements EventProcessor {
         plugin.getServer().getPluginManager().registerEvents(new EffectStaticListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class EffectStaticListener implements Listener, EventSettings {
+    private static class EffectStaticListener implements Listener {
 
         private final Map<?, ?> effectsMap;
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
