@@ -17,8 +17,7 @@ public class ActionBarProcessor implements EffectProcessor {
     @Override
     public void processEffect(List<?> actionBars, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object actionBar : actionBars) {
-            if (actionBar instanceof Map<?, ?>) {
-                Map<?, ?> actionBarMap = (Map<?, ?>) actionBar;
+            if (actionBar instanceof Map<?, ?> actionBarMap) {
                 if (validateActionBarConifg(actionBarMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 

@@ -15,23 +15,13 @@ public class EventProcessorFactory {
      * @return an EventProcessor instance corresponding to the event type, or null if the event type is not recognized
      */
     public static EventProcessor createProcessor(String eventType) {
-        switch (eventType.toUpperCase()) {
-            case "EFFECT_STATIC":
-                return new EffectStaticProcessor();
-            case "CONSUME":
-                return new ConsumeProcessor();
-            case "JUMP":
-                return new JumpProcessor();
-            case "HOOK":
-                return new HookProcessor();
-            case "PLAYER_ELYTRA_BOOST":
-                return new ElytraBoostProcessor();
-            /*
-            case "ATTACK":
-                return new AttackProcessor();
-             */
-            default:
-                return null;
-        }
+        return switch (eventType.toUpperCase()) {
+            case "EFFECT_STATIC" -> new EffectStaticProcessor();
+            case "CONSUME" -> new ConsumeProcessor();
+            case "JUMP" -> new JumpProcessor();
+            case "HOOK" -> new HookProcessor();
+            case "PLAYER_ELYTRA_BOOST" -> new ElytraBoostProcessor();
+            default -> null;
+        };
     }
 }

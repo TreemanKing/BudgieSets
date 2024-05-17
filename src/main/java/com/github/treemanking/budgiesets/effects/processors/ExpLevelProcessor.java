@@ -18,8 +18,7 @@ public class ExpLevelProcessor implements EffectProcessor {
     @Override
     public void processEffect(List<?> expLevels, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object expLevel : expLevels) {
-            if (expLevel instanceof Map<?, ?>) {
-                Map<?, ?> expLevelMap = (Map<?, ?>) expLevel;
+            if (expLevel instanceof Map<?, ?> expLevelMap) {
                 if (validateHealthConfig(expLevelMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 

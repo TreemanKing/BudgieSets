@@ -20,8 +20,7 @@ public class PlaySoundProcessor implements EffectProcessor {
     @Override
     public void processEffect(List<?> sounds, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object sound : sounds) {
-            if (sound instanceof Map<?, ?>) {
-                Map<?, ?> soundMap = (Map<?, ?>) sound;
+            if (sound instanceof Map<?, ?> soundMap) {
                 if (validateSoundConfig(soundMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 

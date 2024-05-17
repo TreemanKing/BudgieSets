@@ -21,9 +21,7 @@ public class PermPotionProcessor implements EffectProcessor {
     @Override
     public void processEffect(List<?> potions, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object potion : potions) {
-            if (potion instanceof Map<?, ?>) {
-                Map<?, ?> potionMap = (Map<?, ?>) potion;
-
+            if (potion instanceof Map<?, ?> potionMap) {
                 if (validatePotionConfig(potionMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)) {
                         // Extract and apply PermPotion effects here

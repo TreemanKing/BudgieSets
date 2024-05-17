@@ -17,8 +17,7 @@ public class HungerProcessor implements EffectProcessor {
     @Override
     public void processEffect(List<?> hungers, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object hunger : hungers) {
-            if (hunger instanceof Map<?, ?>) {
-                Map<?, ?> hungerMap = (Map<?, ?>) hunger;
+            if (hunger instanceof Map<?, ?> hungerMap) {
                 if (validateHungerConfig(hungerMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 

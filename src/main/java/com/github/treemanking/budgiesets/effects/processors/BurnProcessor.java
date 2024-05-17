@@ -16,8 +16,7 @@ public class BurnProcessor implements EffectProcessor {
     @Override
     public void processEffect(List<?> burns, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object burn : burns) {
-            if (burn instanceof Map<?, ?>) {
-                Map<?, ?> burnMap = (Map<?, ?>) burn;
+            if (burn instanceof Map<?, ?> burnMap) {
                 if (validateBurnConifg(burnMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 

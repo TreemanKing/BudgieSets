@@ -1,9 +1,11 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.destroystokyo.paper.ParticleBuilder;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -14,26 +16,28 @@ import java.util.Map;
 public class ParticleProcessor implements EffectProcessor {
 
     private final String PARTICLE_KEY = "Particle";
+    private final String COLOR_KEY = "RGB";
     private final String COUNT_KEY = "Count";
     private final String DATA_KEY = "Data";
 
     @Override
     public void processEffect(List<?> particles, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object particle : particles) {
-            if (particle instanceof Map<?, ?>) {
-                Map<?, ?> particleMap = (Map<?, ?>) particle;
+            if (particle instanceof Map<?, ?> particleMap) {
                 if (validateParticleConfig(particleMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 
                     Particle particleType = Enum.valueOf(Particle.class, (String) particleMap.get(PARTICLE_KEY));
+                    int rgb = (int) particleMap.get(COLOR_KEY);
                     int count = (int) particleMap.get(COUNT_KEY);
-                    Object data = particleMap.get(DATA_KEY);
+                    System.out.println(particleMap.get(DATA_KEY));
+                    Class <?> particleDataType = particleType.getDataType();
 
                     List<String> conditions = (List<String>) particleMap.get("Conditions");
 
                     if (checkConditions(conditions, player)) {
                         // TODO: Verify and check against the data field for each type of datafield
-                        spawnParticle(player, particleType, count, data);
+                        spawnParticle(player, particleType, rgb, count, null);
                     }
 
                 } else {
@@ -44,19 +48,16 @@ public class ParticleProcessor implements EffectProcessor {
         }
     }
 
-    private void spawnParticle(Player player, Particle particle, int count, Object data) {
-        if (particle.getDataType() == Void.class) data = null;
-        try {
-            player.getWorld().spawnParticle(particle, player.getLocation(), count, data);
-        } catch (IllegalArgumentException e) {
-            BudgieSets.getBudgieSets().getLogger().warning("The data given is not valid for the particle.");
-        }
+    private void spawnParticle(Player player, Particle particle, int color, int count, Object data) {
+        ParticleBuilder particleBuilder = new ParticleBuilder(particle);
+        particleBuilder.location(player.getLocation()).count(count).color(Color.fromRGB(color));
     }
 
     private boolean validateParticleConfig(Map<?, ?> particleMap) {
         return particleMap.containsKey(PARTICLE_KEY)
                 && particleMap.containsKey(COUNT_KEY)
                 && isValidParticleEnum((String) particleMap.get(PARTICLE_KEY))
+                && particleMap.get(COLOR_KEY) instanceof Integer
                 && particleMap.get(COUNT_KEY) instanceof Integer;
     }
 

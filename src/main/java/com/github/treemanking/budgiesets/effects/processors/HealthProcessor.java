@@ -17,8 +17,7 @@ public class HealthProcessor implements EffectProcessor {
     @Override
     public void processEffect(List<?> healths, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object health : healths) {
-            if (health instanceof Map<?, ?>) {
-                Map<?, ?> healthMap = (Map<?, ?>) health;
+            if (health instanceof Map<?, ?> healthMap) {
                 if (validateHealthConfig(healthMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 

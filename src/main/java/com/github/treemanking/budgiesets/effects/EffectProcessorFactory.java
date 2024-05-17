@@ -14,29 +14,18 @@ public class EffectProcessorFactory {
      * @return an EffectProcessor instance corresponding to the event type, or null if the event type is not recognized
      */
     public static EffectProcessor createProcessor(String effectType) {
-        switch (effectType.toUpperCase()) {
-            case "PERM_POTION":
-                return new PermPotionProcessor();
-            case "ACTION_BAR":
-                return new ActionBarProcessor();
-            case "HUNGER":
-                return new HungerProcessor();
-            case "HEALTH":
-                return new HealthProcessor();
-            case "BURN":
-                return new BurnProcessor();
-            case "EXP_LEVEL":
-                return new ExpLevelProcessor();
-            case "CANCEL_EVENT":
-                return new EventCancelProcessor();
-            case "POTION":
-                return new PotionProcessor();
-            case "PLAY_SOUND":
-                return new PlaySoundProcessor();
-            case "PARTICLE":
-                return new ParticleProcessor();
-            default:
-                return null;
-        }
+        return switch (effectType.toUpperCase()) {
+            case "PERM_POTION" -> new PermPotionProcessor();
+            case "ACTION_BAR" -> new ActionBarProcessor();
+            case "HUNGER" -> new HungerProcessor();
+            case "HEALTH" -> new HealthProcessor();
+            case "BURN" -> new BurnProcessor();
+            case "EXP_LEVEL" -> new ExpLevelProcessor();
+            case "CANCEL_EVENT" -> new EventCancelProcessor();
+            case "POTION" -> new PotionProcessor();
+            case "PLAY_SOUND" -> new PlaySoundProcessor();
+            case "PARTICLE" -> new ParticleProcessor();
+            default -> null;
+        };
     }
 }
