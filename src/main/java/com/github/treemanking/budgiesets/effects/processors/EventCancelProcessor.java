@@ -19,15 +19,13 @@ public class EventCancelProcessor implements EffectProcessor {
     @Override
     public void processEffect(List<?> eventCancels, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
 
-        if (!(event instanceof Cancellable)) {
+        if (!(event instanceof Cancellable cancellableEvent)) {
             BudgieSets.getBudgieSets().getLogger().warning("Event not cancellable: " + event.getEventName());
             return;
         }
-        Cancellable cancellableEvent = (Cancellable) event;
 
         for (Object eventCancel : eventCancels) {
-            if (eventCancel instanceof Map<?, ?>) {
-                Map<?, ?> eventCancelMap = (Map<?, ?>) eventCancel;
+            if (eventCancel instanceof Map<?, ?> eventCancelMap) {
                 if (validateEventCancelConifg(eventCancelMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 
