@@ -85,14 +85,14 @@ public interface EffectProcessor {
             double actualNumeric = Double.parseDouble(actualValue);
             double expectedNumeric = Double.parseDouble(expectedValue);
 
-            switch (operator) {
-                case "==": return actualNumeric == expectedNumeric;
-                case "<": return actualNumeric < expectedNumeric;
-                case ">": return actualNumeric > expectedNumeric;
-                case "<=": return actualNumeric <= expectedNumeric;
-                case ">=": return actualNumeric >= expectedNumeric;
-                default: return false; // Unsupported operator
-            }
+            return switch (operator) {
+                case "==" -> actualNumeric == expectedNumeric;
+                case "<" -> actualNumeric < expectedNumeric;
+                case ">" -> actualNumeric > expectedNumeric;
+                case "<=" -> actualNumeric <= expectedNumeric;
+                case ">=" -> actualNumeric >= expectedNumeric;
+                default -> false; // Unsupported operator
+            };
         } else if (isBoolean(actualValue) && isBoolean(expectedValue)) {
             boolean actualBoolean = Boolean.parseBoolean(actualValue);
             boolean expectedBoolean = Boolean.parseBoolean(expectedValue);
@@ -126,5 +126,39 @@ public interface EffectProcessor {
      */
     default boolean isBoolean(String str) {
         return str.equalsIgnoreCase("true") || str.equalsIgnoreCase("false");
+    }
+
+    /**
+     * Converts a hexadecimal color string to its red, green, and blue components.
+     *
+     * @param hex the hexadecimal color string (e.g., "#FF5733" or "FF5733")
+     * @return an array of three integers representing the red, green, and blue components
+     * @throws IllegalArgumentException if the hex string is invalid
+     */
+    default int[] convertHexToRGB(String hex) throws IllegalArgumentException {
+        if (hex == null) throw new IllegalArgumentException("Hex cannot be null");
+        // Remove the leading '#' if it's present
+        if (hex.startsWith("#")) {
+            hex = hex.substring(1);
+        }
+
+        // Check if the hex string is valid
+        if (hex.length() != 6) {
+            throw new IllegalArgumentException("Invalid hex color string. Must be 6 characters long.");
+        }
+
+        try {
+            // Parse the hex string to an integer
+            int rgb = Integer.parseInt(hex, 16);
+
+            // Extract the red, green, and blue components
+            int red = (rgb >> 16) & 0xFF;
+            int green = (rgb >> 8) & 0xFF;
+            int blue = rgb & 0xFF;
+
+            return new int[]{red, green, blue};
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid hex color string. Contains non-hex characters.", e);
+        }
     }
 }
