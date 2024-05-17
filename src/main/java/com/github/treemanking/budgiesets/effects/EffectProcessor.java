@@ -1,12 +1,13 @@
 package com.github.treemanking.budgiesets.effects;
 
-import me.clip.placeholderapi.PlaceholderAPI;
+import com.github.treemanking.budgiesets.managers.HookManager;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+
 import java.util.List;
-import java.util.Objects;
 
 /**
  * The EffectProcessor interface defines the methods required to process effects
@@ -33,7 +34,7 @@ public interface EffectProcessor {
      * @return true if all conditions are met or if conditions are null or PlaceholderAPI is not enabled, false otherwise
      */
     default boolean checkConditions(List<String> conditions, Player player) {
-        if (!Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI")).isEnabled()) {
+        if (HookManager.placeholderAPIEnabled) {
             Bukkit.getLogger().warning("PlaceholderAPI is not enabled on this server, conditions will not work!");
             return true;
         }
