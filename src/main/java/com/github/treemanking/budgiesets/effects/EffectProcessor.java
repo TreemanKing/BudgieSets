@@ -34,8 +34,7 @@ public interface EffectProcessor {
      * @return true if all conditions are met or if conditions are null or PlaceholderAPI is not enabled, false otherwise
      */
     default boolean checkConditions(List<String> conditions, Player player) {
-        if (HookManager.isPlaceholderAPIEnabled()) {
-            BudgieSets.getBudgieSets().getLogger().warning("PlaceholderAPI is not enabled on this server, conditions will not work!");
+        if (!HookManager.isPlaceholderAPIEnabled()) {
             return true;
         }
 
