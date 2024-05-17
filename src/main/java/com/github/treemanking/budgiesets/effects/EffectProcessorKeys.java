@@ -29,4 +29,5 @@ public interface EffectProcessorKeys {
     String TO_COLOR_KEY = "To-Hex";
     String SIZE_KEY = "Size";
     String OFFSET_KEY = "Offset";
+    String ACTION_TYPE_KEY = "Action-Type";
 }

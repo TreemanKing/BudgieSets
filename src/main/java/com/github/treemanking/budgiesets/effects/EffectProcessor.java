@@ -4,6 +4,7 @@ import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.HookManager;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 

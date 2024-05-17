@@ -4,6 +4,8 @@ import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.effects.EffectProcessorKeys;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
+import org.bukkit.Effect;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
@@ -21,18 +23,43 @@ public class PotionProcessor implements EffectProcessor, EffectProcessorKeys {
                 if (validatePotionConfig(potionMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)) {
                         // Extract and apply PermPotion effects here
+                        String actionType = (String) potionMap.get(ACTION_TYPE_KEY);
                         String type = (String) potionMap.get(TYPE_KEY);
-                        int duration = (int) potionMap.get(DURATION_KEY);
-                        int amplifier = (int) potionMap.get(AMPLIFIER_KEY);
-                        boolean ambient = (boolean) potionMap.get(AMBIENT_KEY);
-                        boolean particles = (boolean) potionMap.get(PARTICLES_KEY);
-                        List<String> conditions = (List<String>) potionMap.get(CONDITION_KEY);
-                        // Assuming you have a method to apply PermPotion effects
-                        if (checkConditions(conditions, player)) {
-                            applyPotionEffect(player, duration, type, amplifier, ambient, particles);
+                        int duration;
+                        int amplifier;
+                        boolean ambient;
+                        boolean particles;
+
+                        // TODO: Fix this, less if statements!
+                        if (potionMap.get(DURATION_KEY) == null) {
+                            duration = 5;
+                        } else {
+                            duration = (int) potionMap.get(DURATION_KEY);
                         }
-                    } else {
-                        if ((int) potionMap.get(DURATION_KEY) == -1) removePotionEffects(player);
+
+                        if (potionMap.get(AMPLIFIER_KEY) == null) {
+                            amplifier = 0;
+                        } else {
+                            amplifier = (int) potionMap.get(AMPLIFIER_KEY);
+                        }
+
+                        if (potionMap.get(AMBIENT_KEY) == null) {
+                            ambient = false;
+                        } else {
+                            ambient = (boolean) potionMap.get(AMBIENT_KEY);
+                        }
+
+                        if (potionMap.get(PARTICLES_KEY) == null) {
+                            particles = true;
+                        } else {
+                            particles = (boolean) potionMap.get(PARTICLES_KEY);
+                        }
+
+                        List<String> conditions = (List<String>) potionMap.get(CONDITION_KEY);
+                        // Assuming you have a method to apply effects
+                        if (checkConditions(conditions, player)) {
+                            actionPotionEffect(actionType, player, duration, type, amplifier, ambient, particles);
+                        }
                     }
                 } else {
                     // Log an error or inform the user about the invalid configuration
@@ -44,8 +71,20 @@ public class PotionProcessor implements EffectProcessor, EffectProcessorKeys {
 
     private final Map<UUID, List<PotionEffect>> activeEffects = new HashMap<>();
 
+    private void actionPotionEffect(String actionType, @NotNull Player player, int duration, @NotNull String effectName, int amplifier, boolean ambient, boolean particles) {
+        if (actionType.equalsIgnoreCase("Add")) {
+            applyPotionEffect(player, duration, effectName, amplifier, ambient, particles);
+        } else if (actionType.equalsIgnoreCase("Remove")) {
+            removePotionEffects(player, effectName);
+        } else {
+            BudgieSets.getBudgieSets().getLogger().warning("You must have an action type of add or remove.");
+        }
+    }
+
     private void applyPotionEffect(@NotNull Player player, int duration, @NotNull String effectName, int amplifier, boolean ambient, boolean particles) {
         PotionEffectType effectType = PotionEffectType.getByName(effectName.toUpperCase());
+
+        if (duration == 0) duration = 5;
 
         if (effectType != null) {
             // Apply the permanent potion effect
@@ -67,36 +106,20 @@ public class PotionProcessor implements EffectProcessor, EffectProcessorKeys {
         }
     }
 
-    public void removePotionEffects(Player player) {
-        UUID playerId = player.getUniqueId();
-        List<PotionEffect> playerEffects = activeEffects.get(playerId);
+    public void removePotionEffects(Player player, String potionEffect) {
+        PotionEffectType effectType = PotionEffectType.getByName(potionEffect.toUpperCase());
 
-        if (playerEffects != null) {
-            // Create a copy of the effects list to avoid ConcurrentModificationException
-            List<PotionEffect> effectsCopy = new ArrayList<>(playerEffects);
+        if (player.getActivePotionEffects().isEmpty()) return;
+        if (effectType == null) return;
 
-            player.clearActivePotionEffects();
-            // Remove custom potion effects for the player
-            for (PotionEffect effect : effectsCopy) {
-                player.removePotionEffect(effect.getType());
-            }
-
-            // Remove the player entry from the activeEffects map
-            activeEffects.remove(playerId);
-        }
+        player.removePotionEffect(effectType);
     }
 
     // Validation method for potion configuration
     private boolean validatePotionConfig(Map<?, ?> potionMap) {
         return potionMap.containsKey(TYPE_KEY)
-                && potionMap.containsKey(DURATION_KEY)
-                && potionMap.containsKey(AMPLIFIER_KEY)
-                && potionMap.containsKey(AMBIENT_KEY)
-                && potionMap.containsKey(PARTICLES_KEY)
+                && potionMap.containsKey(ACTION_TYPE_KEY)
                 && potionMap.get(TYPE_KEY) instanceof String
-                && potionMap.get(DURATION_KEY) instanceof Integer
-                && potionMap.get(AMPLIFIER_KEY) instanceof Integer
-                && potionMap.get(AMBIENT_KEY) instanceof Boolean
-                && potionMap.get(PARTICLES_KEY) instanceof Boolean;
+                && potionMap.get(ACTION_TYPE_KEY) instanceof String;
     }
 }
