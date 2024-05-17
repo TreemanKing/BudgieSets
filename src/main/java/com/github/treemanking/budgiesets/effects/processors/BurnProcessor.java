@@ -4,6 +4,7 @@ import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.effects.EffectProcessorKeys;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
+import com.github.treemanking.budgiesets.managers.armorsets.utilities.ArmorSetUtilities;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -19,12 +20,19 @@ public class BurnProcessor implements EffectProcessor, EffectProcessorKeys {
             if (burn instanceof Map<?, ?> burnMap) {
                 if (validateBurnConifg(burnMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
+                    String actionType = (String) burnMap.get(ACTION_TYPE_KEY);
+                    int time;
 
-                    int time = (int) burnMap.get(BURN_KEY);
+                    if (burnMap.get(TIME_KEY) == null) {
+                        time = 5;
+                    } else {
+                        time = (int) burnMap.get(TIME_KEY);
+                    }
+
                     List<String> conditions = (List<String>) burnMap.get("Conditions");
 
                     if (checkConditions(conditions, player) && time >= 0) {
-                        applyBurn(player, time);
+                        actionPotionEffect(player, actionType, time);
                     }
                 } else {
                     // Log an error or inform the user about the invalid configuration
@@ -34,11 +42,20 @@ public class BurnProcessor implements EffectProcessor, EffectProcessorKeys {
         }
     }
 
-    private void applyBurn(@NotNull Player player, int seconds) {
-        player.setFireTicks(seconds * 20);
+    private void actionPotionEffect(Player player, String actionType, int time) {
+        if (actionType.equalsIgnoreCase("Add")) {
+            player.setFireTicks(time * 20);
+        } else if (actionType.equalsIgnoreCase("Remove")) {
+            player.setFireTicks(0);
+        } else {
+            BudgieSets.getBudgieSets().getLogger().warning("You must have an action type of add or remove.");
+        }
     }
 
     private boolean validateBurnConifg(Map<?, ?> burnMap) {
-        return burnMap.containsKey(BURN_KEY) && burnMap.get(BURN_KEY) instanceof Integer;
+        return burnMap.containsKey(TIME_KEY)
+                && burnMap.containsKey(ACTION_TYPE_KEY)
+                && burnMap.get(TIME_KEY) instanceof Integer
+                && burnMap.get(ACTION_TYPE_KEY) instanceof String;
     }
 }

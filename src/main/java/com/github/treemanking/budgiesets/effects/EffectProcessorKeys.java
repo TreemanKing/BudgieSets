@@ -12,7 +12,7 @@ public interface EffectProcessorKeys {
     String CONDITION_KEY = "Conditions";
     String DURATION_KEY = "Duration";
     String PITCH_KEY = "Pitch";
-    String BURN_KEY = "Time";
+    String TIME_KEY = "Time";
     String VOLUME_KEY = "Volume";
     String SOUND_KEY = "Sound";
     String BOOLEAN_KEY = "Boolean";
