@@ -1,16 +1,17 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Map;
 
 public class BurnProcessor implements EffectProcessor {
-    private static final Object BURN_KEY = "Time";
+    private final Object BURN_KEY = "Time";
 
     @Override
     public void processEffect(List<?> burns, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
@@ -28,7 +29,7 @@ public class BurnProcessor implements EffectProcessor {
                     }
                 } else {
                     // Log an error or inform the user about the invalid configuration
-                    Bukkit.getLogger().warning("Invalid burn configuration: " + burnMap);
+                    BudgieSets.getBudgieSets().getLogger().warning("Invalid burn configuration: " + burnMap);
                 }
             }
         }

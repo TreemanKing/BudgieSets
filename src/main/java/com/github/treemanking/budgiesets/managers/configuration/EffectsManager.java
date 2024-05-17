@@ -1,5 +1,6 @@
 package com.github.treemanking.budgiesets.managers.configuration;
 
+import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessorFactory;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
@@ -83,13 +84,13 @@ public class EffectsManager {
                     if (value instanceof List) {
                         processor.processEffect((List<?>) value, player, equipStatus, event);
                     } else {
-                        Bukkit.getLogger().warning("Invalid effect structure found: " + effectMap);
+                        BudgieSets.getBudgieSets().getLogger().warning("Invalid effect structure found: " + effectMap);
                     }
                 } else {
-                    Bukkit.getLogger().warning("Invalid effect type: " + effectType);
+                    BudgieSets.getBudgieSets().getLogger().warning("Invalid effect type: " + effectType);
                 }
             } else {
-                Bukkit.getLogger().warning("Invalid effect structure found: " + effectMap);
+                BudgieSets.getBudgieSets().getLogger().warning("Invalid effect structure found: " + effectMap);
             }
         }
     }

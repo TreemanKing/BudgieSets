@@ -48,13 +48,13 @@ public class EventManager {
                     if (value instanceof Map) {
                         processor.process((Map<?, ?>) value, plugin, playerEquipStatusHashMap);
                     } else {
-                        Bukkit.getLogger().warning("Invalid event structure found: " + eventMap);
+                        BudgieSets.getBudgieSets().getLogger().warning("Invalid event structure found: " + eventMap);
                     }
                 } else {
-                    Bukkit.getLogger().warning("Invalid event type: " + eventType);
+                    BudgieSets.getBudgieSets().getLogger().warning("Invalid event type: " + eventType);
                 }
             } else {
-                Bukkit.getLogger().warning("Invalid event structure found: " + eventMap);
+                BudgieSets.getBudgieSets().getLogger().warning("Invalid event structure found: " + eventMap);
             }
         }
     }

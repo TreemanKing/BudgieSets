@@ -1,5 +1,6 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.Bukkit;
@@ -37,7 +38,7 @@ public class PlaySoundProcessor implements EffectProcessor {
 
                 } else {
                     // Log an error or inform the user about the invalid configuration
-                    Bukkit.getLogger().warning("Invalid sound configuration: " + soundMap);
+                    BudgieSets.getBudgieSets().getLogger().warning("Invalid sound configuration: " + soundMap);
                 }
 
             }
@@ -62,7 +63,7 @@ public class PlaySoundProcessor implements EffectProcessor {
             Enum.valueOf(Sound.class, type);
             return true;
         } catch (IllegalArgumentException exception) {
-            Bukkit.getLogger().warning(type + "Not a valid sound.");
+            BudgieSets.getBudgieSets().getLogger().warning(type + "Not a valid sound.");
         }
         return false;
     }

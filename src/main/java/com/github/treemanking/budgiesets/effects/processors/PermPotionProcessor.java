@@ -1,5 +1,6 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.Bukkit;
@@ -41,13 +42,13 @@ public class PermPotionProcessor implements EffectProcessor {
 
                 } else {
                     // Log an error or inform the user about the invalid configuration
-                    Bukkit.getLogger().warning("Invalid potion configuration: " + potionMap);
+                    BudgieSets.getBudgieSets().getLogger().warning("Invalid potion configuration: " + potionMap);
                 }
             }
         }
     }
 
-    private static final Map<UUID, List<PotionEffect>> activeEffects = new HashMap<>();
+    private final Map<UUID, List<PotionEffect>> activeEffects = new HashMap<>();
 
     private void applyPotionEffect(@NotNull Player player, @NotNull String effectName, int amplifier, boolean ambient, boolean particles) {
         PotionEffectType effectType = PotionEffectType.getByName(effectName.toUpperCase());
@@ -68,7 +69,7 @@ public class PermPotionProcessor implements EffectProcessor {
 
             player.addPotionEffect(effect);
         } else {
-            Bukkit.getLogger().warning("Invalid potion effect name: " + effectName);
+            BudgieSets.getBudgieSets().getLogger().warning("Invalid potion effect name: " + effectName);
         }
     }
 

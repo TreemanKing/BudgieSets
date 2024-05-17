@@ -1,5 +1,6 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.Bukkit;
@@ -11,7 +12,7 @@ import java.util.Map;
 
 public class ActionBarProcessor implements EffectProcessor {
 
-    private static final String TEXT_KEY = "Text";
+    private final String TEXT_KEY = "Text";
 
     @Override
     public void processEffect(List<?> actionBars, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
@@ -29,7 +30,7 @@ public class ActionBarProcessor implements EffectProcessor {
                     }
                 } else {
                     // Log an error or inform the user about the invalid configuration
-                    Bukkit.getLogger().warning("Invalid action bar configuration: " + actionBarMap);
+                    BudgieSets.getBudgieSets().getLogger().warning("Invalid action bar configuration: " + actionBarMap);
                 }
             }
         }

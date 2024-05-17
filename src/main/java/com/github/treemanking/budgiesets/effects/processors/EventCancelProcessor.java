@@ -1,5 +1,6 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import org.bukkit.Bukkit;
@@ -13,13 +14,13 @@ import java.util.Map;
 
 public class EventCancelProcessor implements EffectProcessor {
 
-    private static final String BOOLEAN_KEY = "Boolean";
+    private final String BOOLEAN_KEY = "Boolean";
 
     @Override
     public void processEffect(List<?> eventCancels, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
 
         if (!(event instanceof Cancellable)) {
-            Bukkit.getLogger().warning("Event not cancellable: " + event.getEventName());
+            BudgieSets.getBudgieSets().getLogger().warning("Event not cancellable: " + event.getEventName());
             return;
         }
         Cancellable cancellableEvent = (Cancellable) event;
@@ -38,7 +39,7 @@ public class EventCancelProcessor implements EffectProcessor {
                     }
                 } else {
                     // Log an error or inform the user about the invalid configuration
-                    Bukkit.getLogger().warning("Invalid Cancel Event configuration: " + eventCancelMap);
+                    BudgieSets.getBudgieSets().getLogger().warning("Invalid Cancel Event configuration: " + eventCancelMap);
                 }
             }
         }

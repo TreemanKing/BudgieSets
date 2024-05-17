@@ -1,5 +1,6 @@
 package com.github.treemanking.budgiesets.managers;
 
+import com.github.treemanking.budgiesets.BudgieSets;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -52,5 +53,9 @@ public class HookManager {
             plugin.getLogger().warning("PlaceholderAPI is missing, conditions will not work!");
             placeholderAPIEnabled = false;
         }
+    }
+
+    public static boolean isPlaceholderAPIEnabled() {
+        return placeholderAPIEnabled;
     }
 }

@@ -1,5 +1,6 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.Bukkit;
@@ -37,7 +38,7 @@ public class ParticleProcessor implements EffectProcessor {
 
                 } else {
                     // Log an error or inform the user about the invalid configuration
-                    Bukkit.getLogger().warning("Invalid particle configuration: " + particleMap);
+                    BudgieSets.getBudgieSets().getLogger().warning("Invalid particle configuration: " + particleMap);
                 }
             }
         }
@@ -48,7 +49,7 @@ public class ParticleProcessor implements EffectProcessor {
         try {
             player.getWorld().spawnParticle(particle, player.getLocation(), count, data);
         } catch (IllegalArgumentException e) {
-            Bukkit.getLogger().warning("The data given is not valid for the particle.");
+            BudgieSets.getBudgieSets().getLogger().warning("The data given is not valid for the particle.");
         }
     }
 
@@ -64,7 +65,7 @@ public class ParticleProcessor implements EffectProcessor {
             Enum.valueOf(Particle.class, type);
             return true;
         } catch (IllegalArgumentException exception) {
-            Bukkit.getLogger().warning(type + "Not a valid sound.");
+            BudgieSets.getBudgieSets().getLogger().warning(type + "Not a valid sound.");
         }
         return false;
     }
