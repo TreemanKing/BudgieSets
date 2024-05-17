@@ -17,24 +17,39 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * The ArmorSetListener class handles events related to player armor set equipping and unequipping.
+ * It also manages the registration of events for specific armor sets.
+ */
 public class ArmorSetListener implements Listener, ArmorSetUtilities {
 
     private final String armorSetName;
     private final HashMap<UUID, EquipStatus> playerEquipStatusHashMap = new HashMap<>();
     private final BudgieSets plugin;
 
+    /**
+     * Constructs an ArmorSetListener for a specific armor set.
+     *
+     * @param armorSetName the name of the armor set
+     * @param armorSetConfig the configuration for the armor set
+     * @param plugin the BudgieSets plugin instance
+     */
     public ArmorSetListener(String armorSetName, FileConfiguration armorSetConfig, BudgieSets plugin) {
         this.armorSetName = armorSetName;
         this.plugin = plugin;
 
-        // Registers new EventManager which registers all events for the specific armor-set
+        // Registers a new EventManager which registers all events for the specific armor set
         EventManager eventManager = new EventManager();
         eventManager.registerArmorEvents(armorSetConfig, plugin, this.playerEquipStatusHashMap);
     }
 
     // Events
 
-    // Handles armor set equipping/unequipped. This has nothing to do with registration of the events
+    /**
+     * Handles the event of a player equipping or unequipping armor.
+     *
+     * @param event the PlayerArmorChangeEvent representing the event
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerEquip(PlayerArmorChangeEvent event) {
         Player player = event.getPlayer();
@@ -47,7 +62,8 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities {
         } else if (!isWearingFullSet(player, armorSetName) && currentStatus.equals(EquipStatus.EQUIPPED)) {
             player.sendMessage(ChatColor.RED + "You are now not wearing the " + armorSetName + " set and will lose all bonuses.");
             playerEquipStatusHashMap.put(playerId, EquipStatus.NOT_EQUIPPED);
-        } else if (isWearingFullSet(player, armorSetName) && currentStatus.equals(EquipStatus.NULL)) { // When a player joins the server, it will only trigger this event.
+        } else if (isWearingFullSet(player, armorSetName) && currentStatus.equals(EquipStatus.NULL)) {
+            // When a player joins the server, it will only trigger this event.
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
 
             Bukkit.getServer().getScheduler().runTaskLater(plugin, () -> {
@@ -58,13 +74,23 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities {
         }
     }
 
+    /**
+     * Handles the event of a player joining the server.
+     *
+     * @param event the PlayerJoinEvent representing the event
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        // Add them to with the status NULL as it is unknown whether the player is wearing armour
-        // When player logs in, it equips the armor four times hence a NULL status is needed
+        // Add them to with the status NULL as it is unknown whether the player is wearing armor
+        // When a player logs in, it equips the armor four times hence a NULL status is needed
         playerEquipStatusHashMap.put(event.getPlayer().getUniqueId(), EquipStatus.NULL);
     }
 
+    /**
+     * Handles the event of a player leaving the server.
+     *
+     * @param event the PlayerQuitEvent representing the event
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerLeave(PlayerQuitEvent event) {
         // Remove the player from the map when the player leaves the server

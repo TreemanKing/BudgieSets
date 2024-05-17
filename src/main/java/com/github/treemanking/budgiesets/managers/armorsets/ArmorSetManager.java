@@ -51,9 +51,7 @@ public class ArmorSetManager {
     private void registerArmorSetListener(String armorSetName, FileConfiguration armorSetConfig, BudgieSets plugin) {
         if (armorSetName == null || armorSetConfig == null) {
             return;
-        }
-
-        try {
+        } try {
             plugin.getServer().getPluginManager().registerEvents(
                     new ArmorSetListener(armorSetName, armorSetConfig, plugin), plugin);
             plugin.getLogger().info(armorSetName + " Registered");

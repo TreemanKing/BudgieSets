@@ -11,12 +11,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The EffectsManager class is responsible for processing effects defined in the configuration file for a specific event.
+ */
 public class EffectsManager {
 
-    public EffectsManager (Map<?, ?> eventMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    /**
+     * Constructs an EffectsManager to process effects for a specific event.
+     *
+     * @param eventMap the map representing the event and its associated effects
+     * @param player the player involved in the event
+     * @param equipStatus the player's armor set equip status
+     * @param event the event triggering the effects
+     */
+    public EffectsManager(Map<?, ?> eventMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         processEffectsMap(eventMap, player, equipStatus, event);
     }
 
+    /**
+     * Processes the map containing effects for the event.
+     *
+     * @param eventMap the map representing the event and its associated effects
+     * @param player the player involved in the event
+     * @param equipStatus the player's armor set equip status
+     * @param event the event triggering the effects
+     */
     private void processEffectsMap(Map<?, ?> eventMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         if (eventMap.containsKey("Effects")) {
             List<Map<?, ?>> effects = (List<Map<?, ?>>) eventMap.get("Effects");
@@ -26,6 +45,14 @@ public class EffectsManager {
         }
     }
 
+    /**
+     * Processes the list of effects for the event.
+     *
+     * @param effectsMap the list of maps representing individual effects
+     * @param player the player involved in the event
+     * @param equipStatus the player's armor set equip status
+     * @param event the event triggering the effects
+     */
     private void processEffects(List<Map<?, ?>> effectsMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         if (effectsMap != null) {
             for (Map<?, ?> effect : effectsMap) {
@@ -36,6 +63,14 @@ public class EffectsManager {
         }
     }
 
+    /**
+     * Processes an individual effect for the event.
+     *
+     * @param effectMap the map representing the individual effect
+     * @param player the player involved in the event
+     * @param equipStatus the player's armor set equip status
+     * @param event the event triggering the effect
+     */
     private void processEffect(Map<?, ?> effectMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         if (effectMap != null) {
             Set<? extends Map.Entry<?, ?>> entrySet = effectMap.entrySet();
