@@ -3,8 +3,8 @@ package com.github.treemanking.budgiesets.effects.processors;
 import com.destroystokyo.paper.ParticleBuilder;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
+import com.github.treemanking.budgiesets.effects.EffectProcessorKeys;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -13,12 +13,7 @@ import org.bukkit.event.Event;
 import java.util.List;
 import java.util.Map;
 
-public class ParticleProcessor implements EffectProcessor {
-
-    private final String PARTICLE_KEY = "Particle";
-    private final String COLOR_KEY = "RGB";
-    private final String COUNT_KEY = "Count";
-    private final String DATA_KEY = "Data";
+public class ParticleProcessor implements EffectProcessor, EffectProcessorKeys {
 
     @Override
     public void processEffect(List<?> particles, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {

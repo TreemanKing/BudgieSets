@@ -2,8 +2,8 @@ package com.github.treemanking.budgiesets.effects.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
+import com.github.treemanking.budgiesets.effects.EffectProcessorKeys;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
@@ -11,12 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
-public class PermPotionProcessor implements EffectProcessor {
-
-    private final String TYPE_KEY = "Type";
-    private final String AMPLIFIER_KEY = "Amplifier";
-    private final String AMBIENT_KEY = "Ambient";
-    private final String PARTICLES_KEY = "Particles";
+public class PermPotionProcessor implements EffectProcessor, EffectProcessorKeys {
 
     @Override
     public void processEffect(List<?> potions, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {

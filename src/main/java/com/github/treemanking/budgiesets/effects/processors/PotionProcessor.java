@@ -2,8 +2,8 @@ package com.github.treemanking.budgiesets.effects.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
+import com.github.treemanking.budgiesets.effects.EffectProcessorKeys;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
@@ -12,13 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class PotionProcessor implements EffectProcessor {
+public class PotionProcessor implements EffectProcessor, EffectProcessorKeys {
 
-    private final String TYPE_KEY = "Type";
-    private final String DURATION_KEY = "Duration";
-    private final String AMPLIFIER_KEY = "Amplifier";
-    private final String AMBIENT_KEY = "Ambient";
-    private final String PARTICLES_KEY = "Particles";
     @Override
     public void processEffect(List<?> effect, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object potion : effect) {
@@ -31,7 +26,7 @@ public class PotionProcessor implements EffectProcessor {
                         int amplifier = (int) potionMap.get(AMPLIFIER_KEY);
                         boolean ambient = (boolean) potionMap.get(AMBIENT_KEY);
                         boolean particles = (boolean) potionMap.get(PARTICLES_KEY);
-                        List<String> conditions = (List<String>) potionMap.get("Conditions");
+                        List<String> conditions = (List<String>) potionMap.get(CONDITION_KEY);
                         // Assuming you have a method to apply PermPotion effects
                         if (checkConditions(conditions, player)) {
                             applyPotionEffect(player, duration, type, amplifier, ambient, particles);

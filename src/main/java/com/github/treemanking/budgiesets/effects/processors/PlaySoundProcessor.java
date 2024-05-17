@@ -2,8 +2,8 @@ package com.github.treemanking.budgiesets.effects.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
+import com.github.treemanking.budgiesets.effects.EffectProcessorKeys;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -11,11 +11,7 @@ import org.bukkit.event.Event;
 import java.util.List;
 import java.util.Map;
 
-public class PlaySoundProcessor implements EffectProcessor {
-
-    private final String SOUND_KEY = "Sound";
-    private final String VOLUME_KEY = "Volume";
-    private final String PITCH_KEY = "Pitch";
+public class PlaySoundProcessor implements EffectProcessor, EffectProcessorKeys {
 
     @Override
     public void processEffect(List<?> sounds, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
