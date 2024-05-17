@@ -21,8 +21,8 @@ public class PlaySoundProcessor implements EffectProcessor, EffectProcessorKeys 
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 
                     Sound soundType = Enum.valueOf(Sound.class, (String) soundMap.get(SOUND_KEY));
-                    int volume = (int) soundMap.get(VOLUME_KEY);
-                    int pitch = (int) soundMap.get(PITCH_KEY);
+                    float volume = (float) ((double) soundMap.get(VOLUME_KEY));
+                    float pitch = (float) ((double) soundMap.get(PITCH_KEY));
 
                     List<String> conditions = (List<String>) soundMap.get("Conditions");
 
@@ -40,7 +40,7 @@ public class PlaySoundProcessor implements EffectProcessor, EffectProcessorKeys 
         }
     }
 
-    private void playSound(Player player, Sound sound, int volume, int pitch) {
+    private void playSound(Player player, Sound sound, float volume, float pitch) {
         player.getWorld().playSound(player.getLocation(), sound, volume, pitch);
     }
 
@@ -49,8 +49,8 @@ public class PlaySoundProcessor implements EffectProcessor, EffectProcessorKeys 
                 && soundMap.containsKey(VOLUME_KEY)
                 && soundMap.containsKey(PITCH_KEY)
                 && isValidSoundEnum((String) soundMap.get(SOUND_KEY))
-                && soundMap.get(VOLUME_KEY) instanceof Integer
-                && soundMap.get(PITCH_KEY) instanceof Integer;
+                && soundMap.get(VOLUME_KEY) instanceof Double
+                && soundMap.get(PITCH_KEY) instanceof Double;
     }
 
     private boolean isValidSoundEnum(String type) {
