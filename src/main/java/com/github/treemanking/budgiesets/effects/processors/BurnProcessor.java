@@ -2,17 +2,15 @@ package com.github.treemanking.budgiesets.effects.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
-import com.github.treemanking.budgiesets.effects.EffectProcessorKeys;
+import com.github.treemanking.budgiesets.utilities.ProcessorKeys;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import com.github.treemanking.budgiesets.managers.armorsets.utilities.ArmorSetUtilities;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 
-public class BurnProcessor implements EffectProcessor, EffectProcessorKeys {
+public class BurnProcessor implements EffectProcessor, ProcessorKeys {
 
     @Override
     public void processEffect(List<?> burns, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {

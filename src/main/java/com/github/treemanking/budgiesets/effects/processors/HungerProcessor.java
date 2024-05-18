@@ -2,7 +2,7 @@ package com.github.treemanking.budgiesets.effects.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
-import com.github.treemanking.budgiesets.effects.EffectProcessorKeys;
+import com.github.treemanking.budgiesets.utilities.ProcessorKeys;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-public class HungerProcessor implements EffectProcessor, EffectProcessorKeys {
+public class HungerProcessor implements EffectProcessor, ProcessorKeys {
 
     @Override
     public void processEffect(List<?> hungers, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {

@@ -22,6 +22,7 @@ public class EventProcessorFactory {
             case "HOOK" -> new HookProcessor();
             case "PLAYER_ELYTRA_BOOST" -> new ElytraBoostProcessor();
             case "ATTACK" -> new AttackProcessor();
+            case "DAMAGED" -> new DamagedProcessor();
             default -> null;
         };
     }

@@ -1,10 +1,6 @@
-package com.github.treemanking.budgiesets.effects;
+package com.github.treemanking.budgiesets.utilities;
 
-import org.bukkit.Material;
-
-import java.util.Map;
-
-public interface EffectProcessorKeys {
+public interface ProcessorKeys {
     String TYPE_KEY = "Type";
     String AMPLIFIER_KEY = "Amplifier";
     String AMBIENT_KEY = "Ambient";
