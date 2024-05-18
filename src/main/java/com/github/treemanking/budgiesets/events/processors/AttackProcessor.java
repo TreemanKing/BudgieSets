@@ -1,14 +1,21 @@
 package com.github.treemanking.budgiesets.events.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
+import com.github.treemanking.budgiesets.effects.EffectProcessorKeys;
 import com.github.treemanking.budgiesets.events.EventProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.managers.configuration.EffectsManager;
-import org.bukkit.entity.Player;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,28 +26,76 @@ public class AttackProcessor implements EventProcessor {
         plugin.getServer().getPluginManager().registerEvents(new AttackProcessor.AttackListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class AttackListener implements Listener {
+    private static class AttackListener implements Listener, EffectProcessorKeys {
 
         private final Map<?, ?> effectsMap;
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
+        private String eventType;
 
         public AttackListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
             this.effectsMap = event;
             this.playerEquipStatus = playerEquipStatusHashMap;
+
+            if (event.containsKey(TYPE_KEY) && event.get(TYPE_KEY) instanceof String) {
+                this.eventType = (String) event.get(TYPE_KEY);
+            }
         }
 
         @EventHandler
-        private void onPlayerAttack(EntityDamageByEntityEvent damageByEntityEvent) {
-            if (!(damageByEntityEvent.getEntity() instanceof Player)) return;
+        private void onPlayerAttack(EntityDamageByEntityEvent event) {
+            Player player = null;
+            Entity attackingEnemy = event.getDamager();
+            Entity damagedEntity = event.getEntity();
+            EntityDamageEvent.DamageCause damageCause = event.getCause();
 
-            Player player = (Player) damageByEntityEvent.getDamager();
-
+            switch (eventType) {
+                case "COMBAT_PLAYER":
+                    if (damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)
+                            && damagedEntity.getType().equals(EntityType.PLAYER)) {
+                        player = (Player) event.getDamager();
+                    }
+                    break;
+                case "COMBAT_PLAYER_PROJECTILE":
+                    if (damageCause.equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+                        if (!damagedEntity.getType().equals(EntityType.PLAYER)) break;
+                        if (attackingEnemy.getType().equals(EntityType.ARROW)) {
+                            Arrow arrow = (Arrow) attackingEnemy;
+                            if (!(arrow.getShooter() instanceof Player)) break;
+                            player = (Player) arrow.getShooter();
+                        } else if (attackingEnemy.getType().equals(EntityType.SPECTRAL_ARROW)) {
+                            SpectralArrow arrow = (SpectralArrow) attackingEnemy;
+                            if (!(arrow.getShooter() instanceof Player)) break;
+                            player = (Player) arrow.getShooter();
+                        }
+                    }
+                    break;
+                case "COMBAT_MOB":
+                    if (damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)
+                            && damagedEntity instanceof Mob) {
+                        player = (Player) attackingEnemy;
+                    }
+                    break;
+                case "COMBAT_MOB_PROJECTILE":
+                    if (!(damagedEntity instanceof Mob)) break;
+                    if (damageCause.equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+                        if (attackingEnemy.getType().equals(EntityType.ARROW)) {
+                            Arrow arrow = (Arrow) attackingEnemy;
+                            player = (Player) arrow.getShooter();
+                            break;
+                        } else if (attackingEnemy.getType().equals(EntityType.SPECTRAL_ARROW)) {
+                            SpectralArrow arrow = (SpectralArrow) attackingEnemy;
+                            if (!(arrow.getShooter() instanceof Player)) break;
+                            if (!damagedEntity.getType().equals(EntityType.PLAYER)) break;
+                            player = (Player) arrow.getShooter();
+                        }
+                    }
+                    break;
+            }
+            if (player == null) return;
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
 
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
-            new EffectsManager(effectsMap, player, currentStatus, damageByEntityEvent);
+            new EffectsManager(effectsMap, player, currentStatus, event);
         }
-
     }
-
 }

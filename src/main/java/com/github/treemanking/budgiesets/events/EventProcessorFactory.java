@@ -21,6 +21,7 @@ public class EventProcessorFactory {
             case "JUMP" -> new JumpProcessor();
             case "HOOK" -> new HookProcessor();
             case "PLAYER_ELYTRA_BOOST" -> new ElytraBoostProcessor();
+            case "ATTACK" -> new AttackProcessor();
             default -> null;
         };
     }
