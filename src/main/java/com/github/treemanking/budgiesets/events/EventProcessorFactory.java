@@ -23,6 +23,7 @@ public class EventProcessorFactory {
             case "PLAYER_ELYTRA_BOOST" -> new ElytraBoostProcessor();
             case "ATTACK" -> new AttackProcessor();
             case "DAMAGED" -> new DamagedProcessor();
+            case "ON_POTION_EFFECT" -> new OnPotionEffectProcessor();
             default -> null;
         };
     }
