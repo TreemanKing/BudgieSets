@@ -23,7 +23,6 @@ public class EffectStaticProcessor implements EventProcessor {
 
         private final Map<?, ?> effectsMap;
         private final Map<UUID, Long> cooldownMap = new HashMap<>();
-
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
 
         public EffectStaticListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {

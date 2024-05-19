@@ -22,7 +22,7 @@ public class DamagedProcessor implements EventProcessor, ProcessorKeys {
         plugin.getServer().getPluginManager().registerEvents(new DamagedProcessor.DamageListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private class DamageListener implements Listener, ProcessorKeys {
+    private class DamageListener implements Listener {
 
         private final Map<?, ?> effectsMap;
         private final Map<UUID, Long> cooldownMap = new HashMap<>();
