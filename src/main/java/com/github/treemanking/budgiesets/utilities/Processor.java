@@ -43,7 +43,7 @@ public interface Processor extends HookManager {
         if (cooldown != null) {
             long currentTime = System.currentTimeMillis();
             Long lastUsedTime = cooldownMap.get(player.getUniqueId());
-            if (lastUsedTime != null && (currentTime - lastUsedTime) < cooldown.longValue()) {
+            if (lastUsedTime != null && (currentTime - lastUsedTime)/1000 < cooldown.longValue()) {
                 return false; // Cooldown not met
             }
             cooldownMap.put(player.getUniqueId(), currentTime); // Update cooldown map with current time
