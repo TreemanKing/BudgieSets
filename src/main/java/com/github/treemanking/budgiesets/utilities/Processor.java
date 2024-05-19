@@ -18,13 +18,9 @@ public interface Processor extends HookManager {
      * @return true if all conditions are met or if conditions are null or PlaceholderAPI is not enabled, false otherwise
      */
     default boolean checkMap(Map<?, ?> map, Player player, Map<UUID, Long> cooldownMap) {
-        if (!isPlaceholderAPIEnabled()) {
-            return true;
-        }
-
         List<String> conditions = castToListOfString(map.get("Conditions"));
         Double chance = (Double) map.get("Chance");
-        Long cooldown = (Long) map.get("Cooldown");
+        Integer cooldown = (Integer) map.get("Cooldown");
 
         // Check conditions
         if (conditions != null && !conditions.isEmpty()) {
@@ -47,7 +43,7 @@ public interface Processor extends HookManager {
         if (cooldown != null) {
             long currentTime = System.currentTimeMillis();
             Long lastUsedTime = cooldownMap.get(player.getUniqueId());
-            if (lastUsedTime != null && (currentTime - lastUsedTime) < cooldown) {
+            if (lastUsedTime != null && (currentTime - lastUsedTime) < cooldown.longValue()) {
                 return false; // Cooldown not met
             }
             cooldownMap.put(player.getUniqueId(), currentTime); // Update cooldown map with current time
@@ -64,6 +60,10 @@ public interface Processor extends HookManager {
      * @return true if the condition is met, false otherwise
      */
     default boolean checkCondition(String condition, Player player) {
+        if (!isPlaceholderAPIEnabled()) {
+            return true;
+        }
+
         String trimmedCondition = condition.replaceAll("\\s+", "");
         String[] parts = trimmedCondition.split("<=|>=|<|>|==");
 

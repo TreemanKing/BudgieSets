@@ -28,7 +28,7 @@ public class DamagedProcessor implements EventProcessor, ProcessorKeys {
         private final Map<UUID, Long> cooldownMap = new HashMap<>();
 
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
-        private String eventType;
+        private final String eventType;
 
         public DamageListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
             this.effectsMap = event;
@@ -36,6 +36,8 @@ public class DamagedProcessor implements EventProcessor, ProcessorKeys {
 
             if (event.containsKey(TYPE_KEY) && event.get(TYPE_KEY) instanceof String) {
                 this.eventType = (String) event.get(TYPE_KEY);
+            } else {
+                this.eventType = "Null";
             }
         }
 
