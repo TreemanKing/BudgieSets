@@ -19,9 +19,11 @@ public class JumpProcessor implements EventProcessor {
         plugin.getServer().getPluginManager().registerEvents(new JumpListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    public static class JumpListener implements Listener {
+    public class JumpListener implements Listener {
 
         private final Map<?, ?> effectsMap;
+        private final Map<UUID, Long> cooldownMap = new HashMap<>();
+
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
 
         public JumpListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
@@ -35,9 +37,10 @@ public class JumpProcessor implements EventProcessor {
 
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
-            new EffectsManager(effectsMap, player, currentStatus, jumpEvent);
+            if (checkMap(effectsMap, player, cooldownMap)) {
+                new EffectsManager(effectsMap, player, currentStatus, jumpEvent);
+            }
         }
     }
-
 }
 

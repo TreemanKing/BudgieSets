@@ -4,6 +4,8 @@ import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.utilities.ProcessorKeys;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
@@ -24,11 +26,9 @@ public class PermPotionProcessor implements EffectProcessor, ProcessorKeys {
                         int amplifier = (int) potionMap.get(AMPLIFIER_KEY);
                         boolean ambient = (boolean) potionMap.get(AMBIENT_KEY);
                         boolean particles = (boolean) potionMap.get(PARTICLES_KEY);
-                        List<String> conditions = (List<String>) potionMap.get("Conditions");
                         // Assuming you have a method to apply PermPotion effects
-                        if (checkConditions(conditions, player)) {
-                            applyPotionEffect(player, type, amplifier, ambient, particles);
-                        }
+                        applyPotionEffect(player, type, amplifier, ambient, particles);
+
                     } else {
                         removePotionEffects(player);
                     }
@@ -41,8 +41,6 @@ public class PermPotionProcessor implements EffectProcessor, ProcessorKeys {
         }
     }
 
-    private final Map<UUID, List<PotionEffect>> activeEffects = new HashMap<>();
-
     private void applyPotionEffect(@NotNull Player player, @NotNull String effectName, int amplifier, boolean ambient, boolean particles) {
         PotionEffectType effectType = PotionEffectType.getByName(effectName.toUpperCase());
 
@@ -51,13 +49,13 @@ public class PermPotionProcessor implements EffectProcessor, ProcessorKeys {
             PotionEffect effect = new PotionEffect(effectType, PotionEffect.INFINITE_DURATION, amplifier, ambient, particles);
 
             // Check if the player already has effects
-            if (activeEffects.containsKey(player.getUniqueId())) {
-                activeEffects.get(player.getUniqueId()).add(effect);
+            if (getPotionEffects().containsKey(player.getUniqueId())) {
+                getPotionEffects().get(player.getUniqueId()).add(effect);
             } else {
                 // If not, create a new list with the current effect
                 List<PotionEffect> effects = new ArrayList<>();
                 effects.add(effect);
-                activeEffects.put(player.getUniqueId(), effects);
+                getPotionEffects().put(player.getUniqueId(), effects);
             }
 
             player.addPotionEffect(effect);
@@ -68,20 +66,17 @@ public class PermPotionProcessor implements EffectProcessor, ProcessorKeys {
 
     public void removePotionEffects(Player player) {
         UUID playerId = player.getUniqueId();
-        List<PotionEffect> playerEffects = activeEffects.get(playerId);
+        List<PotionEffect> playerEffects = getPotionEffects().get(playerId);
 
         if (playerEffects != null) {
-            // Create a copy of the effects list to avoid ConcurrentModificationException
-            List<PotionEffect> effectsCopy = new ArrayList<>(playerEffects);
 
-            player.clearActivePotionEffects();
             // Remove custom potion effects for the player
-            for (PotionEffect effect : effectsCopy) {
+            for (PotionEffect effect : playerEffects) {
                 player.removePotionEffect(effect.getType());
             }
 
             // Remove the player entry from the activeEffects map
-            activeEffects.remove(playerId);
+            getPotionEffects().remove(playerId);
         }
     }
 

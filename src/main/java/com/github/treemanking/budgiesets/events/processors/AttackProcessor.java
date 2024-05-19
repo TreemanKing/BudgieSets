@@ -1,6 +1,7 @@
 package com.github.treemanking.budgiesets.events.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
+import com.github.treemanking.budgiesets.utilities.Processor;
 import com.github.treemanking.budgiesets.utilities.ProcessorKeys;
 import com.github.treemanking.budgiesets.events.EventProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
@@ -22,9 +23,10 @@ public class AttackProcessor implements EventProcessor {
         plugin.getServer().getPluginManager().registerEvents(new AttackProcessor.AttackListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class AttackListener implements Listener, ProcessorKeys {
+    private class AttackListener implements Listener, ProcessorKeys {
 
         private final Map<?, ?> effectsMap;
+        private final Map<UUID, Long> cooldownMap = new HashMap<>();
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
         private String eventType;
 
@@ -86,12 +88,24 @@ public class AttackProcessor implements EventProcessor {
                         }
                     }
                     break;
+                default:
+                    if (damageCause.equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+                        if (attackingEnemy.getType().equals(EntityType.ARROW)) {
+                            Arrow arrow = (Arrow) attackingEnemy;
+                            player = (Player) arrow.getShooter();
+                            break;
+                        }
+                    } else if (damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+                        player = (Player) attackingEnemy;
+                    }
             }
             if (player == null) return;
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
 
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
-            new EffectsManager(effectsMap, player, currentStatus, event);
+            if (checkMap(effectsMap, player, cooldownMap)) {
+                new EffectsManager(effectsMap, player, currentStatus, event);
+            }
         }
     }
 }

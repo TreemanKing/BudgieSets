@@ -24,9 +24,7 @@ public class PlaySoundProcessor implements EffectProcessor, ProcessorKeys {
                     float volume = (float) ((double) soundMap.get(VOLUME_KEY));
                     float pitch = (float) ((double) soundMap.get(PITCH_KEY));
 
-                    List<String> conditions = (List<String>) soundMap.get("Conditions");
-
-                    if (checkConditions(conditions, player)) {
+                    if (volume > 0 && pitch >= 0) {
                         playSound(player, soundType, volume, pitch);
                     }
 

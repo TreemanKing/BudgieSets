@@ -53,11 +53,8 @@ public class PotionProcessor implements EffectProcessor, ProcessorKeys {
                             particles = (boolean) potionMap.get(PARTICLES_KEY);
                         }
 
-                        List<String> conditions = (List<String>) potionMap.get(CONDITION_KEY);
                         // Assuming you have a method to apply effects
-                        if (checkConditions(conditions, player)) {
-                            actionPotionEffect(actionType, player, duration, type, amplifier, ambient, particles);
-                        }
+                        actionPotionEffect(actionType, player, duration, type, amplifier, ambient, particles);
                     }
                 } else {
                     // Log an error or inform the user about the invalid configuration

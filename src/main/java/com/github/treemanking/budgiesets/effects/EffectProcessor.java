@@ -1,15 +1,15 @@
 package com.github.treemanking.budgiesets.effects;
 
-import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.managers.HookManager;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.utilities.Processor;
-import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.potion.PotionEffect;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * The EffectProcessor interface defines the methods required to process effects
@@ -27,8 +27,6 @@ public interface EffectProcessor extends Processor {
      * @param event the event triggering the effect
      */
     void processEffect(List<?> effect, Player player, ArmorSetListener.EquipStatus equipStatus, Event event);
-
-
 
     /**
      * Converts a hexadecimal color string to its red, green, and blue components.
@@ -62,5 +60,36 @@ public interface EffectProcessor extends Processor {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid hex color string. Contains non-hex characters.", e);
         }
+    }
+
+    /**
+     * A map storing PotionEffect instances for players identified by their unique UUIDs.
+     *
+     * <p>The key of the map is a {@link UUID} which uniquely identifies a player.
+     * The value is a {@link PotionEffect} which represents the potion effect applied to the player.
+     *
+     * <p>This map can be used to track active potion effects for players in a game,
+     * enabling the application, removal, or querying of potion effects based on player UUIDs.
+     *
+     * <p>Example usage:
+     * <pre>{@code
+     * // Adding a potion effect to a player
+     * UUID playerUUID = player.getUniqueId();
+     * PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, duration, amplifier);
+     * potionEffects.put(playerUUID, effect);
+     *
+     * // Retrieving a potion effect for a player
+     * PotionEffect activeEffect = potionEffects.get(playerUUID);
+     * }</pre>
+     */
+    Map<UUID, List<PotionEffect>> potionEffects = new HashMap<>();
+
+    /**
+     * Gets the map storing potion effects for players.
+     *
+     * @return the map of potion effects
+     */
+    default Map<UUID, List<PotionEffect>> getPotionEffects() {
+        return potionEffects;
     }
 }

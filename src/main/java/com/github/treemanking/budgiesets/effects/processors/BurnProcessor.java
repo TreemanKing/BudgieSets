@@ -27,9 +27,7 @@ public class BurnProcessor implements EffectProcessor, ProcessorKeys {
                         time = (int) burnMap.get(TIME_KEY);
                     }
 
-                    List<String> conditions = (List<String>) burnMap.get("Conditions");
-
-                    if (checkConditions(conditions, player) && time >= 0) {
+                    if (time >= 0) {
                         actionPotionEffect(player, actionType, time);
                     }
                 } else {

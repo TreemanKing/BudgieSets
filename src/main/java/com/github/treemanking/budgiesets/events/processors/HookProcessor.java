@@ -18,9 +18,11 @@ public class HookProcessor implements EventProcessor {
         plugin.getServer().getPluginManager().registerEvents(new HookProcessor.HookListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class HookListener implements Listener {
+    private class HookListener implements Listener {
 
         private final Map<?, ?> effectsMap;
+        private final Map<UUID, Long> cooldownMap = new HashMap<>();
+
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
 
         public HookListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
@@ -34,7 +36,8 @@ public class HookProcessor implements EventProcessor {
 
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
-            new EffectsManager(effectsMap, player, currentStatus, fishEvent);
-        }
+            if (checkMap(effectsMap, player, cooldownMap)) {
+                new EffectsManager(effectsMap, player, currentStatus, fishEvent);
+            }        }
     }
 }

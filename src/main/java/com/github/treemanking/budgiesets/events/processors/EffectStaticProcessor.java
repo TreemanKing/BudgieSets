@@ -19,9 +19,11 @@ public class EffectStaticProcessor implements EventProcessor {
         plugin.getServer().getPluginManager().registerEvents(new EffectStaticListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class EffectStaticListener implements Listener {
+    private class EffectStaticListener implements Listener {
 
         private final Map<?, ?> effectsMap;
+        private final Map<UUID, Long> cooldownMap = new HashMap<>();
+
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
 
         public EffectStaticListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
@@ -34,9 +36,10 @@ public class EffectStaticProcessor implements EventProcessor {
             Player player = armorChangeEvent.getPlayer();
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
-            new EffectsManager(effectsMap, player, currentStatus, armorChangeEvent);
+            if (checkMap(effectsMap, player, cooldownMap)) {
+                new EffectsManager(effectsMap, player, currentStatus, armorChangeEvent);
+            }
         }
-
     }
 }
 

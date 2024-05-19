@@ -19,9 +19,11 @@ public class ConsumeProcessor implements EventProcessor {
         plugin.getServer().getPluginManager().registerEvents(new ConsumeListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class ConsumeListener implements Listener {
+    private class ConsumeListener implements Listener {
 
         private final Map<?, ?> effectsMap;
+        private final Map<UUID, Long> cooldownMap = new HashMap<>();
+
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
 
         public ConsumeListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
@@ -35,7 +37,9 @@ public class ConsumeProcessor implements EventProcessor {
 
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
-            new EffectsManager(effectsMap, player, currentStatus, consumeEvent);
+            if (checkMap(effectsMap, player, cooldownMap)) {
+                new EffectsManager(effectsMap, player, currentStatus, consumeEvent);
+            }
         }
 
     }

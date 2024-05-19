@@ -22,9 +22,11 @@ public class DamagedProcessor implements EventProcessor, ProcessorKeys {
         plugin.getServer().getPluginManager().registerEvents(new DamagedProcessor.DamageListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class DamageListener implements Listener, ProcessorKeys {
+    private class DamageListener implements Listener, ProcessorKeys {
 
         private final Map<?, ?> effectsMap;
+        private final Map<UUID, Long> cooldownMap = new HashMap<>();
+
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
         private String eventType;
 
@@ -87,12 +89,17 @@ public class DamagedProcessor implements EventProcessor, ProcessorKeys {
                         }
                     }
                     break;
+                default:
+                    if (!(damagedEntity instanceof Player)) return;
+                    player = (Player) damagedEntity;
             }
             if (player == null) return;
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
 
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
-            new EffectsManager(effectsMap, player, currentStatus, event);
+            if (checkMap(effectsMap, player, cooldownMap)) {
+                new EffectsManager(effectsMap, player, currentStatus, event);
+            }
         }
     }
 }

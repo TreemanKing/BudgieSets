@@ -19,8 +19,10 @@ public class ElytraBoostProcessor implements EventProcessor {
         plugin.getServer().getPluginManager().registerEvents(new ElytraBoostProcessor.ElytraBoostListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class ElytraBoostListener implements Listener {
+    private class ElytraBoostListener implements Listener {
         private final Map<?, ?> effectsMap;
+        private final Map<UUID, Long> cooldownMap = new HashMap<>();
+
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
 
         public ElytraBoostListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
@@ -34,7 +36,8 @@ public class ElytraBoostProcessor implements EventProcessor {
 
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
-            new EffectsManager(effectsMap, player, currentStatus, playerElytraBoostEvent);
-        }
+            if (checkMap(effectsMap, player, cooldownMap)) {
+                new EffectsManager(effectsMap, player, currentStatus, playerElytraBoostEvent);
+            }        }
     }
 }

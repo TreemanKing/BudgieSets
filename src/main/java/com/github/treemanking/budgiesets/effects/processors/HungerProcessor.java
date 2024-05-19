@@ -20,12 +20,10 @@ public class HungerProcessor implements EffectProcessor, ProcessorKeys {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 
                     int amount = (int) hungerMap.get(AMOUNT_KEY);
-                    List<String> conditions = (List<String>) hungerMap.get("Conditions");
 
-                    if (checkConditions(conditions, player)) {
+                    if (amount != 0) {
                         setHunger(player, amount);
                     }
-
 
                 } else {
                     // Log an error or inform the user about the invalid configuration

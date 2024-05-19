@@ -20,9 +20,8 @@ public class HealthProcessor implements EffectProcessor, ProcessorKeys {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 
                     double amount = (double) healthMap.get(AMOUNT_KEY);
-                    List<String> conditions = (List<String>) healthMap.get("Conditions");
 
-                    if (checkConditions(conditions, player)) {
+                    if (amount != 0) {
                         setHealth(player, amount);
                     }
                 } else {

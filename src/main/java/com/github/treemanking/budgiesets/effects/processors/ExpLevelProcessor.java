@@ -21,9 +21,8 @@ public class ExpLevelProcessor implements EffectProcessor, ProcessorKeys {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 
                     int amount = (int) expLevelMap.get(AMOUNT_KEY);
-                    List<String> conditions = (List<String>) expLevelMap.get("Conditions");
 
-                    if (checkConditions(conditions, player)) {
+                    if (amount != 0) {
                         setExpLevel(player, amount);
                     }
                 } else {

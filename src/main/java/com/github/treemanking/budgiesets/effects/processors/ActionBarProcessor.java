@@ -22,9 +22,8 @@ public class ActionBarProcessor implements EffectProcessor {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 
                     String text = (String) actionBarMap.get(TEXT_KEY);
-                    List<String> conditions = (List<String>) actionBarMap.get("Conditions");
 
-                    if (checkConditions(conditions, player) && text != null) {
+                    if (text != null) {
                         applyActionBar(player, text);
                     }
                 } else {

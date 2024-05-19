@@ -28,9 +28,8 @@ public class EventCancelProcessor implements EffectProcessor, ProcessorKeys {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 
                     boolean eventCancelStatus = (boolean) eventCancelMap.get(BOOLEAN_KEY);
-                    List<String> conditions = (List<String>) eventCancelMap.get("Conditions");
 
-                    if (checkConditions(conditions, player) && eventCancelStatus) {
+                    if (eventCancelStatus) {
                         applyEventCancel(cancellableEvent);
                     }
                 } else {

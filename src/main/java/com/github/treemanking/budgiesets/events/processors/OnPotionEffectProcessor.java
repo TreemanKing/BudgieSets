@@ -23,8 +23,10 @@ public class OnPotionEffectProcessor implements EventProcessor, ProcessorKeys {
         plugin.getServer().getPluginManager().registerEvents(new OnPotionEffectListener(effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private static class OnPotionEffectListener implements Listener {
+    private class OnPotionEffectListener implements Listener {
         private final Map<?, ?> effectsMap;
+        private final Map<UUID, Long> cooldownMap = new HashMap<>();
+
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
         private final List<?> potionEffects;
 
@@ -44,10 +46,14 @@ public class OnPotionEffectProcessor implements EventProcessor, ProcessorKeys {
 
             if (potionEffects != null) {
                 if (potionEffects.contains(event.getNewEffect().getType().getName())) {
-                    new EffectsManager(effectsMap, player, currentStatus, event);
+                    if (checkMap(effectsMap, player, cooldownMap)) {
+                        new EffectsManager(effectsMap, player, currentStatus, event);
+                    }
                 }
             } else {
-                new EffectsManager(effectsMap, player, currentStatus, event);
+                if (checkMap(effectsMap, player, cooldownMap)) {
+                    new EffectsManager(effectsMap, player, currentStatus, event);
+                }
             }
         }
     }

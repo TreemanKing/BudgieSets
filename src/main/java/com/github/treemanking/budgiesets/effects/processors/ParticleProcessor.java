@@ -28,14 +28,11 @@ public class ParticleProcessor implements EffectProcessor, ProcessorKeys {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
 
                     Particle particleType = Enum.valueOf(Particle.class, (String) particleMap.get(PARTICLE_KEY));
-                    String hex = (String) particleMap.get(COLOR_KEY);
                     int count = (int) particleMap.get(COUNT_KEY);
                     double offset = (double) particleMap.get(OFFSET_KEY);
                     Map<?, ?> particleDataMap = (Map<?, ?>) particleMap.get(DATA_KEY);
 
-                    List<String> conditions = (List<String>) particleMap.get("Conditions");
-
-                    if (checkConditions(conditions, player)) {
+                    if (count > 0) {
                         spawnParticle(player, particleType, count, offset, particleDataMap);
                     }
                 } else {
