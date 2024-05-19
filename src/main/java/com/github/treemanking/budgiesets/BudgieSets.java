@@ -5,14 +5,15 @@ import com.github.treemanking.budgiesets.managers.configuration.ConfigurationMan
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class BudgieSets extends JavaPlugin {
+public final class BudgieSets extends JavaPlugin implements HookManager{
 
     public static BudgieSets budgieSets;
 
     @Override
     public void onEnable() {
         ConfigurationManager configManager = new ConfigurationManager(this);
-        new HookManager(this);
+        checkHooks(this);
+
         new ArmorSetManager(this, configManager);
         budgieSets = this;
     }

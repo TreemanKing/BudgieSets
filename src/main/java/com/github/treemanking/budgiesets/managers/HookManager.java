@@ -1,28 +1,29 @@
 package com.github.treemanking.budgiesets.managers;
 
-import com.github.treemanking.budgiesets.BudgieSets;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * The HookManager class is responsible for checking the availability of
+ * The HookManager interface is responsible for checking the availability of
  * required dependencies such as Paper and PlaceholderAPI and managing
  * hooks for these dependencies.
  */
-public class HookManager {
+public interface HookManager {
 
     /**
-     * Indicates whether PlaceholderAPI is enabled on the server.
+     * A static inner class to hold state.
      */
-    public static boolean placeholderAPIEnabled;
+    class HookState {
+        private static boolean placeholderAPIEnabled = false;
+    }
 
     /**
      * Constructs a HookManager to check and manage hooks for required dependencies.
      *
      * @param plugin the JavaPlugin instance of the BudgieSets plugin
      */
-    public HookManager(JavaPlugin plugin) {
+    default void checkHooks(JavaPlugin plugin) {
+        setPlaceholderAPIEnabled(isPlaceholderAPIAvailable(plugin));
         isPaperEnabled(plugin);
-        isPlaceholderAPIEnabled(plugin);
     }
 
     /**
@@ -31,7 +32,7 @@ public class HookManager {
      *
      * @param plugin the JavaPlugin instance of the BudgieSets plugin
      */
-    private void isPaperEnabled(JavaPlugin plugin) {
+    default void isPaperEnabled(JavaPlugin plugin) {
         try {
             Class.forName("com.destroystokyo.paper.ParticleBuilder");
         } catch (ClassNotFoundException ignored) {
@@ -40,22 +41,39 @@ public class HookManager {
     }
 
     /**
-     * Checks if PlaceholderAPI is enabled by verifying the presence of the PlaceholderAPIPlugin class.
-     * Logs a warning and sets a flag if PlaceholderAPI is not found.
+     * Checks if PlaceholderAPI is available by verifying the presence of the PlaceholderAPIPlugin class.
+     * Logs a warning if PlaceholderAPI is not found.
      *
      * @param plugin the JavaPlugin instance of the BudgieSets plugin
+     * @return true if PlaceholderAPI is available, false otherwise
      */
-    private void isPlaceholderAPIEnabled(JavaPlugin plugin) {
+    default boolean isPlaceholderAPIAvailable(JavaPlugin plugin) {
         try {
             Class.forName("me.clip.placeholderapi.PlaceholderAPIPlugin");
-            placeholderAPIEnabled = true;
+            plugin.getLogger().info("PlaceholderAPI Hooked!");
+            return true;
         } catch (ClassNotFoundException ignored) {
             plugin.getLogger().warning("PlaceholderAPI is missing, conditions will not work!");
-            placeholderAPIEnabled = false;
+            return false;
         }
     }
 
-    public static boolean isPlaceholderAPIEnabled() {
-        return placeholderAPIEnabled;
+    /**
+     * Indicates whether PlaceholderAPI is enabled on the server.
+     *
+     * @return true if PlaceholderAPI is enabled, false otherwise
+     */
+    default boolean isPlaceholderAPIEnabled() {
+        return HookState.placeholderAPIEnabled;
     }
+
+    /**
+     * Sets the state indicating whether PlaceholderAPI is enabled.
+     *
+     * @param enabled true if PlaceholderAPI is enabled, false otherwise
+     */
+    default void setPlaceholderAPIEnabled(boolean enabled) {
+        HookState.placeholderAPIEnabled = enabled;
+    }
+
 }

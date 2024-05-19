@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public interface Processor {
+public interface Processor extends HookManager {
 
     /**
      * Checks a list of conditions for a player using the PlaceholderAPI.
@@ -18,7 +18,7 @@ public interface Processor {
      * @return true if all conditions are met or if conditions are null or PlaceholderAPI is not enabled, false otherwise
      */
     default boolean checkMap(Map<?, ?> map, Player player, Map<UUID, Long> cooldownMap) {
-        if (!HookManager.isPlaceholderAPIEnabled()) {
+        if (!isPlaceholderAPIEnabled()) {
             return true;
         }
 
@@ -134,24 +134,6 @@ public interface Processor {
      */
     default boolean isBoolean(String str) {
         return str.equalsIgnoreCase("true") || str.equalsIgnoreCase("false");
-    }
-
-    /**
-     * Checks if a random chance succeeds based on the provided probability.
-     *
-     * @param chance the probability (between 0.0 and 1.0) of the condition being true
-     * @return {@code true} if the generated random value is less than the provided chance, {@code false} otherwise
-     */
-    default boolean checkChance(double chance) {
-        if (chance >= 1.0 || chance < 0) {
-            return true;
-        }
-        // Generate a random value between 0.0 (inclusive) and 1.0 (exclusive)
-        Random random = new Random();
-        double randomValue = random.nextDouble();
-
-        // Compare the random value with the provided chance
-        return randomValue < chance;
     }
 
     /**
