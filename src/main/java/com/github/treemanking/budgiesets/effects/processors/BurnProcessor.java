@@ -49,9 +49,7 @@ public class BurnProcessor implements EffectProcessor, ProcessorKeys {
     }
 
     private boolean validateBurnConifg(Map<?, ?> burnMap) {
-        return burnMap.containsKey(TIME_KEY)
-                && burnMap.containsKey(ACTION_TYPE_KEY)
-                && burnMap.get(TIME_KEY) instanceof Integer
+        return burnMap.containsKey(ACTION_TYPE_KEY)
                 && burnMap.get(ACTION_TYPE_KEY) instanceof String;
     }
 }
