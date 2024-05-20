@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public interface Processor extends HookManager {
+public interface Processor extends HookManager, ProcessorKeys {
 
     /**
      * Checks a list of conditions for a player using the PlaceholderAPI.

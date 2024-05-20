@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class PotionProcessor implements EffectProcessor, ProcessorKeys {
+public class PotionProcessor implements EffectProcessor {
 
     @Override
     public void processEffect(List<?> effect, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {

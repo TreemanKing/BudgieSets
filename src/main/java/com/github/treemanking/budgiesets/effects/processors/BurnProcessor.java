@@ -19,12 +19,10 @@ public class BurnProcessor implements EffectProcessor, ProcessorKeys {
                 if (validateBurnConifg(burnMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
                     String actionType = (String) burnMap.get(ACTION_TYPE_KEY);
-                    int time;
+                    Integer time = (Integer) burnMap.get(TIME_KEY);
 
-                    if (burnMap.get(TIME_KEY) == null) {
+                    if (time == null) {
                         time = 5;
-                    } else {
-                        time = (int) burnMap.get(TIME_KEY);
                     }
 
                     if (time >= 0) {

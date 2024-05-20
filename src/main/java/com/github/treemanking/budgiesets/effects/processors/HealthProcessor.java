@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-public class HealthProcessor implements EffectProcessor, ProcessorKeys {
+public class HealthProcessor implements EffectProcessor {
 
     @Override
     public void processEffect(List<?> healths, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {

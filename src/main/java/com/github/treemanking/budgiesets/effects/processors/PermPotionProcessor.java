@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
-public class PermPotionProcessor implements EffectProcessor, ProcessorKeys {
+public class PermPotionProcessor implements EffectProcessor {
 
     @Override
     public void processEffect(List<?> potions, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {

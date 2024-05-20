@@ -18,7 +18,7 @@ import org.bukkit.material.MaterialData;
 import java.util.List;
 import java.util.Map;
 
-public class ParticleProcessor implements EffectProcessor, ProcessorKeys {
+public class ParticleProcessor implements EffectProcessor {
 
     @Override
     public void processEffect(List<?> particles, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {

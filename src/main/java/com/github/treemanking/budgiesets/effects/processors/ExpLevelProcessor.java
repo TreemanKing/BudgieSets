@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-public class ExpLevelProcessor implements EffectProcessor, ProcessorKeys {
+public class ExpLevelProcessor implements EffectProcessor {
 
     @Override
     public void processEffect(List<?> expLevels, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {

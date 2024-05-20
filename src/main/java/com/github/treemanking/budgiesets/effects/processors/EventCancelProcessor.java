@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-public class EventCancelProcessor implements EffectProcessor, ProcessorKeys {
+public class EventCancelProcessor implements EffectProcessor {
 
     @Override
     public void processEffect(List<?> eventCancels, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {

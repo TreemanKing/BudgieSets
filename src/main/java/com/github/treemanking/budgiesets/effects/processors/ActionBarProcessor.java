@@ -12,8 +12,6 @@ import java.util.Map;
 
 public class ActionBarProcessor implements EffectProcessor {
 
-    private final String TEXT_KEY = "Text";
-
     @Override
     public void processEffect(List<?> actionBars, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object actionBar : actionBars) {

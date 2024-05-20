@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-public class HungerProcessor implements EffectProcessor, ProcessorKeys {
+public class HungerProcessor implements EffectProcessor {
 
     @Override
     public void processEffect(List<?> hungers, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {

@@ -11,7 +11,7 @@ import org.bukkit.event.Event;
 import java.util.List;
 import java.util.Map;
 
-public class PlaySoundProcessor implements EffectProcessor, ProcessorKeys {
+public class PlaySoundProcessor implements EffectProcessor {
 
     @Override
     public void processEffect(List<?> sounds, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
