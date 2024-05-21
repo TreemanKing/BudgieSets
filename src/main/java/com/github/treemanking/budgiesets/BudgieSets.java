@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BudgieSets extends JavaPlugin implements HookManager, OnPluginDisable {
 
-    public static BudgieSets budgieSets;
+    private static BudgieSets budgieSets;
 
     @Override
     public void onLoad() {
