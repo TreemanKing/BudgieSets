@@ -17,8 +17,6 @@ public class CommandManager implements BudgieSetsCommand {
                 .withSubcommand(removeArmorSet)
                 .withSubcommand(reloadCommand)
                 .withSubcommand(renameCommand)
-                .withSubcommand(enableSet)
-                .withSubcommand(disableSet)
                 .register(plugin);
     }
 
