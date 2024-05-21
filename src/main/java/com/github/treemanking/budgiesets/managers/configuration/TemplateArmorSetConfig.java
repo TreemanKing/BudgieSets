@@ -29,21 +29,16 @@ public interface TemplateArmorSetConfig {
         return """
                 # Please see https://github.com/TreemanKing/BudgieSets/wiki for events and effects
                 Events:
-                  - DAMAGED:
-                      Chance: 0.1
+                  - JUMP:
+                      Chance: 0.5
+                      Cooldown: 5
                       Effects:
-                        - CANCEL_EVENT:
-                          - Boolean: true
-                        - PLAY_SOUND:
-                          - Sound: ENTITY_ENDERMAN_TELEPORT\s
-                            Pitch: 1.0
-                            Volume: 1.5
                         - PARTICLE:
-                          - Particle: DRAGON_BREATH
-                            Count: 40
+                          - Particle: REDSTONE
+                            Count: 20
                             Offset: 1.0
-                        - ACTION_BAR:
-                          - Text: "Attack Evaded!\"""";
+                            Data:
+                              Hex-Color: "#fcba03"
+                              Size: 5.0""";
     }
-
 }
