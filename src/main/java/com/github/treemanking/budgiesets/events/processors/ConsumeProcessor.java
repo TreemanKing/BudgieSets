@@ -23,7 +23,6 @@ public class ConsumeProcessor implements EventProcessor {
 
         private final Map<?, ?> effectsMap;
         private final Map<UUID, Long> cooldownMap = new HashMap<>();
-
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
 
         public ConsumeListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {

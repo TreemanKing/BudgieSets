@@ -27,13 +27,10 @@ public class PlaySoundProcessor implements EffectProcessor {
                     if (volume > 0 && pitch >= 0) {
                         playSound(player, soundType, volume, pitch);
                     }
-
-
                 } else {
                     // Log an error or inform the user about the invalid configuration
                     BudgieSets.getBudgieSets().getLogger().warning("Invalid sound configuration: " + soundMap);
                 }
-
             }
         }
     }

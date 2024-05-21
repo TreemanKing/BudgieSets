@@ -2,16 +2,17 @@ package com.github.treemanking.budgiesets.effects.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
-import com.github.treemanking.budgiesets.utilities.ProcessorKeys;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class PermPotionProcessor implements EffectProcessor {
 
@@ -28,11 +29,9 @@ public class PermPotionProcessor implements EffectProcessor {
                         boolean particles = (boolean) potionMap.get(PARTICLES_KEY);
                         // Assuming you have a method to apply PermPotion effects
                         applyPotionEffect(player, type, amplifier, ambient, particles);
-
                     } else {
                         removePotionEffects(player);
                     }
-
                 } else {
                     // Log an error or inform the user about the invalid configuration
                     BudgieSets.getBudgieSets().getLogger().warning("Invalid potion configuration: " + potionMap);
