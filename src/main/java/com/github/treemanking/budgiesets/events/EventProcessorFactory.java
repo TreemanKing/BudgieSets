@@ -16,7 +16,7 @@ public class EventProcessorFactory {
      */
     public static EventProcessor createProcessor(String eventType) {
         return switch (eventType.toUpperCase()) {
-            case "EFFECT_STATIC" -> new EffectStaticProcessor();
+            case "ON_EQUIP" -> new OnEquipProcessor();
             case "CONSUME" -> new ConsumeProcessor();
             case "JUMP" -> new JumpProcessor();
             case "HOOK" -> new HookProcessor();

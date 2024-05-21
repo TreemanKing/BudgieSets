@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class EffectStaticProcessor implements EventProcessor {
+public class OnEquipProcessor implements EventProcessor {
     @Override
     public void process(Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
         plugin.getServer().getPluginManager().registerEvents(new EffectStaticListener(effectsMap, playerEquipStatusHashMap), plugin);
