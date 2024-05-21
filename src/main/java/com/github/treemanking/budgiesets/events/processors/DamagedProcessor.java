@@ -52,6 +52,7 @@ public class DamagedProcessor implements EventProcessor, ProcessorKeys {
             Entity damagedEntity = event.getEntity();
             EntityDamageEvent.DamageCause damageCause = event.getCause();
 
+            // TODO: Add more types and check within list instead of having to make multiple events
             switch (eventType) {
                 case "DAMAGE_PLAYER":
                     if (damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)
@@ -92,7 +93,7 @@ public class DamagedProcessor implements EventProcessor, ProcessorKeys {
                     }
                     break;
                 default:
-                    if (!(damagedEntity instanceof Player)) return;
+                    if (!(damagedEntity instanceof Player) && !(attackingEnemy instanceof Mob || attackingEnemy instanceof AbstractArrow)) return;
                     player = (Player) damagedEntity;
             }
             if (player == null) return;

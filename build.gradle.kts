@@ -44,14 +44,17 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.commandapi.bukkit.shade)
     implementation(libs.de.tr7zw.item.nbt.api)
     compileOnly(libs.io.papermc.paper.paper.api)
     compileOnly(libs.me.clip.placeholderapi)
+
 }
 
 tasks.withType<ShadowJar> {
     archiveFileName.set("${project.name}-${project.version}.jar")
     relocate("de.tr7zw.changeme.nbtapi", "com.github.treemanking.budgiesets.nbtapi")
+    relocate("dev.jorel.commandapi", "com.github.treemanking.budgiesets.commandapi")
 }
 
 tasks {
