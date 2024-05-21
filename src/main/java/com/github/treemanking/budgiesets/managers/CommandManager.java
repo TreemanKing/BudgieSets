@@ -11,12 +11,11 @@ import java.util.concurrent.CompletableFuture;
 
 public class CommandManager implements BudgieSetsCommand {
 
-    private final BudgieSets PLUGIN = BudgieSets.getBudgieSets();
-
     public CommandManager(BudgieSets plugin) {
         new CommandAPICommand("budgiesets")
                 .withSubcommand(createArmorSet)
                 .withSubcommand(removeArmorSet)
+                .withSubcommand(reloadCommand)
                 .register(plugin);
     }
 
@@ -33,14 +32,28 @@ public class CommandManager implements BudgieSetsCommand {
                     throw new RuntimeException(e);
                 }
             });
+
     CommandAPICommand removeArmorSet = new CommandAPICommand("remove")
             .withArguments(new StringArgument("name")
                     .replaceSuggestions(ArgumentSuggestions.stringsAsync(info -> CompletableFuture.supplyAsync(this::getArmorSetFileNames))))
             .withPermission("budgiesets.remove")
+            .withAliases("delete", "yeet")
             .executes((sender, args) -> {
                 String armorSetConfig = (String) args.get("name");
                 deleteArmorSetFile(armorSetConfig);
                 sender.sendMessage(armorSetConfig + " was successfully removed.");
             });
 
+    CommandAPICommand reloadCommand = new CommandAPICommand("reload")
+            .withPermission("budgiesets.reload")
+            .executes(((sender, args) -> {
+                reloadPlugin();
+            }));
+
+    CommandAPICommand renameCommand = new CommandAPICommand("rename")
+            .withPermission("budgiesets.rename")
+            .withArguments(new StringArgument("newName"))
+            .executes(((sender, args) -> {
+
+            }));
 }

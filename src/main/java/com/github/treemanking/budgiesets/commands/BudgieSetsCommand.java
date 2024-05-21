@@ -1,5 +1,5 @@
 package com.github.treemanking.budgiesets.commands;
 
-public interface BudgieSetsCommand extends CreateCommand, RemoveCommand {
+public interface BudgieSetsCommand extends CreateCommand, RemoveCommand, ReloadCommand {
 
 }

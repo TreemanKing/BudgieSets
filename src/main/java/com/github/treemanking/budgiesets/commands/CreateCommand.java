@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Interface for creating new armor sets and generating YAML content for the BudgieSets plugin.
  */
-public interface CreateCommand {
+public interface CreateCommand extends ReloadCommand {
 
     /**
      * Creates a new armor set configuration file with the given name and YAML content.
@@ -35,6 +35,7 @@ public interface CreateCommand {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(yamlContent);
+            loadArmorSet(armorSetName, BudgieSets.getBudgieSets());
         } catch (IOException e) {
             BudgieSets.getBudgieSets().getLogger().severe("Failed to make " + armorSetName + " configuration.");
             throw e;

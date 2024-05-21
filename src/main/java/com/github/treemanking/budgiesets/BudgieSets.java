@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class BudgieSets extends JavaPlugin implements HookManager, OnPluginDisable {
 
     private static BudgieSets budgieSets;
+    private static ConfigurationManager configurationManager;
 
     @Override
     public void onLoad() {
@@ -21,7 +22,8 @@ public final class BudgieSets extends JavaPlugin implements HookManager, OnPlugi
                 .useLatestNMSVersion(false)
                 .dispatcherFile(null)
                 .silentLogs(true)
-                .usePluginNamespace());
+                .usePluginNamespace()
+                .verboseOutput(true));
     }
 
     @Override
@@ -31,8 +33,8 @@ public final class BudgieSets extends JavaPlugin implements HookManager, OnPlugi
         CommandAPI.onEnable();
         checkHooks(this);
 
-        ConfigurationManager configManager = new ConfigurationManager(this);
-        new ArmorSetManager(this, configManager);
+        configurationManager = new ConfigurationManager(this);
+        new ArmorSetManager(this, configurationManager);
         new CommandManager(this);
     }
 
@@ -41,13 +43,14 @@ public final class BudgieSets extends JavaPlugin implements HookManager, OnPlugi
 
         CommandAPI.onDisable();
 
-        for (Player player : getServer().getOnlinePlayers()) {
-            if (!getPotionEffects().containsKey(player.getUniqueId())) continue;
-            removePotionEffects(player);
-        }
+        removeAllPermPotionEffects();
     }
 
     public static BudgieSets getBudgieSets() {
         return budgieSets;
+    }
+
+    public static ConfigurationManager getConfigurationManager() {
+        return configurationManager;
     }
 }
