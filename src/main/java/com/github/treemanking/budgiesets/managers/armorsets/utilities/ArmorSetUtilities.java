@@ -52,7 +52,7 @@ public interface ArmorSetUtilities {
      */
     default boolean hasCustomNbtTag(ItemStack itemStack, String armorSetName) {
         NBTItem nbtItem = new NBTItem(itemStack);
-        return nbtItem.hasTag("armorSet") && nbtItem.getString("armorSet").equals(armorSetName);
+        return nbtItem.hasTag("armorSet") && nbtItem.getString("armorSet").equalsIgnoreCase(armorSetName);
     }
 
     /**
