@@ -3,6 +3,7 @@ package com.github.treemanking.budgiesets.effects.processors;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
+import com.github.treemanking.budgiesets.utilities.OnPluginDisable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
@@ -12,9 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-public class PermPotionProcessor implements EffectProcessor {
+public class PermPotionProcessor implements EffectProcessor, OnPluginDisable {
 
     @Override
     public void processEffect(List<?> potions, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
@@ -28,7 +28,7 @@ public class PermPotionProcessor implements EffectProcessor {
                         boolean ambient = (boolean) potionMap.get(AMBIENT_KEY);
                         boolean particles = (boolean) potionMap.get(PARTICLES_KEY);
                         // Assuming you have a method to apply PermPotion effects
-                        applyPotionEffect(player, type, amplifier, ambient, particles);
+                        applyPotionEffect(player, PotionEffect.INFINITE_DURATION, type, amplifier, ambient, particles);
                     } else {
                         removePotionEffects(player);
                     }
@@ -37,45 +37,6 @@ public class PermPotionProcessor implements EffectProcessor {
                     BudgieSets.getBudgieSets().getLogger().warning("Invalid potion configuration: " + potionMap);
                 }
             }
-        }
-    }
-
-    private void applyPotionEffect(@NotNull Player player, @NotNull String effectName, int amplifier, boolean ambient, boolean particles) {
-        PotionEffectType effectType = PotionEffectType.getByName(effectName.toUpperCase());
-
-        if (effectType != null) {
-            // Apply the permanent potion effect
-            PotionEffect effect = new PotionEffect(effectType, PotionEffect.INFINITE_DURATION, amplifier, ambient, particles);
-
-            // Check if the player already has effects
-            if (getPotionEffects().containsKey(player.getUniqueId())) {
-                getPotionEffects().get(player.getUniqueId()).add(effect);
-            } else {
-                // If not, create a new list with the current effect
-                List<PotionEffect> effects = new ArrayList<>();
-                effects.add(effect);
-                getPotionEffects().put(player.getUniqueId(), effects);
-            }
-
-            player.addPotionEffect(effect);
-        } else {
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid potion effect name: " + effectName);
-        }
-    }
-
-    public void removePotionEffects(Player player) {
-        UUID playerId = player.getUniqueId();
-        List<PotionEffect> playerEffects = getPotionEffects().get(playerId);
-
-        if (playerEffects != null) {
-
-            // Remove custom potion effects for the player
-            for (PotionEffect effect : playerEffects) {
-                player.removePotionEffect(effect.getType());
-            }
-
-            // Remove the player entry from the activeEffects map
-            getPotionEffects().remove(playerId);
         }
     }
 

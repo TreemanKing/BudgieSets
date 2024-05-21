@@ -3,9 +3,11 @@ package com.github.treemanking.budgiesets;
 import com.github.treemanking.budgiesets.managers.HookManager;
 import com.github.treemanking.budgiesets.managers.configuration.ConfigurationManager;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetManager;
+import com.github.treemanking.budgiesets.utilities.OnPluginDisable;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class BudgieSets extends JavaPlugin implements HookManager{
+public final class BudgieSets extends JavaPlugin implements HookManager, OnPluginDisable {
 
     public static BudgieSets budgieSets;
 
@@ -20,7 +22,10 @@ public final class BudgieSets extends JavaPlugin implements HookManager{
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        for (Player player : getServer().getOnlinePlayers()) {
+            if (!getPotionEffects().containsKey(player.getUniqueId())) continue;
+            removePotionEffects(player);
+        }
     }
 
     public static BudgieSets getBudgieSets() {

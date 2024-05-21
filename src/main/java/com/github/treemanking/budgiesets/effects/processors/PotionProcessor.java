@@ -64,8 +64,6 @@ public class PotionProcessor implements EffectProcessor {
         }
     }
 
-    private final Map<UUID, List<PotionEffect>> activeEffects = new HashMap<>();
-
     private void actionPotionEffect(String actionType, @NotNull Player player, int duration, @NotNull String effectName, int amplifier, boolean ambient, boolean particles) {
         if (actionType.equalsIgnoreCase("Add")) {
             applyPotionEffect(player, duration, effectName, amplifier, ambient, particles);
@@ -74,40 +72,6 @@ public class PotionProcessor implements EffectProcessor {
         } else {
             BudgieSets.getBudgieSets().getLogger().warning("You must have an action type of add or remove.");
         }
-    }
-
-    private void applyPotionEffect(@NotNull Player player, int duration, @NotNull String effectName, int amplifier, boolean ambient, boolean particles) {
-        PotionEffectType effectType = PotionEffectType.getByName(effectName.toUpperCase());
-
-        if (duration == 0) duration = 5;
-
-        if (effectType != null) {
-            // Apply the permanent potion effect
-            PotionEffect effect = new PotionEffect(effectType, duration * 20, amplifier, ambient, particles);
-
-            // Check if the player already has effects
-            if (activeEffects.containsKey(player.getUniqueId())) {
-                activeEffects.get(player.getUniqueId()).add(effect);
-            } else {
-                // If not, create a new list with the current effect
-                List<PotionEffect> effects = new ArrayList<>();
-                effects.add(effect);
-                activeEffects.put(player.getUniqueId(), effects);
-            }
-
-            player.addPotionEffect(effect);
-        } else {
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid potion effect name: " + effectName);
-        }
-    }
-
-    public void removePotionEffects(Player player, String potionEffect) {
-        PotionEffectType effectType = PotionEffectType.getByName(potionEffect.toUpperCase());
-
-        if (player.getActivePotionEffects().isEmpty()) return;
-        if (effectType == null) return;
-
-        player.removePotionEffect(effectType);
     }
 
     // Validation method for potion configuration
