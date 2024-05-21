@@ -119,7 +119,7 @@ public class ParticleProcessor implements EffectProcessor {
                 return new Particle.DustTransition(
                         Color.fromRGB(fromColor[0], fromColor[1], fromColor[2]),
                         Color.fromRGB(toColor[0], toColor[1], toColor[2]),
-                        (float) dataMap.get(SIZE_KEY)
+                        (float) ((double)dataMap.get(SIZE_KEY))
                 );
             }
             BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
