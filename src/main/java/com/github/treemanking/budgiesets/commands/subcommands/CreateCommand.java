@@ -1,4 +1,4 @@
-package com.github.treemanking.budgiesets.commands;
+package com.github.treemanking.budgiesets.commands.subcommands;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 

@@ -3,7 +3,13 @@ package com.github.treemanking.budgiesets.managers.armorsets;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.configuration.ConfigurationManager;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.Listener;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The ArmorSetManager class manages the registration of ArmorSetListeners
@@ -11,6 +17,7 @@ import java.io.File;
  */
 public class ArmorSetManager {
 
+    private  final Map<String, List<Listener>> armorSetListeners = new HashMap<>();
     private final BudgieSets plugin;
     private final ConfigurationManager configurationManager;
 
@@ -36,8 +43,9 @@ public class ArmorSetManager {
         for (File configFile : armorSetFiles) {
             FileConfiguration armorSetConfig = configurationManager.getConfig("ArmorSets/" + configFile.getName());
             String armorSetName = configFile.getName().replace(".yml", "");
+            armorSetListeners.put(armorSetName, new ArrayList<>());
 
-            registerArmorSetListener(armorSetName, armorSetConfig, plugin);
+            registerArmorSetListener(armorSetName, armorSetConfig);
         }
     }
 
@@ -46,9 +54,8 @@ public class ArmorSetManager {
      *
      * @param armorSetName the name of the armor set
      * @param armorSetConfig the configuration file for the armor set
-     * @param plugin the BudgieSets plugin instance
      */
-    private void registerArmorSetListener(String armorSetName, FileConfiguration armorSetConfig, BudgieSets plugin) {
+    private void registerArmorSetListener(String armorSetName, FileConfiguration armorSetConfig) {
         if (armorSetName == null || armorSetConfig == null) {
             return;
         } try {

@@ -16,9 +16,13 @@ public class CommandManager implements BudgieSetsCommand {
                 .withSubcommand(createArmorSet)
                 .withSubcommand(removeArmorSet)
                 .withSubcommand(reloadCommand)
+                .withSubcommand(renameCommand)
+                .withSubcommand(enableSet)
+                .withSubcommand(disableSet)
                 .register(plugin);
     }
 
+    // TODO: Add help messages to each sub command
 
     CommandAPICommand createArmorSet = new CommandAPICommand("create")
             .withArguments(new StringArgument("name"))
@@ -52,8 +56,19 @@ public class CommandManager implements BudgieSetsCommand {
 
     CommandAPICommand renameCommand = new CommandAPICommand("rename")
             .withPermission("budgiesets.rename")
+            .withArguments(new StringArgument( "oldName")
+                    .replaceSuggestions(ArgumentSuggestions.stringsAsync(info -> CompletableFuture.supplyAsync(this::getArmorSetFileNames))))
             .withArguments(new StringArgument("newName"))
             .executes(((sender, args) -> {
-
+                if (renameArmorSetFile((String) args.get(0), (String) args.get(1))) {
+                    BudgieSets.getBudgieSets().getLogger().info(args.get(0) + " was renamed to " + args.get(1));
+                }
             }));
+
+    CommandAPICommand disableSet;
+
+    CommandAPICommand enableSet = new CommandAPICommand("enableSet")
+            .withPermission("budgiesets.enableSet")
+            .withArguments(new StringArgument( "oldName")
+                    .replaceSuggestions(ArgumentSuggestions.stringsAsync(info -> CompletableFuture.supplyAsync(this::getArmorSetFileNames))));
 }

@@ -1,7 +1,7 @@
 /**
  * This interface provides methods for managing armor set files within the "ArmorSets" folder.
  */
-package com.github.treemanking.budgiesets.commands;
+package com.github.treemanking.budgiesets.commands.subcommands;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 
