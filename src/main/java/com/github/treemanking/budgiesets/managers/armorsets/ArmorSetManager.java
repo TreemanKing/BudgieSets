@@ -3,13 +3,12 @@ package com.github.treemanking.budgiesets.managers.armorsets;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.configuration.ConfigurationManager;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.RegisteredListener;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The ArmorSetManager class manages the registration of ArmorSetListeners
@@ -17,7 +16,7 @@ import java.util.Map;
  */
 public class ArmorSetManager {
 
-    private  final Map<String, List<Listener>> armorSetListeners = new HashMap<>();
+    public static List<String> enabledArmorSets = new ArrayList<>();
     private final BudgieSets plugin;
     private final ConfigurationManager configurationManager;
 
@@ -41,9 +40,9 @@ public class ArmorSetManager {
         File[] armorSetFiles = configurationManager.getArmorSetFiles();
 
         for (File configFile : armorSetFiles) {
+            if (configFile.getName().startsWith("--")) continue;
             FileConfiguration armorSetConfig = configurationManager.getConfig("ArmorSets/" + configFile.getName());
             String armorSetName = configFile.getName().replace(".yml", "");
-            armorSetListeners.put(armorSetName, new ArrayList<>());
 
             registerArmorSetListener(armorSetName, armorSetConfig);
         }
@@ -62,8 +61,21 @@ public class ArmorSetManager {
             plugin.getServer().getPluginManager().registerEvents(
                     new ArmorSetListener(armorSetName, armorSetConfig, plugin), plugin);
             plugin.getLogger().info(armorSetName + " Registered");
+            enabledArmorSets.add(armorSetName);
         } catch (Exception exception) {
             plugin.getLogger().severe(armorSetName + " did not register and ran into an error!");
         }
+    }
+
+    public static String[] getEnabledArmorSets() {
+        return enabledArmorSets.toArray(new String[0]);
+    }
+
+    public static void addEnabledArmorSet(String armorSetName) {
+        enabledArmorSets.add(armorSetName);
+    }
+
+    public static void removeEnabledArmorSet(String armorSetName) {
+        enabledArmorSets.remove(armorSetName);
     }
 }

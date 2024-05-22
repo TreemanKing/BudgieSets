@@ -19,6 +19,7 @@ public class PlaySoundProcessor implements EffectProcessor {
             if (sound instanceof Map<?, ?> soundMap) {
                 if (validateSoundConfig(soundMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
 
                     Sound soundType = Enum.valueOf(Sound.class, (String) soundMap.get(SOUND_KEY));
                     float volume = (float) ((double) soundMap.get(VOLUME_KEY));

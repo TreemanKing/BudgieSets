@@ -26,6 +26,8 @@ public class EventCancelProcessor implements EffectProcessor {
             if (eventCancel instanceof Map<?, ?> eventCancelMap) {
                 if (validateEventCancelConifg(eventCancelMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
+
 
                     boolean eventCancelStatus = (boolean) eventCancelMap.get(BOOLEAN_KEY);
 

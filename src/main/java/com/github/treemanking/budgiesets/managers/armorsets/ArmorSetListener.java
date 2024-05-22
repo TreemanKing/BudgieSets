@@ -40,7 +40,7 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities {
 
         // Registers a new EventManager which registers all events for the specific armor set
         EventManager eventManager = new EventManager();
-        eventManager.registerArmorEvents(armorSetConfig, plugin, this.playerEquipStatusHashMap);
+        eventManager.registerArmorEvents(armorSetName, armorSetConfig, plugin, this.playerEquipStatusHashMap);
     }
 
     // Events
@@ -55,14 +55,15 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities {
         Player player = event.getPlayer();
         UUID playerId = player.getUniqueId();
         EquipStatus currentStatus = playerEquipStatusHashMap.getOrDefault(playerId, EquipStatus.NULL);
+        boolean fullSet = isWearingFullSet(player, armorSetName);
 
-        if (isWearingFullSet(player, armorSetName) && currentStatus.equals(EquipStatus.NOT_EQUIPPED)) {
+        if (fullSet && currentStatus.equals(EquipStatus.NOT_EQUIPPED)) {
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
             player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-        } else if (!isWearingFullSet(player, armorSetName) && currentStatus.equals(EquipStatus.EQUIPPED)) {
+        } else if (!fullSet && currentStatus.equals(EquipStatus.EQUIPPED)) {
             player.sendMessage(ChatColor.RED + "You are now not wearing the " + armorSetName + " set and will lose all bonuses.");
             playerEquipStatusHashMap.put(playerId, EquipStatus.NOT_EQUIPPED);
-        } else if (isWearingFullSet(player, armorSetName) && currentStatus.equals(EquipStatus.NULL)) {
+        } else if (fullSet && currentStatus.equals(EquipStatus.NULL)) {
             // When a player joins the server, it will only trigger this event.
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
 
@@ -95,5 +96,15 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities {
     public void onPlayerLeave(PlayerQuitEvent event) {
         // Remove the player from the map when the player leaves the server
         playerEquipStatusHashMap.remove(event.getPlayer().getUniqueId());
+    }
+
+    /**
+     * Handles the hashcode of the event
+     *
+     * @return the hashcode of the new armorset
+     */
+    @Override
+    public int hashCode() {
+        return armorSetName.hashCode();
     }
 }

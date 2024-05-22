@@ -18,6 +18,7 @@ public class HungerProcessor implements EffectProcessor {
             if (hunger instanceof Map<?, ?> hungerMap) {
                 if (validateHungerConfig(hungerMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
 
                     int amount = (int) hungerMap.get(AMOUNT_KEY);
 

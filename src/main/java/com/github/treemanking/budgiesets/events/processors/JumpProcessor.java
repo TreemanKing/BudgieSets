@@ -10,13 +10,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class JumpProcessor implements EventProcessor {
 
     @Override
-    public void process(Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
-        plugin.getServer().getPluginManager().registerEvents(new JumpListener(effectsMap, playerEquipStatusHashMap), plugin);
+    public void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+        plugin.getServer().getPluginManager().registerEvents(new JumpListener(armorSetName, effectsMap, playerEquipStatusHashMap), plugin);
     }
 
     public class JumpListener implements Listener {
@@ -24,10 +25,13 @@ public class JumpProcessor implements EventProcessor {
         private final Map<?, ?> effectsMap;
         private final Map<UUID, Long> cooldownMap = new HashMap<>();
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
+        private final String armorSetName;
 
-        public JumpListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+
+        public JumpListener(String armorSetName, Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
             this.effectsMap = event;
             this.playerEquipStatus = playerEquipStatusHashMap;
+            this.armorSetName = armorSetName;
         }
 
         @EventHandler
@@ -39,6 +43,11 @@ public class JumpProcessor implements EventProcessor {
             if (checkMap(effectsMap, player, cooldownMap)) {
                 new EffectsManager(effectsMap, player, currentStatus, jumpEvent);
             }
+        }
+
+        @Override
+        public int hashCode() {
+            return armorSetName.hashCode();
         }
     }
 }

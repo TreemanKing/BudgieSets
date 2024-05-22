@@ -14,13 +14,14 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class AttackProcessor implements EventProcessor {
 
     @Override
-    public void process(Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
-        plugin.getServer().getPluginManager().registerEvents(new AttackProcessor.AttackListener(effectsMap, playerEquipStatusHashMap), plugin);
+    public void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+        plugin.getServer().getPluginManager().registerEvents(new AttackProcessor.AttackListener(armorSetName, effectsMap, playerEquipStatusHashMap), plugin);
     }
 
     private class AttackListener implements Listener, ProcessorKeys {
@@ -28,11 +29,13 @@ public class AttackProcessor implements EventProcessor {
         private final Map<?, ?> effectsMap;
         private final Map<UUID, Long> cooldownMap = new HashMap<>();
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
+        private final String armorSetName;
         private String eventType;
 
-        public AttackListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+        public AttackListener(String armorSetName, Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
             this.effectsMap = event;
             this.playerEquipStatus = playerEquipStatusHashMap;
+            this.armorSetName = armorSetName;
 
             if (event.containsKey(TYPE_KEY) && event.get(TYPE_KEY) instanceof String) {
                 this.eventType = (String) event.get(TYPE_KEY);
@@ -106,6 +109,11 @@ public class AttackProcessor implements EventProcessor {
             if (checkMap(effectsMap, player, cooldownMap)) {
                 new EffectsManager(effectsMap, player, currentStatus, event);
             }
+        }
+
+        @Override
+        public int hashCode() {
+            return armorSetName.hashCode();
         }
     }
 }

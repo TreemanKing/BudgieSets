@@ -1,16 +1,19 @@
 package com.github.treemanking.budgiesets.managers.configuration;
 
+import com.github.treemanking.budgiesets.BudgieSets;
+import com.github.treemanking.budgiesets.commands.subcommands.CreateCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * The ConfigurationManager class handles the loading, saving, and initialization
  * of configuration files and directories for the BudgieSets plugin.
  */
-public class ConfigurationManager {
+public class ConfigurationManager implements CreateCommand {
 
     private final JavaPlugin plugin;
 
@@ -52,10 +55,21 @@ public class ConfigurationManager {
      * @return the FileConfiguration associated with the specified file
      */
     public FileConfiguration getConfig(String fileName) {
-        File configFile = new File(plugin.getDataFolder(), fileName);
+        File configFile;
+        if (fileName.endsWith(".yml")) {
+            configFile = new File(plugin.getDataFolder(), fileName);
+        } else {
+            configFile = new File(plugin.getDataFolder(), fileName + ".yml");
+        }
 
         if (!configFile.exists()) {
-            plugin.saveResource(fileName, false);
+            if (configFile.getName().equalsIgnoreCase("config.yml")) {
+                plugin.saveResource(fileName, false);
+            } else {
+                BudgieSets.getBudgieSets().getLogger().warning(fileName + " does not exist.");
+                return null;
+            }
+
         }
 
         return YamlConfiguration.loadConfiguration(configFile);
@@ -84,6 +98,6 @@ public class ConfigurationManager {
      */
     public File[] getArmorSetFiles() {
         File armorSetsFolder = new File(plugin.getDataFolder(), "ArmorSets");
-        return armorSetsFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".yml"));
+        return armorSetsFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".yml") && !name.toLowerCase().startsWith("--"));
     }
 }

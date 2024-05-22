@@ -3,6 +3,7 @@ package com.github.treemanking.budgiesets.effects.processors;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
+import com.github.treemanking.budgiesets.managers.armorsets.utilities.ArmorSetUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -18,6 +19,7 @@ public class ActionBarProcessor implements EffectProcessor {
             if (actionBar instanceof Map<?, ?> actionBarMap) {
                 if (validateActionBarConifg(actionBarMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
 
                     String text = (String) actionBarMap.get(TEXT_KEY);
 

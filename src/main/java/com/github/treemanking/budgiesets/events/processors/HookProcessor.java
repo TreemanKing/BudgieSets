@@ -10,12 +10,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class HookProcessor implements EventProcessor {
     @Override
-    public void process(Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
-        plugin.getServer().getPluginManager().registerEvents(new HookProcessor.HookListener(effectsMap, playerEquipStatusHashMap), plugin);
+    public void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+        plugin.getServer().getPluginManager().registerEvents(new HookProcessor.HookListener(armorSetName, effectsMap, playerEquipStatusHashMap), plugin);
     }
 
     private class HookListener implements Listener {
@@ -24,10 +25,12 @@ public class HookProcessor implements EventProcessor {
         private final Map<UUID, Long> cooldownMap = new HashMap<>();
 
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
+        private final String armorSetName;
 
-        public HookListener(Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+        public HookListener(String armorSetName, Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
             this.effectsMap = event;
             this.playerEquipStatus = playerEquipStatusHashMap;
+            this.armorSetName = armorSetName;
         }
 
         @EventHandler
@@ -38,6 +41,12 @@ public class HookProcessor implements EventProcessor {
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
             if (checkMap(effectsMap, player, cooldownMap)) {
                 new EffectsManager(effectsMap, player, currentStatus, fishEvent);
-            }        }
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            return armorSetName.hashCode();
+        }
     }
 }

@@ -19,6 +19,8 @@ public class ExpLevelProcessor implements EffectProcessor {
             if (expLevel instanceof Map<?, ?> expLevelMap) {
                 if (validateHealthConfig(expLevelMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
+
 
                     int amount = (int) expLevelMap.get(AMOUNT_KEY);
 

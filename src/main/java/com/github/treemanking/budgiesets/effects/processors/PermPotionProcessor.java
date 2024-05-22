@@ -21,7 +21,7 @@ public class PermPotionProcessor implements EffectProcessor, OnPluginDisable {
         for (Object potion : potions) {
             if (potion instanceof Map<?, ?> potionMap) {
                 if (validatePotionConfig(potionMap)) {
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)) {
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED) || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) {
                         // Extract and apply PermPotion effects here
                         String type = (String) potionMap.get(TYPE_KEY);
                         int amplifier = (int) potionMap.get(AMPLIFIER_KEY);

@@ -2,6 +2,7 @@ package com.github.treemanking.budgiesets.managers;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.commands.BudgieSetsCommand;
+import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetManager;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.StringArgument;
@@ -17,6 +18,8 @@ public class CommandManager implements BudgieSetsCommand {
                 .withSubcommand(removeArmorSet)
                 .withSubcommand(reloadCommand)
                 .withSubcommand(renameCommand)
+                .withSubcommand(enableSet)
+                .withSubcommand(disableSet)
                 .register(plugin);
     }
 
@@ -63,10 +66,21 @@ public class CommandManager implements BudgieSetsCommand {
                 }
             }));
 
-    CommandAPICommand disableSet;
+    CommandAPICommand disableSet = new CommandAPICommand("disableset")
+            .withPermission("budgiesets.disableset")
+            .withAliases("unloadset", "enable", "unload")
+            .withArguments(new StringArgument( "enabledSet")
+                    .replaceSuggestions(ArgumentSuggestions.stringsAsync(info -> CompletableFuture.supplyAsync(ArmorSetManager::getEnabledArmorSets))))
+            .executes(((sender, args) -> {
+                unloadArmorSet((String) args.get(0));
+            }));
 
-    CommandAPICommand enableSet = new CommandAPICommand("enableSet")
-            .withPermission("budgiesets.enableSet")
-            .withArguments(new StringArgument( "oldName")
-                    .replaceSuggestions(ArgumentSuggestions.stringsAsync(info -> CompletableFuture.supplyAsync(this::getArmorSetFileNames))));
+    CommandAPICommand enableSet = new CommandAPICommand("enableset")
+            .withPermission("budgiesets.enableset")
+            .withAliases("loadset", "enable", "load")
+            .withArguments(new StringArgument( "disabledSet")
+                    .replaceSuggestions(ArgumentSuggestions.stringsAsync(info -> CompletableFuture.supplyAsync(this::getUnloadedArmorSetFileNames))))
+            .executes(((sender, args) -> {
+                loadArmorSet((String) args.get(0));
+            }));
 }

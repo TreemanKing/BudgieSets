@@ -16,11 +16,12 @@ public interface EventProcessor extends Processor {
     /**
      * Processes the effects associated with an event.
      *
+     * @param armorSetName the name of the armor set
      * @param effectsMap the map containing the effects to be processed
      * @param plugin the BudgieSets plugin instance
      * @param playerEquipStatusHashMap a map storing players' armor set equip status
      */
-    void process(Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap);
+    void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap);
 
 
 }

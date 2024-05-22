@@ -11,29 +11,28 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class OnPotionEffectProcessor implements EventProcessor, ProcessorKeys {
 
     @Override
-    public void process(Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
-        plugin.getServer().getPluginManager().registerEvents(new OnPotionEffectListener(effectsMap, playerEquipStatusHashMap), plugin);
+    public void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+        plugin.getServer().getPluginManager().registerEvents(new OnPotionEffectListener(armorSetName, effectsMap, playerEquipStatusHashMap), plugin);
     }
 
     private class OnPotionEffectListener implements Listener {
         private final Map<?, ?> effectsMap;
         private final Map<UUID, Long> cooldownMap = new HashMap<>();
-
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
         private final List<?> potionEffects;
+        private final String armorSetName;
 
-        public OnPotionEffectListener(Map<?, ?> event, HashMap<UUID, ArmorSetUtilities.EquipStatus> playerEquipStatusHashMap) {
+
+        public OnPotionEffectListener(String armorSetName, Map<?, ?> event, HashMap<UUID, ArmorSetUtilities.EquipStatus> playerEquipStatusHashMap) {
             this.effectsMap = event;
             this.playerEquipStatus = playerEquipStatusHashMap;
             this.potionEffects = (event.containsKey(TYPE_KEY) && event.get(TYPE_KEY) instanceof List) ? (List<?>) event.get(TYPE_KEY) : null;
+            this.armorSetName = armorSetName;
         }
 
         @EventHandler
@@ -55,6 +54,11 @@ public class OnPotionEffectProcessor implements EventProcessor, ProcessorKeys {
                     new EffectsManager(effectsMap, player, currentStatus, event);
                 }
             }
+        }
+
+        @Override
+        public int hashCode() {
+            return armorSetName.hashCode();
         }
     }
 }

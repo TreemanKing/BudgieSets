@@ -26,6 +26,7 @@ public class ParticleProcessor implements EffectProcessor {
             if (particle instanceof Map<?, ?> particleMap) {
                 if (validateParticleConfig(particleMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
 
                     Particle particleType = Enum.valueOf(Particle.class, (String) particleMap.get(PARTICLE_KEY));
                     int count = (int) particleMap.get(COUNT_KEY);

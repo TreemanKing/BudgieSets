@@ -19,7 +19,8 @@ public class PotionProcessor implements EffectProcessor {
         for (Object potion : effect) {
             if (potion instanceof Map<?, ?> potionMap) {
                 if (validatePotionConfig(potionMap)) {
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)) {
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)
+                            || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) {
                         // Extract and apply PermPotion effects here
                         String actionType = (String) potionMap.get(ACTION_TYPE_KEY);
                         String type = (String) potionMap.get(TYPE_KEY);

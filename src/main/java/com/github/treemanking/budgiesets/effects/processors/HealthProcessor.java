@@ -18,6 +18,8 @@ public class HealthProcessor implements EffectProcessor {
             if (health instanceof Map<?, ?> healthMap) {
                 if (validateHealthConfig(healthMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
+
 
                     double amount = (double) healthMap.get(AMOUNT_KEY);
 
