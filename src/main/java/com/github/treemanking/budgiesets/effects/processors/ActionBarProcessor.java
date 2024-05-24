@@ -1,7 +1,7 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.effects.EffectProcessor;
+import com.github.treemanking.budgiesets.effects.PlayerEffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * The ActionBarProcessor class processes action bar effects for players based on their armor equip status.
  */
-public class ActionBarProcessor implements EffectProcessor {
+public class ActionBarProcessor implements PlayerEffectProcessor {
 
     /**
      * Processes action bar effects based on the provided configuration.

@@ -1,7 +1,7 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.effects.EffectProcessor;
+import com.github.treemanking.budgiesets.effects.PlayerEffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -9,12 +9,11 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 /**
  * A class to process potion effects for armor set effects.
  */
-public class PermPotionProcessor implements EffectProcessor {
+public class PermPotionProcessor implements PlayerEffectProcessor {
 
     /**
      * Processes potion effects based on the provided configuration.

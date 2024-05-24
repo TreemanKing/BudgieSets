@@ -34,13 +34,13 @@ public class ElytraBoostProcessor implements EventProcessor {
         }
 
         @EventHandler
-        private void onFishingHook(PlayerElytraBoostEvent playerElytraBoostEvent) {
-            Player player = playerElytraBoostEvent.getPlayer();
+        private void onFishingHook(PlayerElytraBoostEvent event) {
+            Player player = event.getPlayer();
 
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
             if (checkMap(effectsMap, player, cooldownMap)) {
-                new EffectsManager(effectsMap, player, currentStatus, playerElytraBoostEvent);
+                new EffectsManager(effectsMap, player, currentStatus, event);
             }
         }
 

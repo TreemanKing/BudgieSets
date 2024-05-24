@@ -4,6 +4,7 @@ import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.events.EventProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.managers.configuration.EffectsManager;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,11 +37,20 @@ public class HookProcessor implements EventProcessor {
         @EventHandler
         private void onFishingHook(PlayerFishEvent fishEvent) {
             Player player = fishEvent.getPlayer();
+            Entity entity = null;
 
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
+
+            // Get Target
+            if (Objects.equals(getConfigValue(effectsMap, EFFECT_TARGET, String.class, "Player").toLowerCase(), "Hook".toLowerCase())) {
+                entity = fishEvent.getHook();
+            } else {
+                entity = fishEvent.getPlayer();
+            }
+
             if (checkMap(effectsMap, player, cooldownMap)) {
-                new EffectsManager(effectsMap, player, currentStatus, fishEvent);
+                new EffectsManager(effectsMap, entity, currentStatus, fishEvent);
             }
         }
 

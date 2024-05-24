@@ -1,7 +1,7 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.effects.EffectProcessor;
+import com.github.treemanking.budgiesets.effects.PlayerEffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * A class to process sound effects for armor set effects.
  */
-public class PlaySoundProcessor implements EffectProcessor {
+public class PlaySoundProcessor implements PlayerEffectProcessor {
 
     /**
      * Processes sound effects based on the provided configuration.

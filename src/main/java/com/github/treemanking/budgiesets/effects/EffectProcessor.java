@@ -4,6 +4,7 @@ import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.utilities.Processor;
 import com.github.treemanking.budgiesets.utilities.effects.PotionEffects;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -18,14 +19,14 @@ import java.util.Map;
 public interface EffectProcessor extends Processor, PotionEffects {
 
     /**
-     * Processes a given effect on a player based on their equip status and the associated event.
+     * Processes a given effect on an entity effect based on their equip status and the associated event.
      *
      * @param effect the list of effects to process
-     * @param player the player on whom the effect is to be processed
+     * @param entity the entity on whom the effect is to be processed
      * @param equipStatus the equip status of the player's armor set
      * @param event the event triggering the effect
      */
-    void processEffect(List<?> effect, Player player, ArmorSetListener.EquipStatus equipStatus, Event event);
+    void processEffect(List<?> effect, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event);
 
     /**
      * Converts a hexadecimal color string to its red, green, and blue components.
@@ -86,7 +87,6 @@ public interface EffectProcessor extends Processor, PotionEffects {
      */
     default  <T> T getConfigValue(Map<?, ?> map, String key, Class<T> type, T defaultValue) {
         if (!map.containsKey(key)) {
-            BudgieSets.getBudgieSets().getLogger().warning("Missing configuration key: " + key);
             return defaultValue;
         }
         Object value = map.get(key);

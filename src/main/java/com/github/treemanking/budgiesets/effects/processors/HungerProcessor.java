@@ -1,7 +1,7 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.effects.EffectProcessor;
+import com.github.treemanking.budgiesets.effects.PlayerEffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * A class to process hunger effects for armor set effects.
  */
-public class HungerProcessor implements EffectProcessor {
+public class HungerProcessor implements PlayerEffectProcessor {
 
     /**
      * Processes hunger effects based on the provided configuration.

@@ -2,29 +2,28 @@ package com.github.treemanking.budgiesets.effects.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
-import com.github.treemanking.budgiesets.utilities.ProcessorKeys;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * The BurnProcessor class processes burn effects for players based on their armor equip status.
+ * The BurnProcessor class processes burn effects for entity based on their armor equip status.
  */
-public class BurnProcessor implements EffectProcessor, ProcessorKeys {
+public class BurnProcessor implements EffectProcessor {
 
     /**
      * Processes burn effects based on the provided configuration.
      *
      * @param burns       A list of burn configurations.
-     * @param player      The player to apply the effects to.
+     * @param entity      The entity to apply the effects to.
      * @param equipStatus The equip status of the player's armor.
      * @param event       The event triggering the effect.
      */
     @Override
-    public void processEffect(List<?> burns, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffect(List<?> burns, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object burn : burns) {
             if (burn instanceof Map<?, ?> burnMap) {
                 if (validateBurnConfig(burnMap)) {
@@ -35,7 +34,7 @@ public class BurnProcessor implements EffectProcessor, ProcessorKeys {
                     Integer time = getConfigValue(burnMap, TIME_KEY, Integer.class, 5);
 
                     if (time != null && time >= 0) {
-                        actionPotionEffect(player, actionType, time);
+                        actionPotionEffect(entity, actionType, time);
                     }
                 } else {
                     // Log an error about the invalid configuration
@@ -46,17 +45,17 @@ public class BurnProcessor implements EffectProcessor, ProcessorKeys {
     }
 
     /**
-     * Applies the burn effect to the player based on the action type and duration.
+     * Applies the burn effect to the entity based on the action type and duration.
      *
-     * @param player     The player to apply the effect to.
+     * @param entity     The entity to apply the effect to.
      * @param actionType The type of action to perform ("Add" or "Remove").
      * @param time       The duration of the effect in seconds.
      */
-    private void actionPotionEffect(Player player, String actionType, int time) {
+    private void actionPotionEffect(Entity entity, String actionType, int time) {
         if ("Add".equalsIgnoreCase(actionType)) {
-            player.setFireTicks(time * 20);
+            entity.setFireTicks(time * 20);
         } else if ("Remove".equalsIgnoreCase(actionType)) {
-            player.setFireTicks(0);
+            entity.setFireTicks(0);
         } else {
             BudgieSets.getBudgieSets().getLogger().warning("Invalid action type: " + actionType + ". You must use 'Add' or 'Remove'.");
         }

@@ -3,7 +3,7 @@ package com.github.treemanking.budgiesets.effects.processors;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The EventCancelProcessor class processes event cancellation effects for players based on their armor equip status.
+ * The EventCancelProcessor class processes event cancellation effects for entities based on their armor equip status.
  */
 public class EventCancelProcessor implements EffectProcessor {
 
@@ -20,12 +20,12 @@ public class EventCancelProcessor implements EffectProcessor {
      * Processes event cancellation effects based on the provided configuration.
      *
      * @param eventCancels A list of event cancellation configurations.
-     * @param player       The player to apply the effects to.
+     * @param entity       The entity to apply the effects to.
      * @param equipStatus  The equip status of the player's armor.
      * @param event        The event triggering the effect.
      */
     @Override
-    public void processEffect(List<?> eventCancels, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffect(List<?> eventCancels, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
         if (!(event instanceof Cancellable cancellableEvent)) {
             BudgieSets.getBudgieSets().getLogger().warning("Event not cancellable: " + event.getEventName());
             return;

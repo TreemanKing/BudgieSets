@@ -26,4 +26,5 @@ public interface ProcessorKeys {
     String OFFSET_KEY = "Offset";
     String ACTION_TYPE_KEY = "Action-Type";
     String TEXT_KEY = "Text";
+    String EFFECT_TARGET = "Effect-Target";
 }

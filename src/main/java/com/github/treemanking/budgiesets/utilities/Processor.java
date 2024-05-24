@@ -163,4 +163,40 @@ public interface Processor extends HookManager, ProcessorKeys {
         List<String> stringList = (List<String>) list;
         return stringList;
     }
+
+    /**
+     * Retrieves a configuration value from the map with detailed logging for errors.
+     *
+     * @param map  The configuration map.
+     * @param key  The key to retrieve.
+     * @param type The expected type of the value.
+     * @param <T>  The type parameter.
+     * @return The value if present and correct type, null otherwise.
+     */
+    default  <T> T getConfigValue(Map<?, ?> map, String key, Class<T> type) {
+        return getConfigValue(map, key, type, null);
+    }
+
+    /**
+     * Retrieves a configuration value from the map with detailed logging for errors, providing a default value if the key is missing or type is incorrect.
+     *
+     * @param map          The configuration map.
+     * @param key          The key to retrieve.
+     * @param type         The expected type of the value.
+     * @param defaultValue The default value to use if the key is missing or type is incorrect.
+     * @param <T>          The type parameter.
+     * @return The value if present and correct type, otherwise the default value.
+     */
+    default  <T> T getConfigValue(Map<?, ?> map, String key, Class<T> type, T defaultValue) {
+        if (!map.containsKey(key)) {
+            BudgieSets.getBudgieSets().getLogger().warning("Missing configuration key: " + key);
+            return defaultValue;
+        }
+        Object value = map.get(key);
+        if (!type.isInstance(value)) {
+            BudgieSets.getBudgieSets().getLogger().warning("Incorrect type for key: " + key + ". Expected: " + type.getSimpleName() + ", but got: " + (value == null ? "null" : value.getClass().getSimpleName()));
+            return defaultValue;
+        }
+        return type.cast(value);
+    }
 }

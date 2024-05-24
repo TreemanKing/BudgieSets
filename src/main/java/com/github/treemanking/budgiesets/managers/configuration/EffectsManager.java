@@ -1,10 +1,10 @@
 package com.github.treemanking.budgiesets.managers.configuration;
 
 import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.effects.EffectProcessorFactory;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
+import com.github.treemanking.budgiesets.effects.EffectProcessorFactory;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 
 import java.util.List;
@@ -20,44 +20,44 @@ public class EffectsManager {
      * Constructs an EffectsManager to process effects for a specific event.
      *
      * @param eventMap the map representing the event and its associated effects
-     * @param player the player involved in the event
+     * @param entity the player involved in the event
      * @param equipStatus the player's armor set equip status
      * @param event the event triggering the effects
      */
-    public EffectsManager(Map<?, ?> eventMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
-        processEffectsMap(eventMap, player, equipStatus, event);
+    public EffectsManager(Map<?, ?> eventMap, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
+        processEffectsMap(eventMap, entity, equipStatus, event);
     }
 
     /**
      * Processes the map containing effects for the event.
      *
      * @param eventMap the map representing the event and its associated effects
-     * @param player the player involved in the event
+     * @param entity the player involved in the event
      * @param equipStatus the player's armor set equip status
      * @param event the event triggering the effects
      */
-    private void processEffectsMap(Map<?, ?> eventMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    private void processEffectsMap(Map<?, ?> eventMap, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
         if (!eventMap.containsKey("Effects")) {
             throw new IllegalArgumentException("Effects key not found for an event.");
         }
         List<Map<?, ?>> effects = (List<Map<?, ?>>) eventMap.get("Effects");
-        processEffects(effects, player, equipStatus, event);
+        processEffects(effects, entity, equipStatus, event);
     }
 
     /**
      * Processes the list of effects for the event.
      *
      * @param effectsMap the list of maps representing individual effects
-     * @param player the player involved in the event
+     * @param entity the player involved in the event
      * @param equipStatus the player's armor set equip status
      * @param event the event triggering the effects
      */
-    private void processEffects(List<Map<?, ?>> effectsMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    private void processEffects(List<Map<?, ?>> effectsMap, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
         if (effectsMap == null) {
             throw new IllegalArgumentException("Effects list not found or is null for an event.");
         }
         for (Map<?, ?> effect : effectsMap) {
-            processEffect(effect, player, equipStatus, event);
+            processEffect(effect, entity, equipStatus, event);
         }
     }
 
@@ -65,11 +65,11 @@ public class EffectsManager {
      * Processes an individual effect for the event.
      *
      * @param effectMap the map representing the individual effect
-     * @param player the player involved in the event
+     * @param entity the player involved in the event
      * @param equipStatus the player's armor set equip status
      * @param event the event triggering the effect
      */
-    private void processEffect(Map<?, ?> effectMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    private void processEffect(Map<?, ?> effectMap, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
         if (effectMap == null) {
             return;
         }
@@ -95,6 +95,6 @@ public class EffectsManager {
             return;
         }
 
-        processor.processEffect((List<?>) value, player, equipStatus, event);
+        processor.processEffect((List<?>) value, entity, equipStatus, event);
     }
 }

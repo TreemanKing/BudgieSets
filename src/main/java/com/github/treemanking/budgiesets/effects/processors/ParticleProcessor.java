@@ -9,7 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Vibration;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
@@ -26,12 +26,12 @@ public class ParticleProcessor implements EffectProcessor {
      * Processes particle effects based on the provided configuration.
      *
      * @param particles   A list of particle configurations.
-     * @param player      The player to apply the effects to.
+     * @param entity      The entity to apply the effects to.
      * @param equipStatus The equip status of the player's armor.
      * @param event       The event triggering the effect.
      */
     @Override
-    public void processEffect(List<?> particles, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffect(List<?> particles, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object particle : particles) {
             if (particle instanceof Map<?, ?> particleMap) {
                 if (validateParticleConfig(particleMap)) {
@@ -44,7 +44,7 @@ public class ParticleProcessor implements EffectProcessor {
                     Map<?, ?> particleDataMap = (Map<?, ?>) particleMap.get(DATA_KEY);
 
                     if (count > 0) {
-                        spawnParticle(player, particleType, count, offset, particleDataMap);
+                        spawnParticle(entity, particleType, count, offset, particleDataMap);
                     }
                 } else {
                     // Log an error or inform the user about the invalid configuration
@@ -54,18 +54,18 @@ public class ParticleProcessor implements EffectProcessor {
         }
     }
 
-    private void spawnParticle(Player player, Particle particle, int count, double offset, Map<?, ?> dataMap) {
+    private void spawnParticle(Entity entity, Particle particle, int count, double offset, Map<?, ?> dataMap) {
         ParticleBuilder particleBuilder = new ParticleBuilder(particle);
 
         if (dataMap == null || dataMap.isEmpty()) {
-            particleBuilder.location(player.getLocation())
+            particleBuilder.location(entity.getLocation())
                     .count(count)
                     .offset(offset, offset, offset)
                     .spawn();
         } else {
-            particleBuilder.location(player.getLocation())
+            particleBuilder.location(entity.getLocation())
                     .count(count)
-                    .data(convertData(particle.getDataType(), dataMap, player))
+                    .data(convertData(particle.getDataType(), dataMap, entity))
                     .offset(offset, offset, offset)
                     .spawn();
         }
@@ -107,10 +107,10 @@ public class ParticleProcessor implements EffectProcessor {
      *
      * @param particleDataTypeClass The class type of the particle data.
      * @param dataMap               The raw configuration data map.
-     * @param player                The player associated with the particle.
+     * @param entity                The entity associated with the particle.
      * @return The converted particle data.
      */
-    private Object convertData(Class<?> particleDataTypeClass, Map<?, ?> dataMap, Player player) {
+    private Object convertData(Class<?> particleDataTypeClass, Map<?, ?> dataMap, Entity entity) {
         if(dataMap == null) return null;
 
         if (particleDataTypeClass.equals(MaterialData.class)) {
@@ -139,7 +139,7 @@ public class ParticleProcessor implements EffectProcessor {
             return null;
         } else if (particleDataTypeClass.equals(Vibration.class)) {
             if (validateArrivalTimeKey(dataMap)) {
-                return new Vibration(new Vibration.Destination.EntityDestination(player), (int) dataMap.get(ARRIVAL_TIME_KEY));
+                return new Vibration(new Vibration.Destination.EntityDestination(entity), (int) dataMap.get(ARRIVAL_TIME_KEY));
             }
             BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
             return null;
