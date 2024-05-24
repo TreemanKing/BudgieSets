@@ -163,7 +163,7 @@ public class ParticleProcessor implements EffectProcessor {
         } else if (particleDataTypeClass.equals(Particle.DustOptions.class)) {
             if (validateSizeKey(dataMap) && validateColorKey(dataMap)) {
                 int[] color = convertHexToRGB(getConfigValue(dataMap, COLOR_KEY, String.class));
-                return new Particle.DustOptions(Color.fromRGB(color[0], color[1], color[2]), getConfigValue(dataMap, FLOAT_KEY, Double.class).floatValue());
+                return new Particle.DustOptions(Color.fromRGB(color[0], color[1], color[2]), getConfigValue(dataMap, SIZE_KEY, Double.class).floatValue());
             }
             BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
             return null;
