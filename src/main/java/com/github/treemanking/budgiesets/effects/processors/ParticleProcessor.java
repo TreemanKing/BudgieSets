@@ -3,7 +3,6 @@ package com.github.treemanking.budgiesets.effects.processors;
 import com.destroystokyo.paper.ParticleBuilder;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
-import com.github.treemanking.budgiesets.utilities.ProcessorKeys;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -18,19 +17,30 @@ import org.bukkit.material.MaterialData;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A class to process particles for armor set effects.
+ */
 public class ParticleProcessor implements EffectProcessor {
 
+    /**
+     * Processes particle effects based on the provided configuration.
+     *
+     * @param particles   A list of particle configurations.
+     * @param player      The player to apply the effects to.
+     * @param equipStatus The equip status of the player's armor.
+     * @param event       The event triggering the effect.
+     */
     @Override
     public void processEffect(List<?> particles, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
         for (Object particle : particles) {
             if (particle instanceof Map<?, ?> particleMap) {
                 if (validateParticleConfig(particleMap)) {
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)) return;
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)
+                            || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
 
-                    Particle particleType = Enum.valueOf(Particle.class, (String) particleMap.get(PARTICLE_KEY));
-                    int count = (int) particleMap.get(COUNT_KEY);
-                    double offset = (double) particleMap.get(OFFSET_KEY);
+                    Particle particleType = Enum.valueOf(Particle.class, getConfigValue(particleMap, PARTICLE_KEY, String.class));
+                    Integer count = getConfigValue(particleMap, COUNT_KEY, Integer.class, 1);
+                    Double offset = getConfigValue(particleMap, OFFSET_KEY, Double.class, 0.0);;
                     Map<?, ?> particleDataMap = (Map<?, ?>) particleMap.get(DATA_KEY);
 
                     if (count > 0) {
@@ -61,6 +71,12 @@ public class ParticleProcessor implements EffectProcessor {
         }
     }
 
+    /**
+     * Validates the particle configuration.
+     *
+     * @param particleMap The particle configuration map.
+     * @return True if the configuration is valid, otherwise false.
+     */
     private boolean validateParticleConfig(Map<?, ?> particleMap) {
         return particleMap.containsKey(PARTICLE_KEY)
                 && particleMap.containsKey(COUNT_KEY)
@@ -70,6 +86,12 @@ public class ParticleProcessor implements EffectProcessor {
                 && particleMap.get(OFFSET_KEY) instanceof Double;
     }
 
+    /**
+     * Checks if the provided particle type is valid.
+     *
+     * @param type The particle type to check.
+     * @return True if the particle type is valid, otherwise false.
+     */
     private boolean isValidParticleEnum(String type) {
         try {
             Enum.valueOf(Particle.class, type);
@@ -80,30 +102,38 @@ public class ParticleProcessor implements EffectProcessor {
         return false;
     }
 
+    /**
+     * Converts raw configuration data to the specified particle data type.
+     *
+     * @param particleDataTypeClass The class type of the particle data.
+     * @param dataMap               The raw configuration data map.
+     * @param player                The player associated with the particle.
+     * @return The converted particle data.
+     */
     private Object convertData(Class<?> particleDataTypeClass, Map<?, ?> dataMap, Player player) {
         if(dataMap == null) return null;
 
         if (particleDataTypeClass.equals(MaterialData.class)) {
             if (validateMaterialKey(dataMap)) {
-                return Material.getMaterial(dataMap.get(MATERIAL_KEY).toString().toUpperCase());
+                return Material.getMaterial(getConfigValue(dataMap, MATERIAL_KEY, String.class, "STONE").toUpperCase());
             }
             BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(BlockData.class)) {
             if (validateMaterialKey(dataMap)) {
-                return Material.getMaterial(dataMap.get(MATERIAL_KEY).toString().toUpperCase()).createBlockData();
+                return Material.getMaterial(getConfigValue(dataMap, MATERIAL_KEY, String.class, "STONE").toUpperCase()).createBlockData();
             }
             BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(Integer.class)) {
             if (validateIntKey(dataMap)) {
-                return dataMap.get(INT_KEY);
+                return getConfigValue(dataMap, INT_KEY, Integer.class);
             }
             BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(Float.class)) {
             if (validateFloatKey(dataMap)) {
-                return (float) ((double) dataMap.get(FLOAT_KEY));
+                return getConfigValue(dataMap, FLOAT_KEY, Double.class).floatValue();
             }
             BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
             return null;
@@ -114,27 +144,26 @@ public class ParticleProcessor implements EffectProcessor {
             BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(Particle.DustTransition.class)) {
-            int[] fromColor = convertHexToRGB((String) dataMap.get(FROM_COLOR_KEY));
-            int[] toColor = convertHexToRGB((String) dataMap.get(TO_COLOR_KEY));
+            int[] fromColor = convertHexToRGB(getConfigValue(dataMap, FROM_COLOR_KEY, String.class));
+            int[] toColor = convertHexToRGB(getConfigValue(dataMap, TO_COLOR_KEY, String.class));
             if (validateHexKey(dataMap)) {
                 return new Particle.DustTransition(
                         Color.fromRGB(fromColor[0], fromColor[1], fromColor[2]),
                         Color.fromRGB(toColor[0], toColor[1], toColor[2]),
-                        (float) ((double)dataMap.get(SIZE_KEY))
-                );
+                        getConfigValue(dataMap, SIZE_KEY, Double.class).floatValue());
             }
             BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(ItemStack.class)) {
             if (validateMaterialKey(dataMap)) {
-                return new ItemStack(Material.getMaterial(dataMap.get(MATERIAL_KEY).toString().toUpperCase()));
+                return new ItemStack(Material.getMaterial(getConfigValue(dataMap, MATERIAL_KEY, String.class, "STONE").toUpperCase()));
             }
             BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(Particle.DustOptions.class)) {
             if (validateSizeKey(dataMap) && validateColorKey(dataMap)) {
-                int[] color = convertHexToRGB((String) dataMap.get(COLOR_KEY));
-                return new Particle.DustOptions(Color.fromRGB(color[0], color[1], color[2]), (float) ((double)dataMap.get(SIZE_KEY)));
+                int[] color = convertHexToRGB(getConfigValue(dataMap, COLOR_KEY, String.class));
+                return new Particle.DustOptions(Color.fromRGB(color[0], color[1], color[2]), getConfigValue(dataMap, FLOAT_KEY, Double.class).floatValue());
             }
             BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
             return null;
@@ -142,27 +171,56 @@ public class ParticleProcessor implements EffectProcessor {
         return null;
     }
 
-
+    /**
+     * Validates the material data configuration.
+     *
+     * @param map The data configuration map.
+     * @return True if the configuration is valid, otherwise false.
+     */
     private boolean validateMaterialKey(Map<?, ?> map) {
         return map.containsKey(MATERIAL_KEY)
                 && Material.getMaterial(map.get(MATERIAL_KEY).toString().toUpperCase()) != null;
     }
 
+    /**
+     * Validates the float data configuration.
+     *
+     * @param map The data configuration map.
+     * @return True if the configuration is valid, otherwise false.
+     */
     private boolean validateFloatKey(Map<?, ?> map) {
         return map.containsKey(FLOAT_KEY)
                 && map.get(FLOAT_KEY) instanceof Double;
     }
 
+    /**
+     * Validates the integer data configuration.
+     *
+     * @param map The data configuration map.
+     * @return True if the configuration is valid, otherwise false.
+     */
     private boolean validateIntKey(Map<?, ?> map) {
         return map.containsKey(INT_KEY)
                 && map.get(INT_KEY) instanceof Integer;
     }
 
+    /**
+     * Validates the arrival time data configuration.
+     *
+     * @param map The data configuration map.
+     * @return True if the configuration is valid, otherwise false.
+     */
     private boolean validateArrivalTimeKey(Map<?, ?> map) {
         return map.containsKey(ARRIVAL_TIME_KEY)
                 && map.get(ARRIVAL_TIME_KEY) instanceof Integer;
     }
 
+    /**
+     * Validates the hex data configuration.
+     *
+     * @param map The data configuration map.
+     * @return True if the configuration is valid, otherwise false.
+     */
     private boolean validateHexKey(Map<?, ?> map) {
         return map.containsKey(FROM_COLOR_KEY)
                 && map.containsKey(TO_COLOR_KEY)
@@ -171,10 +229,22 @@ public class ParticleProcessor implements EffectProcessor {
                 && validateSizeKey(map);
     }
 
+    /**
+     * Validates the size data configuration.
+     *
+     * @param map The data configuration map.
+     * @return True if the configuration is valid, otherwise false.
+     */
     private boolean validateSizeKey(Map<?, ?> map) {
         return map.containsKey(SIZE_KEY);
     }
 
+    /**
+     * Validates the color data configuration.
+     *
+     * @param map The data configuration map.
+     * @return True if the configuration is valid, otherwise false.
+     */
     private boolean validateColorKey(Map<?, ?> map) {
         return map.containsKey(COLOR_KEY)
                 && map.get(COLOR_KEY) instanceof String;

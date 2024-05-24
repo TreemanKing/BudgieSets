@@ -1,5 +1,6 @@
 package com.github.treemanking.budgiesets.effects;
 
+import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.utilities.Processor;
 import com.github.treemanking.budgiesets.utilities.effects.PotionEffects;
@@ -7,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The EffectProcessor interface defines the methods required to process effects
@@ -57,5 +59,41 @@ public interface EffectProcessor extends Processor, PotionEffects {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid hex color string. Contains non-hex characters.", e);
         }
+    }
+
+    /**
+     * Retrieves a configuration value from the map with detailed logging for errors.
+     *
+     * @param map  The configuration map.
+     * @param key  The key to retrieve.
+     * @param type The expected type of the value.
+     * @param <T>  The type parameter.
+     * @return The value if present and correct type, null otherwise.
+     */
+    default  <T> T getConfigValue(Map<?, ?> map, String key, Class<T> type) {
+        return getConfigValue(map, key, type, null);
+    }
+
+    /**
+     * Retrieves a configuration value from the map with detailed logging for errors, providing a default value if the key is missing or type is incorrect.
+     *
+     * @param map          The configuration map.
+     * @param key          The key to retrieve.
+     * @param type         The expected type of the value.
+     * @param defaultValue The default value to use if the key is missing or type is incorrect.
+     * @param <T>          The type parameter.
+     * @return The value if present and correct type, otherwise the default value.
+     */
+    default  <T> T getConfigValue(Map<?, ?> map, String key, Class<T> type, T defaultValue) {
+        if (!map.containsKey(key)) {
+            BudgieSets.getBudgieSets().getLogger().warning("Missing configuration key: " + key);
+            return defaultValue;
+        }
+        Object value = map.get(key);
+        if (!type.isInstance(value)) {
+            BudgieSets.getBudgieSets().getLogger().warning("Incorrect type for key: " + key + ". Expected: " + type.getSimpleName() + ", but got: " + (value == null ? "null" : value.getClass().getSimpleName()));
+            return defaultValue;
+        }
+        return type.cast(value);
     }
 }

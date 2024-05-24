@@ -59,8 +59,6 @@ public interface PotionEffects {
     default void applyPotionEffect(@NotNull Player player, int duration, @NotNull String effectName, int amplifier, boolean ambient, boolean particles) {
         PotionEffectType effectType = PotionEffectType.getByName(effectName.toUpperCase());
 
-        if (duration == 0) duration = 5;
-
         if (effectType != null) {
             // Apply the permanent potion effect
             PotionEffect effect = new PotionEffect(effectType, duration * 20, amplifier, ambient, particles);
