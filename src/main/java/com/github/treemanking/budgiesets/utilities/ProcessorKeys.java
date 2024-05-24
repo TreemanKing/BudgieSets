@@ -5,7 +5,6 @@ public interface ProcessorKeys {
     String AMPLIFIER_KEY = "Amplifier";
     String AMBIENT_KEY = "Ambient";
     String PARTICLES_KEY = "Particles";
-    String CONDITION_KEY = "Conditions";
     String DURATION_KEY = "Duration";
     String PITCH_KEY = "Pitch";
     String TIME_KEY = "Time";

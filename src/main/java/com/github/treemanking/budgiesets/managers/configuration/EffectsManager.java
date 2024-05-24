@@ -4,7 +4,6 @@ import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessorFactory;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -38,12 +37,11 @@ public class EffectsManager {
      * @param event the event triggering the effects
      */
     private void processEffectsMap(Map<?, ?> eventMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
-        if (eventMap.containsKey("Effects")) {
-            List<Map<?, ?>> effects = (List<Map<?, ?>>) eventMap.get("Effects");
-            processEffects(effects, player, equipStatus, event);
-        } else {
+        if (!eventMap.containsKey("Effects")) {
             throw new IllegalArgumentException("Effects key not found for an event.");
         }
+        List<Map<?, ?>> effects = (List<Map<?, ?>>) eventMap.get("Effects");
+        processEffects(effects, player, equipStatus, event);
     }
 
     /**
@@ -55,12 +53,11 @@ public class EffectsManager {
      * @param event the event triggering the effects
      */
     private void processEffects(List<Map<?, ?>> effectsMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
-        if (effectsMap != null) {
-            for (Map<?, ?> effect : effectsMap) {
-                processEffect(effect, player, equipStatus, event);
-            }
-        } else {
+        if (effectsMap == null) {
             throw new IllegalArgumentException("Effects list not found or is null for an event.");
+        }
+        for (Map<?, ?> effect : effectsMap) {
+            processEffect(effect, player, equipStatus, event);
         }
     }
 
@@ -73,25 +70,31 @@ public class EffectsManager {
      * @param event the event triggering the effect
      */
     private void processEffect(Map<?, ?> effectMap, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
-        if (effectMap != null) {
-            Set<? extends Map.Entry<?, ?>> entrySet = effectMap.entrySet();
-            if (entrySet.size() == 1) {
-                Map.Entry<?, ?> entry = entrySet.iterator().next();
-                String effectType = (String) entry.getKey();
-                EffectProcessor processor = EffectProcessorFactory.createProcessor(effectType);
-                if (processor != null) {
-                    Object value = entry.getValue();
-                    if (value instanceof List) {
-                        processor.processEffect((List<?>) value, player, equipStatus, event);
-                    } else {
-                        BudgieSets.getBudgieSets().getLogger().warning("Invalid effect structure found: " + effectMap);
-                    }
-                } else {
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid effect type: " + effectType);
-                }
-            } else {
-                BudgieSets.getBudgieSets().getLogger().warning("Invalid effect structure found: " + effectMap);
-            }
+        if (effectMap == null) {
+            return;
         }
+
+        Set<? extends Map.Entry<?, ?>> entrySet = effectMap.entrySet();
+        if (entrySet.size() != 1) {
+            BudgieSets.getBudgieSets().getLogger().warning("Invalid effect structure found: " + effectMap);
+            return;
+        }
+
+        Map.Entry<?, ?> entry = entrySet.iterator().next();
+        String effectType = (String) entry.getKey();
+        EffectProcessor processor = EffectProcessorFactory.createProcessor(effectType);
+
+        if (processor == null) {
+            BudgieSets.getBudgieSets().getLogger().warning("Invalid effect type: " + effectType);
+            return;
+        }
+
+        Object value = entry.getValue();
+        if (!(value instanceof List)) {
+            BudgieSets.getBudgieSets().getLogger().warning("Invalid effect structure found: " + effectMap);
+            return;
+        }
+
+        processor.processEffect((List<?>) value, player, equipStatus, event);
     }
 }

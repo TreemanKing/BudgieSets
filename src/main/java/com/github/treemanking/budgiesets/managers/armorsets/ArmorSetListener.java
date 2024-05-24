@@ -39,11 +39,8 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities {
         this.plugin = plugin;
 
         // Registers a new EventManager which registers all events for the specific armor set
-        EventManager eventManager = new EventManager();
-        eventManager.registerArmorEvents(armorSetName, armorSetConfig, plugin, this.playerEquipStatusHashMap);
+        new EventManager().registerArmorEvents(armorSetName, armorSetConfig, plugin, this.playerEquipStatusHashMap);
     }
-
-    // Events
 
     /**
      * Handles the event of a player equipping or unequipping armor.
@@ -56,6 +53,8 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities {
         UUID playerId = player.getUniqueId();
         EquipStatus currentStatus = playerEquipStatusHashMap.getOrDefault(playerId, EquipStatus.NULL);
         boolean fullSet = isWearingFullSet(player, armorSetName);
+
+        // TODO: add messages to a lang file
 
         if (fullSet && currentStatus.equals(EquipStatus.NOT_EQUIPPED)) {
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
@@ -101,7 +100,7 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities {
     /**
      * Handles the hashcode of the event
      *
-     * @return the hashcode of the new armorset
+     * @return the hashcode of the new armor set
      */
     @Override
     public int hashCode() {

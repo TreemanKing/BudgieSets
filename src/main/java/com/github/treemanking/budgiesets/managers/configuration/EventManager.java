@@ -38,25 +38,31 @@ public class EventManager {
      * @param playerEquipStatusHashMap a map storing players' armor set equip status
      */
     private void processEvent(String armorSetName, Map<?, ?> eventMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
-        if (eventMap != null) {
-            Set<? extends Map.Entry<?, ?>> entrySet = eventMap.entrySet();
-            if (entrySet.size() == 1) {
-                Map.Entry<?, ?> entry = entrySet.iterator().next();
-                String eventType = (String) entry.getKey();
-                EventProcessor processor = EventProcessorFactory.createProcessor(eventType);
-                if (processor != null) {
-                    Object value = entry.getValue();
-                    if (value instanceof Map) {
-                        processor.process(armorSetName, (Map<?, ?>) value, plugin, playerEquipStatusHashMap);
-                    } else {
-                        BudgieSets.getBudgieSets().getLogger().warning("Invalid event structure found: " + eventMap);
-                    }
-                } else {
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid event type: " + eventType);
-                }
-            } else {
-                BudgieSets.getBudgieSets().getLogger().warning("Invalid event structure found: " + eventMap);
-            }
+        if (eventMap == null) {
+            return;
         }
+
+        Set<? extends Map.Entry<?, ?>> entrySet = eventMap.entrySet();
+        if (entrySet.size() != 1) {
+            BudgieSets.getBudgieSets().getLogger().warning("Invalid event structure found: " + eventMap);
+            return;
+        }
+
+        Map.Entry<?, ?> entry = entrySet.iterator().next();
+        String eventType = (String) entry.getKey();
+        EventProcessor processor = EventProcessorFactory.createProcessor(eventType);
+
+        if (processor == null) {
+            BudgieSets.getBudgieSets().getLogger().warning("Invalid event type: " + eventType);
+            return;
+        }
+
+        Object value = entry.getValue();
+        if (!(value instanceof Map)) {
+            BudgieSets.getBudgieSets().getLogger().warning("Invalid event structure found: " + eventMap);
+            return;
+        }
+
+        processor.process(armorSetName, (Map<?, ?>) value, plugin, playerEquipStatusHashMap);
     }
 }
