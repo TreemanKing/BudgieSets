@@ -103,7 +103,7 @@ public class DamagedProcessor implements EventProcessor, ProcessorKeys {
 
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
             if (checkMap(effectsMap, player, cooldownMap)) {
-                new EffectsManager(effectsMap, player, currentStatus, event);
+                effectManager.processEffectsMap(effectsMap, player, currentStatus, event);
             }
         }
 

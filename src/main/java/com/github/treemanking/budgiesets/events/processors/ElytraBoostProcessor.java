@@ -4,14 +4,12 @@ import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.events.EventProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import com.github.treemanking.budgiesets.managers.configuration.EffectsManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class ElytraBoostProcessor implements EventProcessor {
@@ -40,7 +38,7 @@ public class ElytraBoostProcessor implements EventProcessor {
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
             if (checkMap(effectsMap, player, cooldownMap)) {
-                new EffectsManager(effectsMap, player, currentStatus, event);
+                effectManager.processEffectsMap(effectsMap, player, currentStatus, event);
             }
         }
 

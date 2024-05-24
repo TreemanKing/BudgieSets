@@ -7,7 +7,6 @@ import com.github.treemanking.budgiesets.managers.configuration.ConfigurationMan
 import com.github.treemanking.budgiesets.utilities.OnPluginDisable;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BudgieSets extends JavaPlugin implements HookManager, OnPluginDisable {

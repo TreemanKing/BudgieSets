@@ -4,8 +4,6 @@ import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.events.EventProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.managers.armorsets.utilities.ArmorSetUtilities;
-import com.github.treemanking.budgiesets.managers.configuration.EffectsManager;
-import com.github.treemanking.budgiesets.utilities.ProcessorKeys;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,7 +11,7 @@ import org.bukkit.event.entity.EntityPotionEffectEvent;
 
 import java.util.*;
 
-public class OnPotionEffectProcessor implements EventProcessor, ProcessorKeys {
+public class OnPotionEffectProcessor implements EventProcessor {
 
     @Override
     public void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
@@ -46,12 +44,12 @@ public class OnPotionEffectProcessor implements EventProcessor, ProcessorKeys {
             if (potionEffects != null) {
                 if (potionEffects.contains(event.getNewEffect().getType().getName())) {
                     if (checkMap(effectsMap, player, cooldownMap)) {
-                        new EffectsManager(effectsMap, player, currentStatus, event);
+                        effectManager.processEffectsMap(effectsMap, player, currentStatus, event);
                     }
                 }
             } else {
                 if (checkMap(effectsMap, player, cooldownMap)) {
-                    new EffectsManager(effectsMap, player, currentStatus, event);
+                    effectManager.processEffectsMap(effectsMap, player, currentStatus, event);
                 }
             }
         }

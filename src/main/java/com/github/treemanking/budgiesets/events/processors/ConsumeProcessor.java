@@ -2,18 +2,14 @@ package com.github.treemanking.budgiesets.events.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.events.EventProcessor;
-import com.github.treemanking.budgiesets.managers.configuration.EffectsManager;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.plugin.RegisteredListener;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class ConsumeProcessor implements EventProcessor {
@@ -42,7 +38,7 @@ public class ConsumeProcessor implements EventProcessor {
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
             if (checkMap(effectsMap, player, cooldownMap)) {
-                new EffectsManager(effectsMap, player, currentStatus, consumeEvent);
+                effectManager.processEffectsMap(effectsMap, player, currentStatus, consumeEvent);
             }
         }
 

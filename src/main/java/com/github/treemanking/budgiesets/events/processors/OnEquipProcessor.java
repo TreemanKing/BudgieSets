@@ -1,7 +1,6 @@
 package com.github.treemanking.budgiesets.events.processors;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
-import com.github.treemanking.budgiesets.managers.configuration.EffectsManager;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.events.EventProcessor;
@@ -11,7 +10,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class OnEquipProcessor implements EventProcessor {
@@ -39,7 +37,7 @@ public class OnEquipProcessor implements EventProcessor {
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
             ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
             if (checkMap(effectsMap, player, cooldownMap)) {
-                new EffectsManager(effectsMap, player, currentStatus, armorChangeEvent);
+                effectManager.processEffectsMap(effectsMap, player, currentStatus, armorChangeEvent);
             }
         }
 

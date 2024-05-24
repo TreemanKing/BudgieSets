@@ -3,7 +3,6 @@ package com.github.treemanking.budgiesets.events.processors;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.events.EventProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import com.github.treemanking.budgiesets.managers.configuration.EffectsManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,7 +49,7 @@ public class HookProcessor implements EventProcessor {
             }
 
             if (checkMap(effectsMap, player, cooldownMap)) {
-                new EffectsManager(effectsMap, entity, currentStatus, fishEvent);
+                effectManager.processEffectsMap(effectsMap, entity, currentStatus, fishEvent);
             }
         }
 

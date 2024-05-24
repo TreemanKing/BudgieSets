@@ -17,18 +17,6 @@ import java.util.Set;
 public class EffectsManager {
 
     /**
-     * Constructs an EffectsManager to process effects for a specific event.
-     *
-     * @param eventMap the map representing the event and its associated effects
-     * @param entity the player involved in the event
-     * @param equipStatus the player's armor set equip status
-     * @param event the event triggering the effects
-     */
-    public EffectsManager(Map<?, ?> eventMap, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
-        processEffectsMap(eventMap, entity, equipStatus, event);
-    }
-
-    /**
      * Processes the map containing effects for the event.
      *
      * @param eventMap the map representing the event and its associated effects
@@ -36,7 +24,7 @@ public class EffectsManager {
      * @param equipStatus the player's armor set equip status
      * @param event the event triggering the effects
      */
-    private void processEffectsMap(Map<?, ?> eventMap, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffectsMap(Map<?, ?> eventMap, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
         if (!eventMap.containsKey("Effects")) {
             throw new IllegalArgumentException("Effects key not found for an event.");
         }

@@ -2,6 +2,8 @@ package com.github.treemanking.budgiesets.events;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
+import com.github.treemanking.budgiesets.managers.armorsets.utilities.ArmorSetUtilities;
+import com.github.treemanking.budgiesets.managers.configuration.EffectsManager;
 import com.github.treemanking.budgiesets.utilities.Processor;
 
 import java.util.HashMap;
@@ -23,5 +25,5 @@ public interface EventProcessor extends Processor {
      */
     void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap);
 
-
+    EffectsManager effectManager = new EffectsManager();
 }
