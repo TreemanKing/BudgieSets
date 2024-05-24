@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ConsumeProcessor implements EventProcessor {
+
     @Override
     public void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
         plugin.getServer().getPluginManager().registerEvents(new ConsumeListener(armorSetName, effectsMap, playerEquipStatusHashMap), plugin);

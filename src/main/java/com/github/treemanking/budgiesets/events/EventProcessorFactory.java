@@ -20,10 +20,13 @@ public class EventProcessorFactory {
             case "CONSUME" -> new ConsumeProcessor();
             case "JUMP" -> new JumpProcessor();
             case "HOOK" -> new HookProcessor();
-            case "PLAYER_ELYTRA_BOOST" -> new ElytraBoostProcessor();
+            case "ELYTRA_BOOST" -> new ElytraBoostProcessor();
             case "ATTACK" -> new AttackProcessor();
             case "DAMAGED" -> new DamagedProcessor();
             case "ON_POTION_EFFECT" -> new OnPotionEffectProcessor();
+            case "SNEAK" -> new SneakProcessor();
+            case "SPRINT" -> new SprintProcessor();
+            case "ON_RIPTIDE" -> new RiptideProcessor();
             default -> null;
         };
     }
