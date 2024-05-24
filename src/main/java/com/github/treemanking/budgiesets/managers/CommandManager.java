@@ -68,7 +68,7 @@ public class CommandManager implements BudgieSetsCommand {
 
     CommandAPICommand disableSet = new CommandAPICommand("disableset")
             .withPermission("budgiesets.disableset")
-            .withAliases("unloadset", "enable", "unload")
+            .withAliases("unloadset", "disable", "unload")
             .withArguments(new StringArgument( "enabledSet")
                     .replaceSuggestions(ArgumentSuggestions.stringsAsync(info -> CompletableFuture.supplyAsync(ArmorSetManager::getEnabledArmorSets))))
             .executes(((sender, args) -> {
