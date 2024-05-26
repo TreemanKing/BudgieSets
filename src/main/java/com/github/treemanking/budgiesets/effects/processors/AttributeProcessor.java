@@ -4,16 +4,13 @@ import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.PlayerEffectProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.utilities.effects.AttributeUtils;
-import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.potion.PotionEffect;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 
 /**
  * A class to process attributes for armor set effects
