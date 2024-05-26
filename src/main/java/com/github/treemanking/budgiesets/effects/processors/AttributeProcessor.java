@@ -18,9 +18,9 @@ import java.util.Map;
 public class AttributeProcessor implements PlayerEffectProcessor, AttributeUtils {
 
     /**
-     * Processes potion effects based on the provided configuration.
+     * Processes attribute effects based on the provided configuration.
      *
-     * @param attributes     A list of potion configurations.
+     * @param attributes  A list of attribute configurations.
      * @param player      The player to apply the effects to.
      * @param equipStatus The equip status of the player's armor.
      * @param event       The event triggering the effect.
@@ -50,18 +50,35 @@ public class AttributeProcessor implements PlayerEffectProcessor, AttributeUtils
     }
 
     private boolean validateAttributeMap(Map <?,?> map) {
-        return false;
+        return map.containsKey(ATTRIBUTE_KEY) && isValidAttributeEnum((String) map.get(ATTRIBUTE_KEY))
+                && map.containsKey(OPERATION_KEY) && isValidOperationEnum((String) map.get(OPERATION_KEY))
+                && map.containsKey(AMOUNT_KEY) && map.get(AMOUNT_KEY) instanceof Double;
     }
 
     /**
-     * Checks if the provided sound type is a valid Sound enum constant.
+     * Checks if the provided attribute type is a valid Attribute enum constant.
      *
-     * @param type The name of the sound type.
-     * @return True if the sound type is valid, otherwise false.
+     * @param type The name of the attribute type.
+     * @return True if the attribute type is valid, otherwise false.
      */
     private boolean isValidAttributeEnum(String type) {
         try {
             Attribute.valueOf(type);
+            return true;
+        } catch (IllegalArgumentException ignored) {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if the provided operation type is a valid Operation enum constant.
+     *
+     * @param type The name of the operation type.
+     * @return True if the operation type is valid, otherwise false.
+     */
+    private boolean isValidOperationEnum(String type) {
+        try {
+            AttributeModifier.Operation.valueOf(type);
             return true;
         } catch (IllegalArgumentException ignored) {
             return false;

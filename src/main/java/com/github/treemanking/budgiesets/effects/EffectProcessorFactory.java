@@ -25,6 +25,7 @@ public class EffectProcessorFactory {
             case "POTION" -> new PotionProcessor();
             case "PLAY_SOUND" -> new PlaySoundProcessor();
             case "PARTICLE" -> new ParticleProcessor();
+            case "ATTRIBUTE" -> new AttributeProcessor();
             default -> null;
         };
     }
