@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.armorsets.utilities.ArmorSetUtilities;
 import com.github.treemanking.budgiesets.managers.configuration.EventManager;
+import com.github.treemanking.budgiesets.utilities.OnPluginDisable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -21,7 +22,7 @@ import java.util.UUID;
  * The ArmorSetListener class handles events related to player armor set equipping and unequipping.
  * It also manages the registration of events for specific armor sets.
  */
-public class ArmorSetListener implements Listener, ArmorSetUtilities {
+public class ArmorSetListener implements Listener, ArmorSetUtilities, OnPluginDisable {
 
     private final String armorSetName;
     private final HashMap<UUID, EquipStatus> playerEquipStatusHashMap = new HashMap<>();
@@ -62,6 +63,10 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities {
         } else if (!fullSet && currentStatus.equals(EquipStatus.EQUIPPED)) {
             player.sendMessage(ChatColor.RED + "You are now not wearing the " + armorSetName + " set and will lose all bonuses.");
             playerEquipStatusHashMap.put(playerId, EquipStatus.NOT_EQUIPPED);
+
+            // Make sure to remove all bonus effects when armor changes
+            removeAllAttributes(player);
+            removePotionEffects(player);
         } else if (fullSet && currentStatus.equals(EquipStatus.NULL)) {
             // When a player joins the server, it will only trigger this event.
             playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
