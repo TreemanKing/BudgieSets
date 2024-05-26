@@ -14,10 +14,10 @@ public interface OnPluginDisable extends PotionEffectsUtils, AttributeUtils {
         }
     }
 
-    default void removeAllAttributes() {
+    default void removeAllPlayersAttributes() {
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
             if (!getAttributePlayerMap().containsKey(player.getUniqueId())) continue;
-            removeAttributes(player);
+            removeAllAttributes(player);
         }
      }
 }

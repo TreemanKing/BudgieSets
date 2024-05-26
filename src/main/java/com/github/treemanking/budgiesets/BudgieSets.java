@@ -43,6 +43,7 @@ public final class BudgieSets extends JavaPlugin implements HookManager, OnPlugi
         CommandAPI.onDisable();
 
         removeAllPermPotionEffects();
+        removeAllPlayersAttributes();
     }
 
     public static BudgieSets getBudgieSets() {
