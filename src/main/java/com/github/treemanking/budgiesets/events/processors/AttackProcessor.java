@@ -30,7 +30,7 @@ public class AttackProcessor implements EventProcessor {
         private final Map<UUID, Long> cooldownMap = new HashMap<>();
         private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
         private final String armorSetName;
-        private String eventType;
+        private String eventType = "default";
 
         public AttackListener(String armorSetName, Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
             this.effectsMap = event;
@@ -99,6 +99,7 @@ public class AttackProcessor implements EventProcessor {
                             break;
                         }
                     } else if (damageCause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+                        if (!(attackingEnemy instanceof Player)) return;
                         player = (Player) attackingEnemy;
                     }
             }
