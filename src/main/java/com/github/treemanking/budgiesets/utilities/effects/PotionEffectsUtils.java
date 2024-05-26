@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public interface PotionEffects {
+public interface PotionEffectsUtils {
 
     /**
      * A map storing PotionEffect instances for players identified by their unique UUIDs.

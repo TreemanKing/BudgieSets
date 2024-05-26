@@ -3,9 +3,8 @@ package com.github.treemanking.budgiesets.effects;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.utilities.Processor;
-import com.github.treemanking.budgiesets.utilities.effects.PotionEffects;
+import com.github.treemanking.budgiesets.utilities.effects.PotionEffectsUtils;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.Map;
  * for players based on their equipped armor sets, including condition checks
  * utilizing the PlaceholderAPI.
  */
-public interface EffectProcessor extends Processor, PotionEffects {
+public interface EffectProcessor extends Processor, PotionEffectsUtils {
 
     /**
      * Processes a given effect on an entity effect based on their equip status and the associated event.

@@ -27,4 +27,6 @@ public interface ProcessorKeys {
     String ACTION_TYPE_KEY = "Action-Type";
     String TEXT_KEY = "Text";
     String EFFECT_TARGET = "Effect-Target";
+    String ATTRIBUTE_KEY = "Attribute-Type";
+    String OPERATION_KEY = "Operation";
 }

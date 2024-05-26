@@ -31,9 +31,9 @@ public class PlaySoundProcessor implements PlayerEffectProcessor {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)
                             || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
 
-                    Sound soundType = Enum.valueOf(Sound.class, getConfigValue(soundMap, SOUND_KEY, String.class, ""));
-                    float volume = getConfigValue(soundMap, VOLUME_KEY, Float.class, 1.0f);
-                    float pitch = getConfigValue(soundMap, PITCH_KEY, Float.class, 1.0f);
+                    Sound soundType = Enum.valueOf(Sound.class, getConfigValue(soundMap, SOUND_KEY, String.class));
+                    Float volume = getConfigValue(soundMap, VOLUME_KEY, Float.class, 1.0f);
+                    Float pitch = getConfigValue(soundMap, PITCH_KEY, Float.class, 1.0f);
 
                     if (volume > 0 && pitch >= 0) {
                         playSound(player, soundType, volume, pitch);

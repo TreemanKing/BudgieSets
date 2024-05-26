@@ -1,10 +1,11 @@
 package com.github.treemanking.budgiesets.utilities;
 
-import com.github.treemanking.budgiesets.utilities.effects.PotionEffects;
+import com.github.treemanking.budgiesets.utilities.effects.AttributeUtils;
+import com.github.treemanking.budgiesets.utilities.effects.PotionEffectsUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public interface OnPluginDisable extends PotionEffects {
+public interface OnPluginDisable extends PotionEffectsUtils, AttributeUtils {
 
     default void removeAllPermPotionEffects() {
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
@@ -12,4 +13,11 @@ public interface OnPluginDisable extends PotionEffects {
             removePotionEffects(player);
         }
     }
+
+    default void removeAllAttributes() {
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+            if (!getAttributePlayerMap().containsKey(player.getUniqueId())) continue;
+            removeAttributes(player);
+        }
+     }
 }
