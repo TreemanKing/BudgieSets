@@ -3,9 +3,6 @@ package com.github.treemanking.budgiesets.managers.armorsets;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.configuration.ConfigurationManager;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.RegisteredListener;
 
 import java.io.File;
 import java.util.*;
