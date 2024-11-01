@@ -11,4 +11,4 @@ commandapi-bukkit-shade = { module = "dev.jorel:commandapi-bukkit-shade", versio
 de-tr7zw-item-nbt-api = "2.13.2"
 io-papermc-paper-paper-api = "1.20.1-R0.1-SNAPSHOT"
 me-clip-placeholderapi = "2.9.2"
-commandapi-bukkit-shade = "9.5.3"
+commandapi-bukkit-shade = "9.6.0"
