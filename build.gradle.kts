@@ -53,8 +53,8 @@ dependencies {
 
 tasks.withType<ShadowJar> {
     archiveFileName.set("${project.name}-${project.version}.jar")
-    relocate("de.tr7zw.changeme.nbtapi", "com.github.treemanking.budgiesets.nbtapi")
-    relocate("dev.jorel.commandapi", "com.github.treemanking.budgiesets.commandapi")
+    relocate("de.tr7zw.changeme.nbtapi", "com.github.treemanking.api.nbtapi")
+    relocate("dev.jorel.commandapi", "com.github.treemanking.api.commandapi")
 }
 
 tasks {
