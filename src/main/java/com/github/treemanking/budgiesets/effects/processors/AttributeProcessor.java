@@ -9,6 +9,7 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +33,8 @@ public class AttributeProcessor implements PlayerEffectProcessor, AttributeUtils
                 if (validateAttributeMap(attributeMap)) {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)) {
 
-                        Attribute attribut3 = Enum.valueOf(Attribute.class, getConfigValue(attributeMap, ATTRIBUTE_KEY, String.class));
-                        AttributeModifier.Operation operation = Enum.valueOf(AttributeModifier.Operation.class, getConfigValue(attributeMap, OPERATION_KEY, String.class, "ADD_NUMBER"));
+                        Attribute attribut3 = getAttributeFromName(getConfigValue(attributeMap, ATTRIBUTE_KEY, String.class));
+                        AttributeModifier.Operation operation = AttributeModifier.Operation.valueOf(getConfigValue(attributeMap, OPERATION_KEY, String.class, "ADD_NUMBER"));
                         Double amount = getConfigValue(attributeMap, AMOUNT_KEY, Double.class);
                         Integer time = getConfigValue(attributeMap, TIME_KEY, Integer.class);
 
@@ -49,7 +50,7 @@ public class AttributeProcessor implements PlayerEffectProcessor, AttributeUtils
         }
     }
 
-    private boolean validateAttributeMap(Map <?,?> map) {
+    private boolean validateAttributeMap(Map<?,?> map) {
         return map.containsKey(ATTRIBUTE_KEY) && isValidAttributeEnum((String) map.get(ATTRIBUTE_KEY))
                 && map.containsKey(OPERATION_KEY) && isValidOperationEnum((String) map.get(OPERATION_KEY))
                 && map.containsKey(AMOUNT_KEY) && map.get(AMOUNT_KEY) instanceof Double;
@@ -62,12 +63,7 @@ public class AttributeProcessor implements PlayerEffectProcessor, AttributeUtils
      * @return True if the attribute type is valid, otherwise false.
      */
     private boolean isValidAttributeEnum(String type) {
-        try {
-            Attribute.valueOf(type);
-            return true;
-        } catch (IllegalArgumentException ignored) {
-            return false;
-        }
+        return getAttributeFromName(type) != null;
     }
 
     /**
@@ -82,6 +78,29 @@ public class AttributeProcessor implements PlayerEffectProcessor, AttributeUtils
             return true;
         } catch (IllegalArgumentException ignored) {
             return false;
+        }
+    }
+
+    /**
+     * Gets an Attribute by name, using Attribute.named(String) if available, otherwise falling back to Attribute.valueOf(String).
+     *
+     * @param name The attribute name.
+     * @return The Attribute, or null if not found.
+     */
+    private Attribute getAttributeFromName(String name) {
+        try {
+            Method namedMethod = Attribute.class.getMethod("named", String.class);
+            Object result = namedMethod.invoke(null, name);
+            return result instanceof Attribute ? (Attribute) result : null;
+        } catch (NoSuchMethodException e) {
+            // Fallback for older versions
+            try {
+                return Attribute.valueOf(name);
+            } catch (IllegalArgumentException ignored) {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
         }
     }
 }

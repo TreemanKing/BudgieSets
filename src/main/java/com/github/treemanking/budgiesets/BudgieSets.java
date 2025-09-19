@@ -21,7 +21,6 @@ public final class BudgieSets extends JavaPlugin implements HookManager, OnPlugi
                 .useLatestNMSVersion(false)
                 .dispatcherFile(null)
                 .silentLogs(true)
-                .usePluginNamespace()
                 .verboseOutput(true));
     }
 

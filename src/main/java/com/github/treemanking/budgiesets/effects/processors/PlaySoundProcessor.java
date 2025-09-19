@@ -31,15 +31,14 @@ public class PlaySoundProcessor implements PlayerEffectProcessor {
                     if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)
                             || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
 
-                    Sound soundType = Enum.valueOf(Sound.class, getConfigValue(soundMap, SOUND_KEY, String.class));
-                    Float volume = getConfigValue(soundMap, VOLUME_KEY, Float.class, 1.0f);
-                    Float pitch = getConfigValue(soundMap, PITCH_KEY, Float.class, 1.0f);
+                    Sound soundType = getSoundFromName(getConfigValue(soundMap, SOUND_KEY, String.class));
+                    float volume = getConfigValue(soundMap, VOLUME_KEY, Double.class, 1.0).floatValue();
+                    float pitch = getConfigValue(soundMap, PITCH_KEY, Double.class, 1.0).floatValue();
 
-                    if (volume > 0 && pitch >= 0) {
+                    if (volume > 0 && pitch >= 0 && soundType != null) {
                         playSound(player, soundType, volume, pitch);
                     }
                 } else {
-                    // Log an error or inform the user about the invalid configuration
                     BudgieSets.getBudgieSets().getLogger().warning("Invalid Sound configuration:" + soundMap);
                 }
             }
@@ -78,11 +77,20 @@ public class PlaySoundProcessor implements PlayerEffectProcessor {
      * @return True if the sound type is valid, otherwise false.
      */
     private boolean isValidSoundEnum(String type) {
+        return getSoundFromName(type) != null;
+    }
+
+    private Sound getSoundFromName(String name) {
         try {
-            Sound.valueOf(type);
-            return true;
-        } catch (IllegalArgumentException ignored) {
-            return false;
+            // For Paper 1.21+, prefer Sound.named
+            try {
+                return Sound.class.getMethod("named", String.class).invoke(null, name) instanceof Sound s ? s : null;
+            } catch (NoSuchMethodException e) {
+                // Fallback for older versions
+                return Sound.valueOf(name);
+            }
+        } catch (Exception ignored) {
+            return null;
         }
     }
 }
