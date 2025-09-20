@@ -61,7 +61,8 @@ public interface PotionEffectsUtils {
 
         if (effectType != null) {
             // Apply the permanent potion effect
-            PotionEffect effect = new PotionEffect(effectType, duration * 20, amplifier, ambient, particles);
+            if (duration != -1) duration = duration * 20;
+            PotionEffect effect = new PotionEffect(effectType, duration, amplifier, ambient, particles);
             if (duration == PotionEffect.INFINITE_DURATION) {
                 // Check if the player already has effects
                 if (getPotionEffects().containsKey(player.getUniqueId())) {
