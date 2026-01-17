@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.github.treemanking.budgiesets"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.1-SNAPSHOT"
 
 java.sourceCompatibility = JavaVersion.VERSION_21
 java.targetCompatibility = JavaVersion.VERSION_21
@@ -43,10 +43,10 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.commandapi.bukkit.shade)
-    implementation(libs.de.tr7zw.item.nbt.api)
-    compileOnly(libs.me.clip.placeholderapi)
-    compileOnly(libs.io.papermc.paper.paper.api)
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    implementation("dev.jorel:commandapi-paper-shade:11.1.0")
+    implementation("de.tr7zw:item-nbt-api:2.15.5")
+    compileOnly("me.clip:placeholderapi:2.11.7")
 }
 
 tasks.withType<ShadowJar> {
