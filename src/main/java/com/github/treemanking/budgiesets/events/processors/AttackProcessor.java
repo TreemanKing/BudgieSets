@@ -1,11 +1,9 @@
 package com.github.treemanking.budgiesets.events.processors;
 
 import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.utilities.Processor;
 import com.github.treemanking.budgiesets.utilities.ProcessorKeys;
 import com.github.treemanking.budgiesets.events.EventProcessor;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import com.github.treemanking.budgiesets.managers.configuration.EffectsManager;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +12,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class AttackProcessor implements EventProcessor {
