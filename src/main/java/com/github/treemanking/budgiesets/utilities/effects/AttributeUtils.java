@@ -1,7 +1,11 @@
 package com.github.treemanking.budgiesets.utilities.effects;
 
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,10 +69,12 @@ public interface AttributeUtils {
      */
     default void applyAttribute(@NotNull Player player, @NotNull Attribute attribute, AttributeModifier.Operation operation, Double amount, Integer time) {
 
-        if (player.getAttribute(attribute) == null) return;
+        AttributeInstance attributeInstance = player.getAttribute(attribute);
+        if (attributeInstance == null) return;
 
-        AttributeModifier attributeModifier = new AttributeModifier("BudgieSets", amount, operation);
-        player.getAttribute(attribute).addModifier(attributeModifier);
+        NamespacedKey key = new NamespacedKey("budgiesets", "modifier_" + UUID.randomUUID());
+        AttributeModifier attributeModifier = new AttributeModifier(key, amount, operation, EquipmentSlotGroup.ANY);
+        attributeInstance.addModifier(attributeModifier);
 
         UUID playerUUID = player.getUniqueId();
         getAttributePlayerMap().computeIfAbsent(playerUUID, k -> new ArrayList<>()).add(attributeModifier);
@@ -93,9 +99,10 @@ public interface AttributeUtils {
 
         if (modifiers != null) {
             for (AttributeModifier modifier : modifiers) {
-                for (Attribute attribute : Attribute.values()) {
-                    if (player.getAttribute(attribute) != null) {
-                        player.getAttribute(attribute).removeModifier(modifier);
+                for (Attribute attribute : Registry.ATTRIBUTE) {
+                    AttributeInstance instance = player.getAttribute(attribute);
+                    if (instance != null) {
+                        instance.removeModifier(modifier);
                     }
                 }
             }
