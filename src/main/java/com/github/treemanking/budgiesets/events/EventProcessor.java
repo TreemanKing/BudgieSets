@@ -2,7 +2,6 @@ package com.github.treemanking.budgiesets.events;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import com.github.treemanking.budgiesets.managers.armorsets.utilities.ArmorSetUtilities;
 import com.github.treemanking.budgiesets.managers.configuration.EffectsManager;
 import com.github.treemanking.budgiesets.utilities.Processor;
 

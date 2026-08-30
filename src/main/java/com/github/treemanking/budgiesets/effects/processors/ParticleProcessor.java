@@ -40,7 +40,7 @@ public class ParticleProcessor implements EffectProcessor {
 
                     Particle particleType = Enum.valueOf(Particle.class, getConfigValue(particleMap, PARTICLE_KEY, String.class));
                     Integer count = getConfigValue(particleMap, COUNT_KEY, Integer.class, 1);
-                    Double offset = getConfigValue(particleMap, OFFSET_KEY, Double.class, 0.0);;
+                    Double offset = getConfigValue(particleMap, OFFSET_KEY, Double.class, 0.0);
                     Map<?, ?> particleDataMap = (Map<?, ?>) particleMap.get(DATA_KEY);
 
                     if (count > 0) {

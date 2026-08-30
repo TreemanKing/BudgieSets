@@ -6,7 +6,6 @@ package com.github.treemanking.budgiesets.commands.subcommands;
 import com.github.treemanking.budgiesets.BudgieSets;
 
 import java.io.File;
-import java.util.Arrays;
 
 public interface RemoveCommand {
 
