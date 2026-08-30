@@ -31,7 +31,8 @@ public class AttributeProcessor implements PlayerEffectProcessor, AttributeUtils
         for (Object attribute : attributes) {
             if (attribute instanceof Map<?, ?> attributeMap) {
                 if (validateAttributeMap(attributeMap)) {
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)) {
+                    if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)
+                            || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) {
 
                         Attribute attribut3 = getAttributeFromName(getConfigValue(attributeMap, ATTRIBUTE_KEY, String.class));
                         AttributeModifier.Operation operation = AttributeModifier.Operation.valueOf(getConfigValue(attributeMap, OPERATION_KEY, String.class, "ADD_NUMBER"));

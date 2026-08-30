@@ -14,6 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -86,9 +87,22 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities, OnPluginDi
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
         // Add them to with the status NULL as it is unknown whether the player is wearing armor
-        // When a player logs in, it equips the armor four times hence a NULL status is needed
-        playerEquipStatusHashMap.put(event.getPlayer().getUniqueId(), EquipStatus.NULL);
+        playerEquipStatusHashMap.put(player.getUniqueId(), EquipStatus.NULL);
+
+        // Fire a synthetic PlayerArmorChangeEvent on join if already wearing a full set,
+        // since Paper does not fire this event for pre-equipped armor.
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (!player.isOnline()) return;
+            if (isWearingFullSet(player, armorSetName)) {
+                ItemStack chestplate = player.getInventory().getChestplate();
+                Bukkit.getPluginManager().callEvent(
+                        new PlayerArmorChangeEvent(player, PlayerArmorChangeEvent.SlotType.CHEST, chestplate, chestplate)
+                );
+            }
+        }, 5L);
     }
 
     /**
