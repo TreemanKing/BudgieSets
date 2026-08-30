@@ -22,31 +22,18 @@ tasks.withType<Javadoc> {
 
 repositories {
     mavenLocal()
-    maven {
-        url = uri("https://repo.papermc.io/repository/maven-public/")
-    }
-
-    maven {
-        url = uri("https://oss.sonatype.org/content/groups/public/")
-    }
-
-    maven {
-        url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    }
-
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
-    maven {
-        url = uri("https://repo.codemc.io/repository/maven-public/")
-    }
+    maven ("https://repo.papermc.io/repository/maven-public/")
+    maven ("https://oss.sonatype.org/content/groups/public/")
+    maven ("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://repo.maven.apache.org/maven2/")
+    maven("https://repo.codemc.io/repository/maven-public/")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     implementation("dev.jorel:commandapi-paper-shade:11.1.0")
-    implementation("de.tr7zw:item-nbt-api:2.15.5")
-    compileOnly("me.clip:placeholderapi:2.11.7")
+    implementation("de.tr7zw:item-nbt-api:2.16.0")
+    compileOnly("me.clip:placeholderapi:2.12.2")
 }
 
 tasks.withType<ShadowJar> {
