@@ -40,6 +40,9 @@ tasks.withType<ShadowJar> {
     archiveFileName.set("${project.name}-${project.version}.jar")
     relocate("de.tr7zw.changeme.nbtapi", "com.github.treemanking.api.nbtapi")
     relocate("dev.jorel.commandapi", "com.github.treemanking.api.commandapi")
+    manifest {
+        attributes["paperweight-mappings-namespace"] = "mojang"
+    }
 }
 
 tasks {
