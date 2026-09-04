@@ -1,8 +1,8 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.PlayerEffectProcessor;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -24,12 +24,12 @@ public class ExpLevelProcessor implements PlayerEffectProcessor {
      * @param event       The event triggering the effect.
      */
     @Override
-    public void processEffect(List<?> expLevels, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffect(List<?> expLevels, Player player, EquipStatus equipStatus, Event event) {
         for (Object expLevel : expLevels) {
             if (expLevel instanceof Map<?, ?> expLevelMap) {
                 if (validateExpLevelConfig(expLevelMap)) {
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)
-                            || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
+                    if (equipStatus.equals(EquipStatus.NOT_EQUIPPED)
+                            || equipStatus.equals(EquipStatus.NULL)) return;
 
                     Integer amount = getConfigValue(expLevelMap, AMOUNT_KEY, Integer.class, 1);
 

@@ -1,9 +1,9 @@
 package com.github.treemanking.budgiesets.managers.configuration;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.events.EventProcessor;
 import com.github.treemanking.budgiesets.events.EventProcessorFactory;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +22,7 @@ public class EventManager {
      * @param plugin the BudgieSets plugin instance
      * @param playerEquipStatusHashMap a map storing players' armor set equip status
      */
-    public void registerArmorEvents(String armorSetName, @NotNull FileConfiguration fileConfiguration, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+    public void registerArmorEvents(String armorSetName, @NotNull FileConfiguration fileConfiguration, BudgieSets plugin, HashMap<UUID, EquipStatus> playerEquipStatusHashMap) {
         @NotNull List<Map<?, ?>> eventsList = fileConfiguration.getMapList("Events");
         for (Map<?, ?> event : eventsList) {
             processEvent(armorSetName, event, plugin, playerEquipStatusHashMap);
@@ -37,7 +37,7 @@ public class EventManager {
      * @param plugin the BudgieSets plugin instance
      * @param playerEquipStatusHashMap a map storing players' armor set equip status
      */
-    private void processEvent(String armorSetName, Map<?, ?> eventMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+    private void processEvent(String armorSetName, Map<?, ?> eventMap, BudgieSets plugin, HashMap<UUID, EquipStatus> playerEquipStatusHashMap) {
         if (eventMap == null) {
             return;
         }

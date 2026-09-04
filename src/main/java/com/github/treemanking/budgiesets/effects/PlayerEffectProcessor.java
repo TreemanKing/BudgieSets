@@ -1,7 +1,7 @@
 package com.github.treemanking.budgiesets.effects;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -19,7 +19,7 @@ public interface PlayerEffectProcessor extends EffectProcessor {
      * @param event the event triggering the effect
      */
     @Override
-    default void processEffect(List<?> effect, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    default void processEffect(List<?> effect, Entity entity, EquipStatus equipStatus, Event event) {
         if (entity instanceof Player) {
             processEffect(effect, (Player) entity, equipStatus, event);
         } else {
@@ -27,6 +27,6 @@ public interface PlayerEffectProcessor extends EffectProcessor {
         }
     }
 
-    void processEffect(List<?> actionBars, Player player, ArmorSetListener.EquipStatus equipStatus, Event event);
+    void processEffect(List<?> actionBars, Player player, EquipStatus equipStatus, Event event);
 
 }

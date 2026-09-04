@@ -1,8 +1,8 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.PlayerEffectProcessor;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
@@ -24,11 +24,11 @@ public class PermPotionProcessor implements PlayerEffectProcessor {
      * @param event       The event triggering the effect.
      */
     @Override
-    public void processEffect(List<?> potions, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffect(List<?> potions, Player player, EquipStatus equipStatus, Event event) {
         for (Object potion : potions) {
             if (potion instanceof Map<?, ?> potionMap) {
                 if (validatePotionConfig(potionMap)) {
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)) {
+                    if (equipStatus.equals(EquipStatus.EQUIPPED)) {
                         String type = getConfigValue(potionMap, TYPE_KEY, String.class);
                         Integer amplifier = getConfigValue(potionMap, AMPLIFIER_KEY, Integer.class, 0);
                         Boolean ambient = getConfigValue(potionMap, AMBIENT_KEY, Boolean.class, false);

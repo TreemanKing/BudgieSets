@@ -54,22 +54,4 @@ public interface ArmorSetUtilities {
         NBTItem nbtItem = new NBTItem(itemStack);
         return nbtItem.hasTag("armorSet") && nbtItem.getString("armorSet").equalsIgnoreCase(armorSetName);
     }
-
-    /**
-     * Enumeration representing the equipment status of a player.
-     * <ul>
-     * This enum defines three possible statuses:
-     * <li> EQUIPPED: The player is wearing the full armor set. </li>
-     * <li> NOT_EQUIPPED: The player is not wearing the full armor set. </li>
-     * <li> NULL: The player's equipment status is unknown, typically used when a player first joins. </li>
-     * </ul>
-     */
-    enum EquipStatus {
-        EQUIPPED,
-        NOT_EQUIPPED,
-        /**
-         * For when someone joins, give them a status of "nothing"
-         */
-        NULL
-    }
 }

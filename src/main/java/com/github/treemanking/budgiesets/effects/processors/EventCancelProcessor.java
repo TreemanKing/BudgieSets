@@ -1,7 +1,7 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
@@ -25,7 +25,7 @@ public class EventCancelProcessor implements EffectProcessor {
      * @param event        The event triggering the effect.
      */
     @Override
-    public void processEffect(List<?> eventCancels, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffect(List<?> eventCancels, Entity entity, EquipStatus equipStatus, Event event) {
         if (!(event instanceof Cancellable cancellableEvent)) {
             BudgieSets.getBudgieSets().getLogger().warning("Event not cancellable: " + event.getEventName());
             return;
@@ -34,8 +34,8 @@ public class EventCancelProcessor implements EffectProcessor {
         for (Object eventCancel : eventCancels) {
             if (eventCancel instanceof Map<?, ?> eventCancelMap) {
                 if (validateEventCancelConfig(eventCancelMap)) {
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)
-                            || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
+                    if (equipStatus.equals(EquipStatus.NOT_EQUIPPED)
+                            || equipStatus.equals(EquipStatus.NULL)) return;
 
                     Boolean eventCancelStatus = getConfigValue(eventCancelMap, BOOLEAN_KEY, Boolean.class);
 

@@ -1,5 +1,6 @@
 package com.github.treemanking.budgiesets.managers.armorsets;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.armorsets.utilities.ArmorSetUtilities;
