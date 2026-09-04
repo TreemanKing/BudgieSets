@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public interface Processor extends HookManager, ProcessorKeys {
+public interface Processor extends ProcessorKeys {
 
     /**
      * Checks a list of conditions for a player using the PlaceholderAPI.
@@ -60,7 +60,7 @@ public interface Processor extends HookManager, ProcessorKeys {
      * @return true if the condition is met, false otherwise
      */
     default boolean checkCondition(String condition, Player player) {
-        if (!isPlaceholderAPIEnabled()) {
+        if (!HookManager.isPlaceholderAPIEnabled()) {
             return true;
         }
 
