@@ -9,10 +9,12 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIPaperConfig;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class BudgieSets extends JavaPlugin implements HookManager, OnPluginDisable {
+public final class BudgieSets extends JavaPlugin {
 
     private static BudgieSets budgieSets;
     private static ConfigurationManager configurationManager;
+
+    private static final OnPluginDisable shutdownTasks = new OnPluginDisable(){};
 
     @Override
     public void onLoad() {
@@ -24,7 +26,7 @@ public final class BudgieSets extends JavaPlugin implements HookManager, OnPlugi
         budgieSets = this;
 
         CommandAPI.onEnable();
-        checkHooks(this);
+        HookManager.checkHooks(this);
 
         configurationManager = new ConfigurationManager(this);
         new ArmorSetManager(this, configurationManager);
@@ -36,8 +38,8 @@ public final class BudgieSets extends JavaPlugin implements HookManager, OnPlugi
 
         CommandAPI.onDisable();
 
-        removeAllPermPotionEffects();
-        removeAllPlayersAttributes();
+        shutdownTasks.removeAllPermPotionEffects();
+        shutdownTasks.removeAllPlayersAttributes();
     }
 
     public static BudgieSets getBudgieSets() {
