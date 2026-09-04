@@ -1,8 +1,8 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 
@@ -23,12 +23,12 @@ public class BurnProcessor implements EffectProcessor {
      * @param event       The event triggering the effect.
      */
     @Override
-    public void processEffect(List<?> burns, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffect(List<?> burns, Entity entity, EquipStatus equipStatus, Event event) {
         for (Object burn : burns) {
             if (burn instanceof Map<?, ?> burnMap) {
                 if (validateBurnConfig(burnMap)) {
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)
-                            || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
+                    if (equipStatus.equals(EquipStatus.NOT_EQUIPPED)
+                            || equipStatus.equals(EquipStatus.NULL)) return;
 
                     String actionType = getConfigValue(burnMap, ACTION_TYPE_KEY, String.class);
                     Integer time = getConfigValue(burnMap, TIME_KEY, Integer.class, 5);

@@ -1,9 +1,9 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.destroystokyo.paper.ParticleBuilder;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -31,12 +31,12 @@ public class ParticleProcessor implements EffectProcessor {
      * @param event       The event triggering the effect.
      */
     @Override
-    public void processEffect(List<?> particles, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffect(List<?> particles, Entity entity, EquipStatus equipStatus, Event event) {
         for (Object particle : particles) {
             if (particle instanceof Map<?, ?> particleMap) {
                 if (validateParticleConfig(particleMap)) {
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)
-                            || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
+                    if (equipStatus.equals(EquipStatus.NOT_EQUIPPED)
+                            || equipStatus.equals(EquipStatus.NULL)) return;
 
                     Particle particleType = Enum.valueOf(Particle.class, getConfigValue(particleMap, PARTICLE_KEY, String.class));
                     Integer count = getConfigValue(particleMap, COUNT_KEY, Integer.class, 1);

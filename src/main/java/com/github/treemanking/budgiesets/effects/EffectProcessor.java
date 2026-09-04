@@ -1,7 +1,7 @@
 package com.github.treemanking.budgiesets.effects;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.utilities.Processor;
 import com.github.treemanking.budgiesets.utilities.effects.PotionEffectsUtils;
 import org.bukkit.entity.Entity;
@@ -25,7 +25,7 @@ public interface EffectProcessor extends Processor, PotionEffectsUtils {
      * @param equipStatus the equip status of the player's armor set
      * @param event the event triggering the effect
      */
-    void processEffect(List<?> effect, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event);
+    void processEffect(List<?> effect, Entity entity, EquipStatus equipStatus, Event event);
 
     /**
      * Converts a hexadecimal color string to its red, green, and blue components.

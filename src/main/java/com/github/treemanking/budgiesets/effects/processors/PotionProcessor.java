@@ -1,8 +1,8 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.PlayerEffectProcessor;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -24,12 +24,12 @@ public class PotionProcessor implements PlayerEffectProcessor {
      * @param event       The event triggering the effect.
      */
     @Override
-    public void processEffect(List<?> effect, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffect(List<?> effect, Player player, EquipStatus equipStatus, Event event) {
         for (Object potion : effect) {
             if (potion instanceof Map<?, ?> potionMap) {
                 if (validatePotionConfig(potionMap)) {
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)
-                            || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) {
+                    if (equipStatus.equals(EquipStatus.EQUIPPED)
+                            || equipStatus.equals(EquipStatus.NULL)) {
 
                         String actionType = getConfigValue(potionMap, ACTION_TYPE_KEY, String.class);
                         String type = getConfigValue(potionMap, TYPE_KEY, String.class);

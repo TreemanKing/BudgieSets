@@ -1,8 +1,8 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.PlayerEffectProcessor;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import com.github.treemanking.budgiesets.utilities.effects.AttributeUtils;
 import com.google.j2objc.annotations.Property;
 import org.bukkit.attribute.Attribute;
@@ -28,12 +28,12 @@ public class AttributeProcessor implements PlayerEffectProcessor, AttributeUtils
      * @param event       The event triggering the effect.
      */
     @Override
-    public void processEffect(List<?> attributes, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffect(List<?> attributes, Player player, EquipStatus equipStatus, Event event) {
         for (Object attribute : attributes) {
             if (attribute instanceof Map<?, ?> attributeMap) {
                 if (validateAttributeMap(attributeMap)) {
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.EQUIPPED)
-                            || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) {
+                    if (equipStatus.equals(EquipStatus.EQUIPPED)
+                            || equipStatus.equals(EquipStatus.NULL)) {
 
                         Attribute attribut3 = getAttributeFromName(getConfigValue(attributeMap, ATTRIBUTE_KEY, String.class));
                         AttributeModifier.Operation operation = AttributeModifier.Operation.valueOf(getConfigValue(attributeMap, OPERATION_KEY, String.class, "ADD_NUMBER"));

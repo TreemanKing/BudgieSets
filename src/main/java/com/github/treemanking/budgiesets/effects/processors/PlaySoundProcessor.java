@@ -1,8 +1,8 @@
 package com.github.treemanking.budgiesets.effects.processors;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.PlayerEffectProcessor;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -24,12 +24,12 @@ public class PlaySoundProcessor implements PlayerEffectProcessor {
      * @param event       The event triggering the effect.
      */
     @Override
-    public void processEffect(List<?> sounds, Player player, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffect(List<?> sounds, Player player, EquipStatus equipStatus, Event event) {
         for (Object sound : sounds) {
             if (sound instanceof Map<?, ?> soundMap) {
                 if (validateSoundConfig(soundMap)) {
-                    if (equipStatus.equals(ArmorSetListener.EquipStatus.NOT_EQUIPPED)
-                            || equipStatus.equals(ArmorSetListener.EquipStatus.NULL)) return;
+                    if (equipStatus.equals(EquipStatus.NOT_EQUIPPED)
+                            || equipStatus.equals(EquipStatus.NULL)) return;
 
                     Sound soundType = getSoundFromName(getConfigValue(soundMap, SOUND_KEY, String.class));
                     float volume = getConfigValue(soundMap, VOLUME_KEY, Double.class, 1.0).floatValue();

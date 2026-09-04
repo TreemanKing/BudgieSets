@@ -1,8 +1,8 @@
 package com.github.treemanking.budgiesets.events.processors;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.events.EventProcessor;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class HookProcessor implements EventProcessor {
     @Override
-    public void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+    public void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, EquipStatus> playerEquipStatusHashMap) {
         plugin.getServer().getPluginManager().registerEvents(new HookProcessor.HookListener(armorSetName, effectsMap, playerEquipStatusHashMap), plugin);
     }
 
@@ -24,10 +24,10 @@ public class HookProcessor implements EventProcessor {
         private final Map<?, ?> effectsMap;
         private final Map<UUID, Long> cooldownMap = new HashMap<>();
 
-        private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
+        private final HashMap<UUID, EquipStatus> playerEquipStatus;
         private final String armorSetName;
 
-        public HookListener(String armorSetName, Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+        public HookListener(String armorSetName, Map<?, ?> event, HashMap<UUID, EquipStatus> playerEquipStatusHashMap) {
             this.effectsMap = event;
             this.playerEquipStatus = playerEquipStatusHashMap;
             this.armorSetName = armorSetName;
@@ -39,7 +39,7 @@ public class HookProcessor implements EventProcessor {
             Entity entity = null;
 
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
-            ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
+            EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
 
             // Get Target
             if (Objects.equals(getConfigValue(effectsMap, EFFECT_TARGET, String.class, "Player").toLowerCase(), "Hook".toLowerCase())) {

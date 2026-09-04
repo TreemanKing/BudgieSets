@@ -1,9 +1,9 @@
 package com.github.treemanking.budgiesets.managers.configuration;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.EffectProcessor;
 import com.github.treemanking.budgiesets.effects.EffectProcessorFactory;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 
@@ -24,7 +24,7 @@ public class EffectsManager {
      * @param equipStatus the player's armor set equip status
      * @param event the event triggering the effects
      */
-    public void processEffectsMap(Map<?, ?> eventMap, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    public void processEffectsMap(Map<?, ?> eventMap, Entity entity, EquipStatus equipStatus, Event event) {
         if (!eventMap.containsKey("Effects")) {
             throw new IllegalArgumentException("Effects key not found for an event.");
         }
@@ -40,7 +40,7 @@ public class EffectsManager {
      * @param equipStatus the player's armor set equip status
      * @param event the event triggering the effects
      */
-    private void processEffects(List<Map<?, ?>> effectsMap, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    private void processEffects(List<Map<?, ?>> effectsMap, Entity entity, EquipStatus equipStatus, Event event) {
         if (effectsMap == null) {
             throw new IllegalArgumentException("Effects list not found or is null for an event.");
         }
@@ -57,7 +57,7 @@ public class EffectsManager {
      * @param equipStatus the player's armor set equip status
      * @param event the event triggering the effect
      */
-    private void processEffect(Map<?, ?> effectMap, Entity entity, ArmorSetListener.EquipStatus equipStatus, Event event) {
+    private void processEffect(Map<?, ?> effectMap, Entity entity, EquipStatus equipStatus, Event event) {
         if (effectMap == null) {
             return;
         }
