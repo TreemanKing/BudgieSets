@@ -1,11 +1,9 @@
 package com.github.treemanking.budgiesets.events.processors;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.utilities.Processor;
 import com.github.treemanking.budgiesets.utilities.ProcessorKeys;
 import com.github.treemanking.budgiesets.events.EventProcessor;
-import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetListener;
-import com.github.treemanking.budgiesets.managers.configuration.EffectsManager;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,13 +12,12 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class AttackProcessor implements EventProcessor {
 
     @Override
-    public void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+    public void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, EquipStatus> playerEquipStatusHashMap) {
         plugin.getServer().getPluginManager().registerEvents(new AttackProcessor.AttackListener(armorSetName, effectsMap, playerEquipStatusHashMap), plugin);
     }
 
@@ -28,11 +25,11 @@ public class AttackProcessor implements EventProcessor {
 
         private final Map<?, ?> effectsMap;
         private final Map<UUID, Long> cooldownMap = new HashMap<>();
-        private final HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatus;
+        private final HashMap<UUID, EquipStatus> playerEquipStatus;
         private final String armorSetName;
         private String eventType = "default";
 
-        public AttackListener(String armorSetName, Map<?, ?> event, HashMap<UUID, ArmorSetListener.EquipStatus> playerEquipStatusHashMap) {
+        public AttackListener(String armorSetName, Map<?, ?> event, HashMap<UUID, EquipStatus> playerEquipStatusHashMap) {
             this.effectsMap = event;
             this.playerEquipStatus = playerEquipStatusHashMap;
             this.armorSetName = armorSetName;
@@ -106,7 +103,7 @@ public class AttackProcessor implements EventProcessor {
             if (player == null) return;
             if (!playerEquipStatus.containsKey(player.getUniqueId())) return;
 
-            ArmorSetListener.EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
+            EquipStatus currentStatus = playerEquipStatus.get(player.getUniqueId());
             if (checkMap(effectsMap, player, cooldownMap)) {
                 effectManager.processEffectsMap(effectsMap, player, currentStatus, event);
             }

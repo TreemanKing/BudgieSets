@@ -1,19 +1,16 @@
 package com.github.treemanking.budgiesets.managers.configuration;
 
-import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.commands.subcommands.CreateCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * The ConfigurationManager class handles the loading, saving, and initialization
  * of configuration files and directories for the BudgieSets plugin.
  */
-public class ConfigurationManager implements CreateCommand {
+public class ConfigurationManager {
 
     private final JavaPlugin plugin;
 
@@ -66,7 +63,7 @@ public class ConfigurationManager implements CreateCommand {
             if (configFile.getName().equalsIgnoreCase("config.yml")) {
                 plugin.saveResource(fileName, false);
             } else {
-                BudgieSets.getBudgieSets().getLogger().warning(fileName + " does not exist.");
+                plugin.getLogger().warning(fileName + " does not exist.");
                 return null;
             }
 

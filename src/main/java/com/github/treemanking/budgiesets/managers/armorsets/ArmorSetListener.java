@@ -1,5 +1,6 @@
 package com.github.treemanking.budgiesets.managers.armorsets;
 
+import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.armorsets.utilities.ArmorSetUtilities;
@@ -12,11 +13,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The ArmorSetListener class handles events related to player armor set equipping and unequipping.
@@ -27,6 +29,8 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities, OnPluginDi
     private final String armorSetName;
     private final HashMap<UUID, EquipStatus> playerEquipStatusHashMap = new HashMap<>();
     private final BudgieSets plugin;
+    /** Tracks players who already have a deferred equip-status check scheduled. */
+    private final Set<UUID> pendingEquipChecks = ConcurrentHashMap.newKeySet();
 
     /**
      * Constructs an ArmorSetListener for a specific armor set.
@@ -45,50 +49,66 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities, OnPluginDi
 
     /**
      * Handles the event of a player equipping or unequipping armor.
-     *
-     * @param event the PlayerArmorChangeEvent representing the event
+     * <p>
+     * Paper fires the PlayerArmorChangeEvent multiple times onPlayerJoin,
+     * so we schedule a single check to run after a short delay to ensure
+     * we evaluate the player's final equip status.
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerEquip(PlayerArmorChangeEvent event) {
         Player player = event.getPlayer();
-        UUID playerId = player.getUniqueId();
-        EquipStatus currentStatus = playerEquipStatusHashMap.getOrDefault(playerId, EquipStatus.NULL);
-        boolean fullSet = isWearingFullSet(player, armorSetName);
+        UUID uuid = player.getUniqueId();
 
-        // TODO: add messages to a lang file
+        // Check if check is already scheduled
+        if (!pendingEquipChecks.add(uuid)) return;
 
-        if (fullSet && currentStatus.equals(EquipStatus.NOT_EQUIPPED)) {
-            playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
-            player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-        } else if (!fullSet && currentStatus.equals(EquipStatus.EQUIPPED)) {
-            player.sendMessage(ChatColor.RED + "You are now not wearing the " + armorSetName + " set and will lose all bonuses.");
-            playerEquipStatusHashMap.put(playerId, EquipStatus.NOT_EQUIPPED);
-
-            // Make sure to remove all bonus effects when armor changes
-            removeAllAttributes(player);
-            removePotionEffects(player);
-        } else if (fullSet && currentStatus.equals(EquipStatus.NULL)) {
-            // When a player joins the server, it will only trigger this event.
-            playerEquipStatusHashMap.put(playerId, EquipStatus.EQUIPPED);
-
-            Bukkit.getServer().getScheduler().runTaskLater(plugin, () -> {
-                // Your code to be executed after 5 seconds goes here
-                // For example, you can send a delayed message to the player
-                player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
-            }, 60L);
-        }
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            pendingEquipChecks.remove(uuid);
+            if (!player.isOnline()) return;
+            evaluateEquipStatus(player);
+        }, 10L);
     }
 
     /**
-     * Handles the event of a player joining the server.
+     * Evaluates a player's current equip status against the armor they are actually
+     * wearing right now, and activates/deactivates the set as needed.
      *
-     * @param event the PlayerJoinEvent representing the event
+     * @param player the player to evaluate
      */
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        // Add them to with the status NULL as it is unknown whether the player is wearing armor
-        // When a player logs in, it equips the armor four times hence a NULL status is needed
-        playerEquipStatusHashMap.put(event.getPlayer().getUniqueId(), EquipStatus.NULL);
+    private void evaluateEquipStatus(Player player) {
+        // TODO: add messages to a lang file
+        EquipStatus currentStatus = playerEquipStatusHashMap.getOrDefault(player.getUniqueId(), EquipStatus.NULL);
+        boolean fullSet = isWearingFullSet(player, armorSetName);
+
+        //plugin.getLogger().info("[" + armorSetName + "] Evaluating equip status for player " + player.getName() + ": currentStatus=" + currentStatus + ", fullSet=" + fullSet);
+
+        // Player is already wearing the full set
+        if (fullSet && currentStatus.equals(EquipStatus.EQUIPPED)) return;
+
+        // Player is not wearing the full set, but was previously wearing it
+        if (!fullSet && currentStatus.equals(EquipStatus.EQUIPPED)) {
+            deactivateSet(player);
+            return;
+        }
+
+        // Player is now wearing the full set, but was not previously wearing it
+        if (fullSet) {
+            activateSet(player);
+        }
+    }
+
+    /** Activates the armor set for the player, updating their equip status and sending a message. */
+    private void activateSet(Player player) {
+        playerEquipStatusHashMap.put(player.getUniqueId(), EquipStatus.EQUIPPED);
+        player.sendMessage(ChatColor.GREEN + "You are now wearing the " + armorSetName + " set.");
+    }
+
+    /** Deactivates the armor set for the player, updating their equip status, removing bonuses, and sending a message. */
+    private void deactivateSet(Player player) {
+        playerEquipStatusHashMap.put(player.getUniqueId(), EquipStatus.NOT_EQUIPPED);
+        player.sendMessage(ChatColor.RED + "You are now not wearing the " + armorSetName + " set and will lose all bonuses.");
+        removeAllAttributes(player);
+        removePotionEffects(player);
     }
 
     /**
@@ -100,6 +120,7 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities, OnPluginDi
     public void onPlayerLeave(PlayerQuitEvent event) {
         // Remove the player from the map when the player leaves the server
         playerEquipStatusHashMap.remove(event.getPlayer().getUniqueId());
+        pendingEquipChecks.remove(event.getPlayer().getUniqueId());
     }
 
     /**
