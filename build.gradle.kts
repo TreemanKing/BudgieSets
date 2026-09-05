@@ -3,7 +3,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     id("java")
     id("java-library")
-    id("com.gradleup.shadow") version "9.1.0"
+    id("maven-publish")
+    id("com.gradleup.shadow") version "9.6.1"
 }
 
 group = "com.github.treemanking.budgiesets"
@@ -36,6 +37,10 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.12.2")
 }
 
+tasks.jar {
+    enabled = false
+}
+
 tasks.withType<ShadowJar> {
     archiveFileName.set("${project.name}-${project.version}.jar")
     relocate("de.tr7zw.changeme.nbtapi", "com.github.treemanking.api.nbtapi")
@@ -55,4 +60,22 @@ tasks.processResources {
     filesMatching("plugin.yml") {
         expand("projectVersion" to project.version)
     }
+}
+
+tasks.register<Copy>("publishLocal") {
+    group = "budgienet"
+    description = "Copies the built plugin jar to the local Paper server's plugins folder."
+    dependsOn(tasks.named("shadowJar"))
+
+    val shadowJarTask = tasks.named<Jar>("shadowJar").get()
+    from(shadowJarTask.archiveFile)
+    into("/data/BudgieNet/PAPER_1_21_11/plugins/")
+}
+
+tasks.register<Exec>("restartPaper") {
+    group = "budgienet"
+    description = "Kills any running paper.jar process so the server can restart."
+
+    isIgnoreExitValue = true
+    commandLine("pkill", "-f", "paper.jar")
 }
