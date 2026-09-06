@@ -1,6 +1,6 @@
 package com.github.treemanking.budgiesets;
 
-import com.github.treemanking.budgiesets.managers.CommandManager;
+import com.github.treemanking.budgiesets.commands.CommandManager;
 import com.github.treemanking.budgiesets.managers.HookManager;
 import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetManager;
 import com.github.treemanking.budgiesets.managers.configuration.ConfigurationManager;

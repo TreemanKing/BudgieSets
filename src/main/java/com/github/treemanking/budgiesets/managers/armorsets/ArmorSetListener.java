@@ -124,6 +124,15 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities, OnPluginDi
     }
 
     /**
+     * Returns the name of the armor set this listener was registered for.
+     *
+     * @return the armor set name
+     */
+    public String getArmorSetName() {
+        return armorSetName;
+    }
+
+    /**
      * Handles the hashcode of the event
      *
      * @return the hashcode of the new armor set
