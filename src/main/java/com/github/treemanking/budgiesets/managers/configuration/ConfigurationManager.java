@@ -1,5 +1,6 @@
 package com.github.treemanking.budgiesets.managers.configuration;
 
+import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetFiles;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,10 +38,10 @@ public class ConfigurationManager {
      * Creates the ArmorSets folder within the plugin's data folder if it does not already exist.
      */
     private void initializeArmorSetsFolder() {
-        File armorSetsFolder = new File(plugin.getDataFolder(), "ArmorSets");
+        File armorSetsFolder = ArmorSetFiles.folderIn(plugin);
 
         if (armorSetsFolder.mkdirs()) {
-            plugin.getLogger().info("ArmorSets folder created.");
+            plugin.getLogger().info(ArmorSetFiles.FOLDER_NAME + " folder created.");
         }
     }
 
@@ -52,12 +53,7 @@ public class ConfigurationManager {
      * @return the FileConfiguration associated with the specified file
      */
     public FileConfiguration getConfig(String fileName) {
-        File configFile;
-        if (fileName.endsWith(".yml")) {
-            configFile = new File(plugin.getDataFolder(), fileName);
-        } else {
-            configFile = new File(plugin.getDataFolder(), fileName + ".yml");
-        }
+        File configFile = new File(plugin.getDataFolder(), ArmorSetFiles.withExtension(fileName));
 
         if (!configFile.exists()) {
             if (configFile.getName().equalsIgnoreCase("config.yml")) {
@@ -94,7 +90,8 @@ public class ConfigurationManager {
      * @return an array of Files in .yml format located in the ArmorSets folder
      */
     public File[] getArmorSetFiles() {
-        File armorSetsFolder = new File(plugin.getDataFolder(), "ArmorSets");
-        return armorSetsFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".yml") && !name.toLowerCase().startsWith("--"));
+        File armorSetsFolder = ArmorSetFiles.folderIn(plugin);
+        return armorSetsFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(ArmorSetFiles.FILE_EXTENSION)
+                && !name.toLowerCase().startsWith(ArmorSetFiles.UNLOADED_PREFIX));
     }
 }
