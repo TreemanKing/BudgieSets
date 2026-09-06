@@ -1,0 +1,55 @@
+package com.github.treemanking.budgiesets.commands.subcommands;
+
+import com.github.treemanking.budgiesets.commands.SubCommand;
+import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetFiles;
+import com.github.treemanking.budgiesets.managers.armorsets.ArmorSetLoader;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.StringArgument;
+import org.bukkit.ChatColor;
+
+import java.io.IOException;
+
+/**
+ * Creates a new armor set configuration and immediately loads it.
+ */
+public class CreateSubCommand implements SubCommand {
+
+    private final ArmorSetFiles files;
+    private final ArmorSetLoader loader;
+
+    /**
+     * Constructs the create subcommand.
+     *
+     * @param files  the armor set file helper
+     * @param loader the armor set loader
+     */
+    public CreateSubCommand(ArmorSetFiles files, ArmorSetLoader loader) {
+        this.files = files;
+        this.loader = loader;
+    }
+
+    @Override
+    public CommandAPICommand build() {
+        return new CommandAPICommand("create")
+                .withArguments(new StringArgument("name"))
+                .withPermission("budgiesets.create")
+                .executes((sender, args) -> {
+                    String armorSetName = (String) args.get("name");
+
+                    try {
+                        switch (files.create(armorSetName, ArmorSetFiles.defaultYaml())) {
+                            case CREATED -> {
+                                loader.load(armorSetName);
+                                sender.sendMessage(ChatColor.GREEN + armorSetName + " was successfully generated and loaded.");
+                            }
+                            case ALREADY_EXISTS -> sender.sendMessage(ChatColor.RED + armorSetName
+                                    + " already exists and was not overwritten.");
+                        }
+                    } catch (IOException exception) {
+                        sender.sendMessage(ChatColor.RED + "Failed to create " + armorSetName
+                                + ". See the server console for details.");
+                    }
+                });
+    }
+}
+

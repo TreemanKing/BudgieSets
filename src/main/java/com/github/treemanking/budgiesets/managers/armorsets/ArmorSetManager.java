@@ -37,9 +37,9 @@ public class ArmorSetManager {
         File[] armorSetFiles = configurationManager.getArmorSetFiles();
 
         for (File configFile : armorSetFiles) {
-            if (configFile.getName().startsWith("--")) continue;
-            FileConfiguration armorSetConfig = configurationManager.getConfig("ArmorSets/" + configFile.getName());
-            String armorSetName = configFile.getName().replace(".yml", "");
+            if (configFile.getName().startsWith(ArmorSetFiles.UNLOADED_PREFIX)) continue;
+            FileConfiguration armorSetConfig = configurationManager.getConfig(ArmorSetFiles.configPath(configFile.getName()));
+            String armorSetName = ArmorSetFiles.stripExtension(configFile.getName());
 
             registerArmorSetListener(armorSetName, armorSetConfig);
         }
@@ -74,5 +74,13 @@ public class ArmorSetManager {
 
     public static void removeEnabledArmorSet(String armorSetName) {
         enabledArmorSets.remove(armorSetName);
+    }
+
+    /**
+     * Clears every tracked enabled armor set, so that a reload can rebuild the list from disk
+     * without duplicating entries.
+     */
+    public static void clearEnabledArmorSets() {
+        enabledArmorSets.clear();
     }
 }
