@@ -10,6 +10,12 @@ import org.bukkit.event.Event;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+import static com.github.treemanking.budgiesets.utilities.ConfigUtils.getConfigValue;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.SOUND_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.VOLUME_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.PITCH_KEY;
+
 /**
  * A class to process sound effects for armor set effects.
  */
@@ -39,7 +45,7 @@ public class PlaySoundProcessor implements PlayerEffectProcessor {
                         playSound(player, soundType, volume, pitch);
                     }
                 } else {
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid Sound configuration:" + soundMap);
+                    warn("Invalid Sound configuration:" + soundMap);
                 }
             }
         }

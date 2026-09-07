@@ -9,6 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
+import com.github.treemanking.budgiesets.utilities.effects.PotionEffectService;
+
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.*;
+import static com.github.treemanking.budgiesets.utilities.ConfigUtils.getConfigValue;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.ACTION_TYPE_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.TYPE_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.DURATION_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.AMPLIFIER_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.AMBIENT_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.PARTICLES_KEY;
 
 /**
  * A class to process potion effects for armor set effects.
@@ -42,7 +52,7 @@ public class PotionProcessor implements PlayerEffectProcessor {
                     }
                 } else {
                     // Log an error or inform the user about the invalid configuration
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid potion configuration:" + potionMap);
+                    warn("Invalid potion configuration:" + potionMap);
                 }
             }
         }
@@ -61,11 +71,11 @@ public class PotionProcessor implements PlayerEffectProcessor {
      */
     private void actionPotionEffect(String actionType, @NotNull Player player, int duration, @NotNull String effectName, int amplifier, boolean ambient, boolean particles) {
         if (actionType.equalsIgnoreCase("Add")) {
-            applyPotionEffect(player, duration, effectName, amplifier, ambient, particles);
+            PotionEffectService.applyPotionEffect(player, duration, effectName, amplifier, ambient, particles);
         } else if (actionType.equalsIgnoreCase("Remove")) {
-            removePotionEffects(player, effectName);
+            PotionEffectService.removePotionEffects(player, effectName);
         } else {
-            BudgieSets.getBudgieSets().getLogger().warning("You must have an action type of add or remove.");
+            warn("You must have an action type of add or remove.");
         }
     }
 

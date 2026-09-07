@@ -7,6 +7,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.io.File;
 import java.util.*;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.*;
+
 /**
  * The ArmorSetManager class manages the registration of ArmorSetListeners
  * for each armor set configuration file found in the ArmorSets folder.
@@ -57,10 +59,10 @@ public class ArmorSetManager {
         } try {
             plugin.getServer().getPluginManager().registerEvents(
                     new ArmorSetListener(armorSetName, armorSetConfig, plugin), plugin);
-            plugin.getLogger().info(armorSetName + " Registered");
+            log(armorSetName + " Registered");
             enabledArmorSets.add(armorSetName);
         } catch (Exception exception) {
-            plugin.getLogger().severe(armorSetName + " did not register and ran into an error!");
+            error(armorSetName + " did not register and ran into an error!");
         }
     }
 

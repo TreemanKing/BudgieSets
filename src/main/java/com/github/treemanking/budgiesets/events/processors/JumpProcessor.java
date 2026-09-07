@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.github.treemanking.budgiesets.utilities.ConditionUtils.checkMap;
+
 public class JumpProcessor implements EventProcessor {
 
     @Override

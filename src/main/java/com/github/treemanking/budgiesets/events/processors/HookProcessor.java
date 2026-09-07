@@ -13,6 +13,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.github.treemanking.budgiesets.utilities.ConditionUtils.checkMap;
+import static com.github.treemanking.budgiesets.utilities.ConfigUtils.getConfigValue;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.EFFECT_TARGET;
+
 public class HookProcessor implements EventProcessor {
     @Override
     public void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, EquipStatus> playerEquipStatusHashMap) {
