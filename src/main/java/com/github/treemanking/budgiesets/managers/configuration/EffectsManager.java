@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+
 /**
  * The EffectsManager class is responsible for processing effects defined in the configuration file for a specific event.
  */
@@ -64,7 +66,7 @@ public class EffectsManager {
 
         Set<? extends Map.Entry<?, ?>> entrySet = effectMap.entrySet();
         if (entrySet.size() != 1) {
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid effect structure found: " + effectMap);
+            warn("Invalid effect structure found: " + effectMap);
             return;
         }
 
@@ -73,13 +75,13 @@ public class EffectsManager {
         EffectProcessor processor = EffectProcessorFactory.createProcessor(effectType);
 
         if (processor == null) {
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid effect type: " + effectType);
+            warn("Invalid effect type: " + effectType);
             return;
         }
 
         Object value = entry.getValue();
         if (!(value instanceof List)) {
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid effect structure found: " + effectMap);
+            warn("Invalid effect structure found: " + effectMap);
             return;
         }
 

@@ -7,6 +7,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.*;
+
 /**
  * The ConfigurationManager class handles the loading, saving, and initialization
  * of configuration files and directories for the BudgieSets plugin.
@@ -41,7 +43,7 @@ public class ConfigurationManager {
         File armorSetsFolder = ArmorSetFiles.folderIn(plugin);
 
         if (armorSetsFolder.mkdirs()) {
-            plugin.getLogger().info(ArmorSetFiles.FOLDER_NAME + " folder created.");
+            log(ArmorSetFiles.FOLDER_NAME + " folder created.");
         }
     }
 
@@ -59,7 +61,7 @@ public class ConfigurationManager {
             if (configFile.getName().equalsIgnoreCase("config.yml")) {
                 plugin.saveResource(fileName, false);
             } else {
-                plugin.getLogger().warning(fileName + " does not exist.");
+                warn(fileName + " does not exist.");
                 return null;
             }
 
@@ -80,7 +82,7 @@ public class ConfigurationManager {
         try {
             config.save(configFile);
         } catch (IOException e) {
-            plugin.getLogger().severe("Could not save configuration file: " + fileName);
+            error("Could not save configuration file: " + fileName);
         }
     }
 

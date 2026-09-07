@@ -17,6 +17,22 @@ import org.bukkit.material.MaterialData;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.*;
+import static com.github.treemanking.budgiesets.utilities.ConfigUtils.getConfigValue;
+import static com.github.treemanking.budgiesets.utilities.ColorUtils.convertHexToRGB;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.PARTICLE_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.COUNT_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.OFFSET_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.DATA_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.MATERIAL_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.INT_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.FLOAT_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.ARRIVAL_TIME_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.FROM_COLOR_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.TO_COLOR_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.SIZE_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.COLOR_KEY;
+
 /**
  * A class to process particles for armor set effects.
  */
@@ -48,7 +64,7 @@ public class ParticleProcessor implements EffectProcessor {
                     }
                 } else {
                     // Log an error or inform the user about the invalid configuration
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid particle configuration: " + particleMap);
+                    warn("Invalid particle configuration: " + particleMap);
                 }
             }
         }
@@ -97,7 +113,7 @@ public class ParticleProcessor implements EffectProcessor {
             Enum.valueOf(Particle.class, type);
             return true;
         } catch (IllegalArgumentException exception) {
-            BudgieSets.getBudgieSets().getLogger().warning(type + "Not a valid particle.");
+            warn(type + "Not a valid particle.");
         }
         return false;
     }
@@ -117,31 +133,31 @@ public class ParticleProcessor implements EffectProcessor {
             if (validateMaterialKey(dataMap)) {
                 return Material.getMaterial(getConfigValue(dataMap, MATERIAL_KEY, String.class, "STONE").toUpperCase());
             }
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
+            warn("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(BlockData.class)) {
             if (validateMaterialKey(dataMap)) {
                 return Material.getMaterial(getConfigValue(dataMap, MATERIAL_KEY, String.class, "STONE").toUpperCase()).createBlockData();
             }
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
+            warn("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(Integer.class)) {
             if (validateIntKey(dataMap)) {
                 return getConfigValue(dataMap, INT_KEY, Integer.class);
             }
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
+            warn("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(Float.class)) {
             if (validateFloatKey(dataMap)) {
                 return getConfigValue(dataMap, FLOAT_KEY, Double.class).floatValue();
             }
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
+            warn("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(Vibration.class)) {
             if (validateArrivalTimeKey(dataMap)) {
                 return new Vibration(new Vibration.Destination.EntityDestination(entity), (int) dataMap.get(ARRIVAL_TIME_KEY));
             }
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
+            warn("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(Particle.DustTransition.class)) {
             int[] fromColor = convertHexToRGB(getConfigValue(dataMap, FROM_COLOR_KEY, String.class));
@@ -152,20 +168,20 @@ public class ParticleProcessor implements EffectProcessor {
                         Color.fromRGB(toColor[0], toColor[1], toColor[2]),
                         getConfigValue(dataMap, SIZE_KEY, Double.class).floatValue());
             }
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
+            warn("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(ItemStack.class)) {
             if (validateMaterialKey(dataMap)) {
                 return new ItemStack(Material.getMaterial(getConfigValue(dataMap, MATERIAL_KEY, String.class, "STONE").toUpperCase()));
             }
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
+            warn("Invalid configuration. Please see the wiki on particle data.");
             return null;
         } else if (particleDataTypeClass.equals(Particle.DustOptions.class)) {
             if (validateSizeKey(dataMap) && validateColorKey(dataMap)) {
                 int[] color = convertHexToRGB(getConfigValue(dataMap, COLOR_KEY, String.class));
                 return new Particle.DustOptions(Color.fromRGB(color[0], color[1], color[2]), getConfigValue(dataMap, SIZE_KEY, Double.class).floatValue());
             }
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid configuration. Please see the wiki on particle data.");
+            warn("Invalid configuration. Please see the wiki on particle data.");
             return null;
         }
         return null;

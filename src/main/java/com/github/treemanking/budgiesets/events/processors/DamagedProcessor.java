@@ -2,7 +2,6 @@ package com.github.treemanking.budgiesets.events.processors;
 
 import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.utilities.ProcessorKeys;
 import com.github.treemanking.budgiesets.events.EventProcessor;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -14,7 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class DamagedProcessor implements EventProcessor, ProcessorKeys {
+import static com.github.treemanking.budgiesets.utilities.ConditionUtils.checkMap;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.TYPE_KEY;
+
+public class DamagedProcessor implements EventProcessor {
 
     @Override
     public void process(String armorSetName, Map<?, ?> effectsMap, BudgieSets plugin, HashMap<UUID, EquipStatus> playerEquipStatusHashMap) {

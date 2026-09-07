@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+import static com.github.treemanking.budgiesets.utilities.ConfigUtils.getConfigValue;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.AMOUNT_KEY;
+
 /**
  * A class to process hunger effects for armor set effects.
  */
@@ -39,7 +43,7 @@ public class HungerProcessor implements PlayerEffectProcessor {
 
                 } else {
                     // Log an error about the invalid configuration
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid hunger configuration: " + hungerMap);
+                    warn("Invalid hunger configuration: " + hungerMap);
                 }
 
             }

@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.*;
+
 /**
  * The single source of truth for the location, naming and on-disk manipulation of
  * armor set configuration files.
@@ -161,20 +163,20 @@ public class ArmorSetFiles {
      */
     public CreateResult create(String armorSetName, String yamlContent) throws IOException {
         if (folder.mkdirs()) {
-            plugin.getLogger().info(FOLDER_NAME + " folder created.");
+            log(FOLDER_NAME + " folder created.");
         }
 
         File file = fileFor(armorSetName);
 
         if (file.exists()) {
-            plugin.getLogger().warning("The file " + file.getName() + " already exists and will not be overwritten.");
+            warn("The file " + file.getName() + " already exists and will not be overwritten.");
             return CreateResult.ALREADY_EXISTS;
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(yamlContent);
         } catch (IOException exception) {
-            plugin.getLogger().severe("Failed to make " + armorSetName + " configuration.");
+            error("Failed to make " + armorSetName + " configuration.");
             throw exception;
         }
 
@@ -191,16 +193,16 @@ public class ArmorSetFiles {
         File file = fileFor(armorSetName);
 
         if (!file.exists()) {
-            plugin.getLogger().warning(armorSetName + " does not exist and therefore cannot be deleted.");
+            warn(armorSetName + " does not exist and therefore cannot be deleted.");
             return DeleteResult.NOT_FOUND;
         }
 
         if (!file.delete()) {
-            plugin.getLogger().severe(armorSetName + " exists but could not be deleted.");
+            error(armorSetName + " exists but could not be deleted.");
             return DeleteResult.FAILED;
         }
 
-        plugin.getLogger().info(armorSetName + " has been deleted.");
+        log(armorSetName + " has been deleted.");
         return DeleteResult.DELETED;
     }
 
