@@ -11,6 +11,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+import static com.github.treemanking.budgiesets.utilities.ConfigUtils.getConfigValue;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.BOOLEAN_KEY;
+
 /**
  * The EventCancelProcessor class processes event cancellation effects for entities based on their armor equip status.
  */
@@ -27,7 +31,7 @@ public class EventCancelProcessor implements EffectProcessor {
     @Override
     public void processEffect(List<?> eventCancels, Entity entity, EquipStatus equipStatus, Event event) {
         if (!(event instanceof Cancellable cancellableEvent)) {
-            BudgieSets.getBudgieSets().getLogger().warning("Event not cancellable: " + event.getEventName());
+            warn("Event not cancellable: " + event.getEventName());
             return;
         }
 
@@ -44,7 +48,7 @@ public class EventCancelProcessor implements EffectProcessor {
                     }
                 } else {
                     // Log an error about the invalid configuration
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid Cancel Event configuration: " + eventCancelMap);
+                    warn("Invalid Cancel Event configuration: " + eventCancelMap);
                 }
             }
         }

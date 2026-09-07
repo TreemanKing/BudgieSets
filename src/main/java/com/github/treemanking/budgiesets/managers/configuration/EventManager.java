@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+
 /**
  * The EventManager class is responsible for registering events defined in the configuration file.
  */
@@ -44,7 +46,7 @@ public class EventManager {
 
         Set<? extends Map.Entry<?, ?>> entrySet = eventMap.entrySet();
         if (entrySet.size() != 1) {
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid event structure found: " + eventMap);
+            warn("Invalid event structure found: " + eventMap);
             return;
         }
 
@@ -53,13 +55,13 @@ public class EventManager {
         EventProcessor processor = EventProcessorFactory.createProcessor(eventType);
 
         if (processor == null) {
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid event type: " + eventType);
+            warn("Invalid event type: " + eventType);
             return;
         }
 
         Object value = entry.getValue();
         if (!(value instanceof Map)) {
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid event structure found: " + eventMap);
+            warn("Invalid event structure found: " + eventMap);
             return;
         }
 

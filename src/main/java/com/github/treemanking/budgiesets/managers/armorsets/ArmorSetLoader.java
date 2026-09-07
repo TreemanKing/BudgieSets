@@ -2,13 +2,15 @@ package com.github.treemanking.budgiesets.managers.armorsets;
 
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.configuration.ConfigurationManager;
-import com.github.treemanking.budgiesets.utilities.OnPluginDisable;
+import com.github.treemanking.budgiesets.utilities.effects.PotionEffectService;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.RegisteredListener;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.*;
 
 /**
  * Handles the runtime lifecycle of armor sets: registering their listeners, unregistering
@@ -19,7 +21,6 @@ public class ArmorSetLoader {
     private final BudgieSets plugin;
     private final ConfigurationManager configurationManager;
     private final ArmorSetFiles files;
-    private final OnPluginDisable shutdownTasks = new OnPluginDisable() {};
 
     /**
      * Constructs an ArmorSetLoader.
@@ -47,7 +48,7 @@ public class ArmorSetLoader {
         String resolvedName = armorSetName;
 
         if (isEnabled(resolvedName)) {
-            plugin.getLogger().warning(resolvedName + " has already been loaded. Loading terminated.");
+            warn(resolvedName + " has already been loaded. Loading terminated.");
             return new LoadResult(LoadStatus.ALREADY_LOADED, resolvedName);
         }
 
@@ -68,10 +69,10 @@ public class ArmorSetLoader {
             plugin.getServer().getPluginManager().registerEvents(
                     new ArmorSetListener(resolvedName, armorSetConfig, plugin), plugin);
             ArmorSetManager.addEnabledArmorSet(resolvedName);
-            plugin.getLogger().info(resolvedName + " has been loaded into the server.");
+            log(resolvedName + " has been loaded into the server.");
             return new LoadResult(LoadStatus.LOADED, resolvedName);
         } catch (Exception exception) {
-            plugin.getLogger().severe(resolvedName + " did not register and ran into an error!");
+            error(resolvedName + " did not register and ran into an error!");
             return new LoadResult(LoadStatus.ERROR, resolvedName);
         }
     }
@@ -87,11 +88,11 @@ public class ArmorSetLoader {
      */
     public UnloadStatus unload(String armorSetName) {
         if (!isEnabled(armorSetName)) {
-            plugin.getLogger().warning(armorSetName + " is not currently loaded. Unloading terminated.");
+            warn(armorSetName + " is not currently loaded. Unloading terminated.");
             return UnloadStatus.NOT_LOADED;
         }
 
-        shutdownTasks.removeAllPermPotionEffects();
+        PotionEffectService.removeAllTrackedEffects();
 
         for (RegisteredListener registeredListener : HandlerList.getRegisteredListeners(plugin)) {
             if (registeredListener.getListener() instanceof ArmorSetListener armorSetListener
@@ -103,11 +104,11 @@ public class ArmorSetLoader {
         ArmorSetManager.removeEnabledArmorSet(armorSetName);
 
         if (!files.rename(armorSetName, ArmorSetFiles.UNLOADED_PREFIX + armorSetName)) {
-            plugin.getLogger().severe(armorSetName + " was unregistered but its file could not be renamed.");
+            error(armorSetName + " was unregistered but its file could not be renamed.");
             return UnloadStatus.RENAME_FAILED;
         }
 
-        plugin.getLogger().info(armorSetName + " has been unloaded from the server.");
+        log(armorSetName + " has been unloaded from the server.");
         return UnloadStatus.UNLOADED;
     }
 
@@ -119,7 +120,7 @@ public class ArmorSetLoader {
         HandlerList.unregisterAll(plugin);
         ArmorSetManager.clearEnabledArmorSets();
         new ArmorSetManager(plugin, configurationManager);
-        shutdownTasks.removeAllPermPotionEffects();
+        PotionEffectService.removeAllTrackedEffects();
     }
 
     /**
