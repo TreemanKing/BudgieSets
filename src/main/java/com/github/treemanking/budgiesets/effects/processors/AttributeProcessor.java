@@ -3,7 +3,6 @@ package com.github.treemanking.budgiesets.effects.processors;
 import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.effects.PlayerEffectProcessor;
-import com.github.treemanking.budgiesets.utilities.effects.AttributeUtils;
 import com.google.j2objc.annotations.Property;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -13,11 +12,19 @@ import org.bukkit.event.Event;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import com.github.treemanking.budgiesets.utilities.effects.AttributeService;
+
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+import static com.github.treemanking.budgiesets.utilities.ConfigUtils.getConfigValue;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.ATTRIBUTE_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.OPERATION_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.AMOUNT_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.TIME_KEY;
 
 /**
  * A class to process attributes for armor set effects
  */
-public class AttributeProcessor implements PlayerEffectProcessor, AttributeUtils {
+public class AttributeProcessor implements PlayerEffectProcessor {
 
     /**
      * Processes attribute effects based on the provided configuration.
@@ -40,13 +47,13 @@ public class AttributeProcessor implements PlayerEffectProcessor, AttributeUtils
                         Double amount = getConfigValue(attributeMap, AMOUNT_KEY, Double.class);
                         Integer time = getConfigValue(attributeMap, TIME_KEY, Integer.class);
 
-                        applyAttribute(player, attribut3, operation, amount, time);
+                        AttributeService.applyAttribute(player, attribut3, operation, amount, time);
                     } else {
-                        removeAllAttributes(player);
+                        AttributeService.removeAllAttributes(player);
                     }
                 } else {
                     // Log an error or inform the user about the invalid configuration
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid attribute configuration: " + attributeMap);
+                    warn("Invalid attribute configuration: " + attributeMap);
                 }
             }
         }

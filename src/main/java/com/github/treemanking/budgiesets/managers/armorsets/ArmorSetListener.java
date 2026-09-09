@@ -5,7 +5,8 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.armorsets.utilities.ArmorSetUtilities;
 import com.github.treemanking.budgiesets.managers.configuration.EventManager;
-import com.github.treemanking.budgiesets.utilities.OnPluginDisable;
+import com.github.treemanking.budgiesets.utilities.effects.AttributeService;
+import com.github.treemanking.budgiesets.utilities.effects.PotionEffectService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * The ArmorSetListener class handles events related to player armor set equipping and unequipping.
  * It also manages the registration of events for specific armor sets.
  */
-public class ArmorSetListener implements Listener, ArmorSetUtilities, OnPluginDisable {
+public class ArmorSetListener implements Listener, ArmorSetUtilities {
 
     private final String armorSetName;
     private final HashMap<UUID, EquipStatus> playerEquipStatusHashMap = new HashMap<>();
@@ -80,7 +81,7 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities, OnPluginDi
         EquipStatus currentStatus = playerEquipStatusHashMap.getOrDefault(player.getUniqueId(), EquipStatus.NULL);
         boolean fullSet = isWearingFullSet(player, armorSetName);
 
-        //plugin.getLogger().info("[" + armorSetName + "] Evaluating equip status for player " + player.getName() + ": currentStatus=" + currentStatus + ", fullSet=" + fullSet);
+        //log("[" + armorSetName + "] Evaluating equip status for player " + player.getName() + ": currentStatus=" + currentStatus + ", fullSet=" + fullSet);
 
         // Player is already wearing the full set
         if (fullSet && currentStatus.equals(EquipStatus.EQUIPPED)) return;
@@ -107,8 +108,8 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities, OnPluginDi
     private void deactivateSet(Player player) {
         playerEquipStatusHashMap.put(player.getUniqueId(), EquipStatus.NOT_EQUIPPED);
         player.sendMessage(ChatColor.RED + "You are now not wearing the " + armorSetName + " set and will lose all bonuses.");
-        removeAllAttributes(player);
-        removePotionEffects(player);
+        AttributeService.removeAllAttributes(player);
+        PotionEffectService.removePotionEffects(player);
     }
 
     /**
@@ -121,6 +122,15 @@ public class ArmorSetListener implements Listener, ArmorSetUtilities, OnPluginDi
         // Remove the player from the map when the player leaves the server
         playerEquipStatusHashMap.remove(event.getPlayer().getUniqueId());
         pendingEquipChecks.remove(event.getPlayer().getUniqueId());
+    }
+
+    /**
+     * Returns the name of the armor set this listener was registered for.
+     *
+     * @return the armor set name
+     */
+    public String getArmorSetName() {
+        return armorSetName;
     }
 
     /**

@@ -3,7 +3,6 @@ package com.github.treemanking.budgiesets.events;
 import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
 import com.github.treemanking.budgiesets.managers.configuration.EffectsManager;
-import com.github.treemanking.budgiesets.utilities.Processor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +10,13 @@ import java.util.UUID;
 
 /**
  * The EventProcessor interface defines a contract for processing events with associated effects.
+ *
+ * <p>Implementations are resolved at runtime by
+ * {@link com.github.treemanking.budgiesets.events.EventProcessorFactory}. Shared helper
+ * behaviour lives in the static utilities ({@code ConfigUtils}, {@code ConditionUtils})
+ * rather than being inherited from this interface.</p>
  */
-public interface EventProcessor extends Processor {
+public interface EventProcessor {
 
     /**
      * Processes the effects associated with an event.

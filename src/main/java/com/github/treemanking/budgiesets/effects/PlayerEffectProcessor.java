@@ -8,6 +8,8 @@ import org.bukkit.event.Event;
 
 import java.util.List;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+
 public interface PlayerEffectProcessor extends EffectProcessor {
 
     /**
@@ -23,7 +25,7 @@ public interface PlayerEffectProcessor extends EffectProcessor {
         if (entity instanceof Player) {
             processEffect(effect, (Player) entity, equipStatus, event);
         } else {
-            BudgieSets.getBudgieSets().getLogger().warning("Effect cannot be used in conjunction with " + entity.getType());
+            warn("Effect cannot be used in conjunction with " + entity.getType());
         }
     }
 

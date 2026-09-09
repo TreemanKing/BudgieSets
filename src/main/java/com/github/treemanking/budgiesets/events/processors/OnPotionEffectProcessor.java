@@ -11,6 +11,9 @@ import org.bukkit.event.entity.EntityPotionEffectEvent;
 
 import java.util.*;
 
+import static com.github.treemanking.budgiesets.utilities.ConditionUtils.checkMap;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.TYPE_KEY;
+
 public class OnPotionEffectProcessor implements EventProcessor {
 
     @Override
