@@ -8,10 +8,14 @@ plugins {
 }
 
 group = "com.github.treemanking.budgiesets"
-version = "1.0.2-SNAPSHOT"
+version = "1.0.3-SNAPSHOT"
 
-java.sourceCompatibility = JavaVersion.VERSION_21
-java.targetCompatibility = JavaVersion.VERSION_21
+java.sourceCompatibility = JavaVersion.VERSION_25
+java.targetCompatibility = JavaVersion.VERSION_25
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
+}
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
@@ -31,8 +35,9 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
-    implementation("dev.jorel:commandapi-paper-shade:11.1.0")
+    compileOnly("io.papermc.paper:paper-api:26.3.build.175-stable")
+    // 12.1.0 shade jar is self-contained; its shadowed-variant metadata lists unpublished modules
+    implementation("dev.jorel:commandapi-paper-shade:12.1.0") { isTransitive = false }
     implementation("de.tr7zw:item-nbt-api:2.16.0")
     compileOnly("me.clip:placeholderapi:2.12.2")
 }
@@ -57,6 +62,7 @@ tasks {
 }
 
 tasks.processResources {
+    inputs.property("projectVersion", project.version)
     filesMatching("plugin.yml") {
         expand("projectVersion" to project.version)
     }
