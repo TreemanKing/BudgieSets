@@ -9,6 +9,14 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.List;
 import java.util.Map;
+import com.github.treemanking.budgiesets.utilities.effects.PotionEffectService;
+
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+import static com.github.treemanking.budgiesets.utilities.ConfigUtils.getConfigValue;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.TYPE_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.AMPLIFIER_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.AMBIENT_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.PARTICLES_KEY;
 
 /**
  * A class to process potion effects for armor set effects.
@@ -34,13 +42,13 @@ public class PermPotionProcessor implements PlayerEffectProcessor {
                         Boolean ambient = getConfigValue(potionMap, AMBIENT_KEY, Boolean.class, false);
                         Boolean particles = getConfigValue(potionMap, PARTICLES_KEY, Boolean.class, true);
                         // Assuming you have a method to apply PermPotion effects
-                        applyPotionEffect(player, PotionEffect.INFINITE_DURATION, type, amplifier, ambient, particles);
+                        PotionEffectService.applyPotionEffect(player, PotionEffect.INFINITE_DURATION, type, amplifier, ambient, particles);
                     } else {
-                        removePotionEffects(player);
+                        PotionEffectService.removePotionEffects(player);
                     }
                 } else {
                     // Log an error or inform the user about the invalid configuration
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid potion configuration: " + potionMap);
+                    warn("Invalid potion configuration: " + potionMap);
                 }
             }
         }

@@ -7,6 +7,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.io.File;
 import java.util.*;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.*;
+
 /**
  * The ArmorSetManager class manages the registration of ArmorSetListeners
  * for each armor set configuration file found in the ArmorSets folder.
@@ -37,9 +39,9 @@ public class ArmorSetManager {
         File[] armorSetFiles = configurationManager.getArmorSetFiles();
 
         for (File configFile : armorSetFiles) {
-            if (configFile.getName().startsWith("--")) continue;
-            FileConfiguration armorSetConfig = configurationManager.getConfig("ArmorSets/" + configFile.getName());
-            String armorSetName = configFile.getName().replace(".yml", "");
+            if (configFile.getName().startsWith(ArmorSetFiles.UNLOADED_PREFIX)) continue;
+            FileConfiguration armorSetConfig = configurationManager.getConfig(ArmorSetFiles.configPath(configFile.getName()));
+            String armorSetName = ArmorSetFiles.stripExtension(configFile.getName());
 
             registerArmorSetListener(armorSetName, armorSetConfig);
         }
@@ -57,10 +59,10 @@ public class ArmorSetManager {
         } try {
             plugin.getServer().getPluginManager().registerEvents(
                     new ArmorSetListener(armorSetName, armorSetConfig, plugin), plugin);
-            plugin.getLogger().info(armorSetName + " Registered");
+            log(armorSetName + " Registered");
             enabledArmorSets.add(armorSetName);
         } catch (Exception exception) {
-            plugin.getLogger().severe(armorSetName + " did not register and ran into an error!");
+            error(armorSetName + " did not register and ran into an error!");
         }
     }
 
@@ -74,5 +76,13 @@ public class ArmorSetManager {
 
     public static void removeEnabledArmorSet(String armorSetName) {
         enabledArmorSets.remove(armorSetName);
+    }
+
+    /**
+     * Clears every tracked enabled armor set, so that a reload can rebuild the list from disk
+     * without duplicating entries.
+     */
+    public static void clearEnabledArmorSets() {
+        enabledArmorSets.clear();
     }
 }

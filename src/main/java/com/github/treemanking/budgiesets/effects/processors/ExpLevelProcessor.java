@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+import static com.github.treemanking.budgiesets.utilities.ConfigUtils.getConfigValue;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.AMOUNT_KEY;
+
 /**
  * The ExpLevelProcessor class processes experience level effects for players based on their armor equip status.
  */
@@ -38,7 +42,7 @@ public class ExpLevelProcessor implements PlayerEffectProcessor {
                     }
                 } else {
                     // Log an error about the invalid configuration
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid exp level configuration: " + expLevelMap);
+                    warn("Invalid exp level configuration: " + expLevelMap);
                 }
             }
         }

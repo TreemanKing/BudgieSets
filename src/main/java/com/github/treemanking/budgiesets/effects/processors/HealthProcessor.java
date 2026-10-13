@@ -9,6 +9,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+import static com.github.treemanking.budgiesets.utilities.ConfigUtils.getConfigValue;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.AMOUNT_KEY;
+
 /**
  * A class to process health effects for armor set effects.
  */
@@ -37,7 +41,7 @@ public class HealthProcessor implements PlayerEffectProcessor {
                     }
                 } else {
                     // Log an error about the invalid configuration
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid health configuration: " + healthMap);
+                    warn("Invalid health configuration: " + healthMap);
                 }
             }
         }

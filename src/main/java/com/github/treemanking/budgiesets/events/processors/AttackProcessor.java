@@ -2,7 +2,6 @@ package com.github.treemanking.budgiesets.events.processors;
 
 import com.github.treemanking.budgiesets.utilities.EquipStatus;
 import com.github.treemanking.budgiesets.BudgieSets;
-import com.github.treemanking.budgiesets.utilities.ProcessorKeys;
 import com.github.treemanking.budgiesets.events.EventProcessor;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -14,6 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.github.treemanking.budgiesets.utilities.ConditionUtils.checkMap;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.TYPE_KEY;
+
 public class AttackProcessor implements EventProcessor {
 
     @Override
@@ -21,7 +23,7 @@ public class AttackProcessor implements EventProcessor {
         plugin.getServer().getPluginManager().registerEvents(new AttackProcessor.AttackListener(armorSetName, effectsMap, playerEquipStatusHashMap), plugin);
     }
 
-    private class AttackListener implements Listener, ProcessorKeys {
+    private class AttackListener implements Listener {
 
         private final Map<?, ?> effectsMap;
         private final Map<UUID, Long> cooldownMap = new HashMap<>();

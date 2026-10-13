@@ -2,6 +2,9 @@ package com.github.treemanking.budgiesets.managers;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.log;
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+
 /**
  * The HookManager class is responsible for checking the availability of
  * required dependencies such as Paper and PlaceholderAPI and managing
@@ -48,10 +51,10 @@ public final class HookManager {
     public static boolean isPlaceholderAPIAvailable(JavaPlugin plugin) {
         try {
             Class.forName("me.clip.placeholderapi.PlaceholderAPIPlugin");
-            plugin.getLogger().info("PlaceholderAPI Hooked!");
+            log("PlaceholderAPI Hooked!");
             return true;
         } catch (ClassNotFoundException ignored) {
-            plugin.getLogger().warning("PlaceholderAPI is missing, conditions will not work!");
+            warn("PlaceholderAPI is missing, conditions will not work!");
             return false;
         }
     }

@@ -9,6 +9,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+import static com.github.treemanking.budgiesets.utilities.ConfigUtils.getConfigValue;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.TEXT_KEY;
+
 /**
  * The ActionBarProcessor class processes action bar effects for players based on their armor equip status.
  */
@@ -37,7 +41,7 @@ public class ActionBarProcessor implements PlayerEffectProcessor {
                     }
                 } else {
                     // Log an error about the invalid configuration
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid action bar configuration: " + actionBarMap);
+                    warn("Invalid action bar configuration: " + actionBarMap);
                 }
             }
         }

@@ -9,6 +9,11 @@ import org.bukkit.event.Event;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.treemanking.budgiesets.utilities.ChatUtils.warn;
+import static com.github.treemanking.budgiesets.utilities.ConfigUtils.getConfigValue;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.ACTION_TYPE_KEY;
+import static com.github.treemanking.budgiesets.utilities.ProcessorKeys.TIME_KEY;
+
 /**
  * The BurnProcessor class processes burn effects for entity based on their armor equip status.
  */
@@ -38,7 +43,7 @@ public class BurnProcessor implements EffectProcessor {
                     }
                 } else {
                     // Log an error about the invalid configuration
-                    BudgieSets.getBudgieSets().getLogger().warning("Invalid burn configuration: " + burnMap);
+                    warn("Invalid burn configuration: " + burnMap);
                 }
             }
         }
@@ -57,7 +62,7 @@ public class BurnProcessor implements EffectProcessor {
         } else if ("Remove".equalsIgnoreCase(actionType)) {
             entity.setFireTicks(0);
         } else {
-            BudgieSets.getBudgieSets().getLogger().warning("Invalid action type: " + actionType + ". You must use 'Add' or 'Remove'.");
+            warn("Invalid action type: " + actionType + ". You must use 'Add' or 'Remove'.");
         }
     }
 
